@@ -76,15 +76,19 @@ haal() {
   if which atom &> /dev/null
     then
     editor="Atom"
+    atom .
   elif which code &> /dev/null
     then
     editor="VSCode"
+    code .
   elif which subl &> /dev/null
     then
     editor="Sublime"
+    subl .
   elif which vi &> /dev/null
     then
     editor="Vim"
+    vi .
   else
     echo "Sorry, I am afraid I cannot find a code editor"
   fi
