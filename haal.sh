@@ -60,7 +60,7 @@ haal() {
   rm master.zip
 
   # Capture, enter & display unzip PATH
-  unzip_path=$(echo $unzip | grep -m1 'creating:' |cut -d ' ' -f5-)
+  unzip_path=$(printf "%s" "$unzip" | grep -m1 'creating:' |cut -d ' ' -f5-)
   cd $unzip_path
   printf "🤖: Unzip & enter project local folder $(pwd)\n"
   # Install project gems
