@@ -27,12 +27,12 @@ haal() {
   # Handle Invalid Arguments
   if [[ $# -eq 0 ]] # no arguments
   then
-    printf "🤖: Assign me a project URL please\n"
+    printf "🔴: Assign me a project URL please\n"
     return
   elif [[ $1 = "sing" ]] # talented haal
   then
     # printf "%s\n" "$hr"
-    printf "🤖: “Daisy, Daisy,\ngive me your answer do.\n"
+    printf "🔴: “Daisy, Daisy,\ngive me your answer do.\n"
     # printf "“Daisy, Daisy,\ngive me your answer do.\n"
     printf "I'm half crazy,\nall for the love of you.\n\n"
     printf "It won't be a stylish marriage,\nI can't afford a carriage.\n"
@@ -40,31 +40,32 @@ haal() {
     return
   elif [[ $1 != https://* ]] # crude URL validation
   then
-    printf "🤖: I'm sorry, $(whoami). I'm afraid I can't do that\n"
+    printf "🔴: I'm sorry, $(whoami). I'm afraid I can't do that\n"
     return
   fi
 
-  # Download ZIP file from URL
-  # echo $hr
-  printf "🤖: Download project ZIP files\n"
-  curl -O ${1}
+  # Download distant ZIP file passed as argument...
+  printf "🔴: Download project ZIP files\n"
+  # ...rename with random temporary name
+  curl -o ./haal_zip_tmp_RSrtZMZ59.zip ${1}
+
   # Set unzip PATH acc. to optional 2nd argument
   if [ ! -z $2 ]
     then
-      unzip=$(unzip master.zip -d $2)
+      unzip=$(unzip haal_zip_tmp_RSrtZMZ59.zip -d $2)
     else
-      unzip=$(unzip master.zip)
+      unzip=$(unzip haal_zip_tmp_RSrtZMZ59.zip)
   fi
 
   # Delete zip file
-  rm master.zip
+  rm haal_zip_tmp_RSrtZMZ59.zip
 
   # Capture, enter & display unzip PATH
   unzip_path=$(printf "%s" "$unzip" | grep -m1 'creating:' |cut -d ' ' -f5-)
   cd $unzip_path
-  printf "🤖: Unzip & enter project local folder $(pwd)\n"
+  printf "🔴: Unzip & enter project local folder $(pwd)\n"
   # Install project gems
-  printf "🤖: Install Project gems\n"
+  printf "🔴: Install Project gems\n"
   bundle install
 
   # Open current folder with local editor
@@ -85,12 +86,12 @@ haal() {
     editor="Vim"
     vi .
   else
-    printf "🤖: Sorry $(whoami), I am afraid I cannot find a code editor\n"
+    printf "🔴: Sorry $(whoami), I am afraid I cannot find a code editor\n"
   fi
 
-  printf "🤖: Open current directory with $editor\n"
+  printf "🔴: Open current directory with $editor\n"
 
   # haal parting tip
-  printf "🤖: Project set. You can now run your tests by typing:\n"
+  printf "🔴: Project set. You can now run your tests by typing:\n"
   printf "bundle exec rspec --color\n\n"
 }
