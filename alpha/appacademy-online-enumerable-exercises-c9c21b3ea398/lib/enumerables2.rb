@@ -5,39 +5,50 @@ require 'byebug'
 # Define a method that returns the sum of all the elements in its argument (an
 # array of numbers).
 def array_sum(arr)
+  arr.reduce(0, :+)
 end
 
 # Define a method that returns a boolean indicating whether substring is a
 # substring of each string in the long_strings array.
 # Hint: you may want a sub_tring? helper method
 def in_all_strings?(long_strings, substring)
+  long_strings.all? { |long_string| sub_string?(long_string, substring) }
+end
+
+def sub_string?(string, substr)
+  string.split(' ').any? { |e| e.include? substr }
 end
 
 # Define a method that accepts a string of lower case words (no punctuation) and
 # returns an array of letters that occur more than once, sorted alphabetically.
 def non_unique_letters(string)
+  string.delete!(' ').chars.select { |e| string.count(e) > 1 }.uniq.sort
 end
 
 # Define a method that returns an array of the longest two words (in order) in
 # the method's argument. Ignore punctuation!
 def longest_two_words(string)
+  string.split.sort_by { |e| e.length }[-2..-1]
 end
-
 # MEDIUM
 
 # Define a method that takes a string of lower-case letters and returns an array
 # of all the letters that do not occur in the method's argument.
 def missing_letters(string)
+  "abcdefghijklmnopqrstuvwxyz".chars.reject { |letter| string.include? letter }
 end
 
 # Define a method that accepts two years and returns an array of the years
 # within that range (inclusive) that have no repeated digits. Hint: helper
 # method?
 def no_repeat_years(first_yr, last_yr)
+  (first_yr..last_yr).select { |e| not_repeat_year?(e) }
 end
 
 def not_repeat_year?(year)
+  "#{year}".chars.uniq == "#{year}".chars
 end
+
 
 # HARD
 
@@ -49,10 +60,15 @@ end
 # appear multiple times in a row and remove them. You may wish to write a helper
 # method no_repeats?
 def one_week_wonders(songs)
+  songs.select { |e| no_repeats?(e, songs) }.uniq
 end
 
 def no_repeats?(song_name, songs)
+  repeats = songs.select.with_index { |_el, i| songs[i] == songs[i + 1] }
+  repeats.none? { |song| song == song_name }
 end
+
+# print one_week_wonders(%w(la di da la la di do da di di))
 
 # Define a method that, given a string of words, returns the word that has the
 # letter "c" closest to the end of it. If there's a tie, return the earlier
@@ -60,9 +76,21 @@ end
 # wish to write the helper methods c_distance and remove_punctuation.
 
 def for_cs_sake(string)
+  return '' unless string.include? 'c'
+
+  removed_punct = string.split(' ').map { |word| remove_punctuation(word) }
+  c_words = removed_punct.select { |word| word.include? 'c' }
+  distances = c_words.map { |word| c_distance(word) }
+
+  c_words[distances.index(distances.min)]
 end
 
 def c_distance(word)
+  (word.length - 1) - word.chars.rindex('c') # https://devdocs.io/ruby~2.5/array#method-i-rindex
+end
+
+def remove_punctuation(word)
+  word.downcase.gsub(/[[:punct:]]/, '') # https://devdocs.io/ruby~2.5/string#method-i-gsub-21
 end
 
 # Define a method that, given an array of numbers, returns a nested array of
@@ -71,4 +99,20 @@ end
 # [[0, 1]] repeated_number_ranges([1, 2, 3, 3, 4, 4, 4]) => [[2, 3], [4, 6]]
 
 def repeated_number_ranges(arr)
+  repeated_number_ranges = []
+  index_start_end = []
+
+  arr.each_with_index do |el, idx|
+    if el == arr[idx + 1] && el != arr[idx - 1]
+      # if == NEXT but != PREVIOUS
+      index_start_end << idx
+    elsif el == arr[idx - 1] && el != arr[idx + 1]
+      # if  == PREVIOUS but != NEXT
+      index_start_end << idx
+      repeated_number_ranges << index_start_end unless index_start_end.empty?
+      index_start_end = [] # reinitialize temp variable as empty array
+    end
+  end
+
+  repeated_number_ranges
 end
