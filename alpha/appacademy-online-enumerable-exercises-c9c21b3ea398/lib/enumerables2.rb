@@ -16,7 +16,7 @@ def in_all_strings?(long_strings, substring)
 end
 
 def sub_string?(string, substr)
-  string.split(' ').any? { |e| e.include? substr }
+  string.split(' ').any? { |str| str.include? substr }
 end
 
 # Define a method that accepts a string of lower case words (no punctuation) and
@@ -28,14 +28,15 @@ end
 # Define a method that returns an array of the longest two words (in order) in
 # the method's argument. Ignore punctuation!
 def longest_two_words(string)
-  string.split.sort_by { |e| e.length }[-2..-1]
+  string.gsub(/[[:punct:]]/, '').split.sort_by(&:length)[-2..-1]
 end
+
 # MEDIUM
 
 # Define a method that takes a string of lower-case letters and returns an array
 # of all the letters that do not occur in the method's argument.
 def missing_letters(string)
-  "abcdefghijklmnopqrstuvwxyz".chars.reject { |letter| string.include? letter }
+  ('a'..'z').reject { |letter| string.downcase.include? letter }
 end
 
 # Define a method that accepts two years and returns an array of the years
@@ -46,9 +47,8 @@ def no_repeat_years(first_yr, last_yr)
 end
 
 def not_repeat_year?(year)
-  "#{year}".chars.uniq == "#{year}".chars
+  year.to_s.chars.uniq == year.to_s.chars
 end
-
 
 # HARD
 
@@ -60,11 +60,11 @@ end
 # appear multiple times in a row and remove them. You may wish to write a helper
 # method no_repeats?
 def one_week_wonders(songs)
-  songs.select { |e| no_repeats?(e, songs) }.uniq
+  songs.select { |song| no_repeats?(song, songs) }.uniq
 end
 
 def no_repeats?(song_name, songs)
-  repeats = songs.select.with_index { |_el, i| songs[i] == songs[i + 1] }
+  repeats = songs.select.with_index { |_el, idx| songs[idx] == songs[idx + 1] }
   repeats.none? { |song| song == song_name }
 end
 
@@ -78,11 +78,9 @@ end
 def for_cs_sake(string)
   return '' unless string.include? 'c'
 
-  removed_punct = string.split(' ').map { |word| remove_punctuation(word) }
-  c_words = removed_punct.select { |word| word.include? 'c' }
-  distances = c_words.map { |word| c_distance(word) }
-
-  c_words[distances.index(distances.min)]
+  remove_punctuation(string)
+  c_words = string.split.select { |word| word.downcase.include? 'c' }
+  c_words.min_by { |word| c_distance(word) }
 end
 
 def c_distance(word)
@@ -90,7 +88,7 @@ def c_distance(word)
 end
 
 def remove_punctuation(word)
-  word.downcase.gsub(/[[:punct:]]/, '') # https://devdocs.io/ruby~2.5/string#method-i-gsub-21
+  word.gsub!(/[[:punct:]]/, '') # https://devdocs.io/ruby~2.5/string#method-i-gsub-21
 end
 
 # Define a method that, given an array of numbers, returns a nested array of

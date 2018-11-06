@@ -3,7 +3,7 @@
 # Define a method that returns an array of only the even numbers in its argument
 # (an array of integers).
 def get_evens(arr)
-  arr.select { |num| num.even? }
+  arr.select(&:even?)
 end
 
 # Define a method that returns a new array of all the elements in its argument
@@ -24,9 +24,7 @@ end
 def array_sum_with_index(arr)
   return 0 if arr.length.zero?
 
-  arr.map.with_index do |el, idx|
-    el * idx
-  end.reduce(:+)
+  arr.map.with_index { |num, idx| num * idx }.reduce(:+)
 end
 
 # MEDIUM
@@ -44,8 +42,8 @@ end
 # at_least_n_factors([1, 3, 10, 16], 5) => [16] because 16 has five factors (1,
 # 2, 4, 8, 16) and the others have fewer than five factors. Consider writing a
 # helper method num_factors
-def at_least_n_factors(numbers, n)
-  numbers.select { |number| num_factors(number) >= n }
+def at_least_n_factors(numbers, num)
+  numbers.select { |number| num_factors(number) >= num }
 end
 
 def num_factors(number)
@@ -80,13 +78,7 @@ end
 # 10, because you take out 3, leaving 1 * 2 * 5 6, because you take out 5,
 # leaving 1 * 2 * 3
 def products_except_me(numbers)
-  products = []
-  numbers.each_index do | i |
-    products << array_product(numbers.reject { |el| el == numbers[i] })
+  numbers.map.with_index do |_el, idx|
+    numbers.reject { |el| el == numbers[idx] }.reduce(:*)
   end
-  products
-end
-
-def array_product(array)
-  array.reduce(:*)
 end
