@@ -4,6 +4,7 @@
 # factors of a given number.
 
 def factors(num)
+  (1..num).select { |factor| (num % factor).zero? }
 end
 
 # ### Bubble Sort
@@ -26,6 +27,9 @@ end
 #
 # Hint: Ruby has parallel assignment for easily swapping values:
 # http://rubyquicktips.com/post/384502538/easily-swap-two-variables-values
+# ---- "In Ruby, you can easily swap values of two variables
+# ---- without the need for a temporary third variable:
+# ---- x,y = y,x"
 #
 # After writing `bubble_sort!`, write a `bubble_sort` that does the same
 # but doesn't modify the original. Do this in two lines using `dup`.
@@ -47,9 +51,39 @@ end
 
 class Array
   def bubble_sort!
+    (self.length - 1).times do
+      self.each_with_index do |current, idx, previous = self[idx - 1]|
+        next if idx.zero? # skip index 0, start iteration at index 1
+
+        if current < previous # if descending order
+          self[idx - 1], self[idx] = self[idx], self[idx - 1] # swap/sort
+        end
+      end
+    end
+
+    self
+  end
+
+  def bubble_sort!(&prc)
+    prc || prc = Proc.new { |x, y| x <=> y } # in case no prc/block is supplied
+    # Alt. syntax: prc ||= Proc.new { |x, y| x <=> y }
+    # https://stackoverflow.com/questions/995593/what-does-or-equals-mean-in-ruby
+
+    (self.length - 1).times do
+      self.each_with_index do |current, idx, previous = self[idx - 1]|
+        next if idx.zero? # skip index 0, start iteration at index 1
+
+        if prc.call(current, previous) == -1 # if descending order
+          self[idx - 1], self[idx] = self[idx], self[idx - 1] # swap/sort
+        end
+      end
+    end
+
+    self
   end
 
   def bubble_sort(&prc)
+    self.dup.bubble_sort!(&prc)
   end
 end
 
@@ -67,9 +101,17 @@ end
 # words).
 
 def substrings(string)
+  substr = []
+  string.chars.each.with_index do |_char, idx1|
+    (idx1...string.length).each do |idx2|
+      substr << string[idx1..idx2]
+    end
+  end
+  substr
 end
 
 def subwords(word, dictionary)
+  substrings(word).select { |substr| dictionary.include?(substr) }.uniq
 end
 
 # ### Doubler
@@ -77,6 +119,7 @@ end
 # array with the original elements multiplied by two.
 
 def doubler(array)
+  array.map { |el| el * 2 }
 end
 
 # ### My Each
@@ -104,6 +147,13 @@ end
 
 class Array
   def my_each(&prc)
+    i = 0
+    while i < self.length
+      prc.call(self[i])
+      i += 1
+    end
+
+    self
   end
 end
 
@@ -120,14 +170,32 @@ end
 #   (and not the symbol) version. Again, use your `my_each` to define
 #   `my_inject`. Again, do not modify the original array.
 
+#   Relevant link:
+#   https://mauricio.github.io/2015/01/12/implementing-enumerable-in-ruby.html
 class Array
   def my_map(&prc)
+    result = []
+    my_each { |element| result << prc.call(element) }
+
+    result
   end
 
   def my_select(&prc)
+    result = []
+    my_each do |element|
+      result << element if prc.call(element)
+    end
+
+    result
   end
 
-  def my_inject(&blk)
+  def my_inject(accumulator = self[0], &blk)
+    my_each do |element|
+      next if element == self[0]
+
+      accumulator = blk.call(accumulator, element)
+    end
+    accumulator
   end
 end
 
@@ -141,4 +209,5 @@ end
 # ```
 
 def concatenate(strings)
+  strings.inject { |acc, str| acc + str }
 end
