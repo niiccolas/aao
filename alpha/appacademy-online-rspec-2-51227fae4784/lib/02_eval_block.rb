@@ -1,3 +1,9 @@
+def eval_block(*args, &proc)
+  raise 'NO BLOCK GIVEN!' if proc.nil?
+
+  proc.call(*args)
+end
+
 # ### `eval_block`
 #
 # Write an `eval_block` method that takes some arguments and a block. It should
