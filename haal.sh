@@ -28,7 +28,7 @@ haal() {
   if [[ $# -eq 0 ]] # no arguments
   then
     printf "🔴: Assign me a project URL please\n"
-    return
+    exit
   elif [[ $1 = "sing" ]] # talented haal
   then
     # printf "%s\n" "$hr"
@@ -37,11 +37,11 @@ haal() {
     printf "I'm half crazy,\nall for the love of you.\n\n"
     printf "It won't be a stylish marriage,\nI can't afford a carriage.\n"
     printf "But you'll look sweet,\nupon the seat,\nof a bicycle built for two.”\n"
-    return
+    exit
   elif [[ $1 != https://* ]] # crude URL validation
   then
     printf "🔴: I'm sorry, $(whoami). I'm afraid I can't do that\n"
-    return
+    exit
   fi
 
   # Download distant ZIP file passed as argument...
@@ -62,7 +62,6 @@ haal() {
 
   # Capture, enter & display unzip PATH
   unzip_path=$(printf "%s" "$unzip" | grep -m1 'creating:' |cut -d ' ' -f5-)
-  cd $unzip_path
   printf "🔴: Unzip & enter project local folder $(pwd)\n"
   # Install project gems
   printf "🔴: Install Project gems\n"
@@ -95,3 +94,5 @@ haal() {
   printf "🔴: Project set. You can now run your tests by typing:\n"
   printf "bundle exec rspec --color\n\n"
 }
+
+haal $1 $2
