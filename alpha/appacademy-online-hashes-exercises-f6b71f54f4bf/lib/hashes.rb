@@ -19,7 +19,7 @@ end
 # Define a method that, given a hash with integers as values, returns the key
 # with the largest value.
 def greatest_key_by_val(hash)
-  hash.sort_by { |_int, value| value }.last[0]
+  hash.max_by { |_int, value| value }[0]
 end
 
 # goats = {
@@ -95,6 +95,7 @@ def most_common_vowel(string)
 end
 
 # puts most_common_vowel("eieeoaa") # => e
+
 # HARD
 
 # -------
@@ -123,11 +124,10 @@ end
 # number_of_species ** 2 *  smallest_population_size / largest_population_size
 
 def biodiversity_index(specimens)
-  # number_of_species ** 2 *  smallest_population_size / largest_population_size
   species = Hash.new(0)
   specimens.each { |el| species[el] += 1 }
-  species.keys.length ** 2 * species.values.min / species.values.max
 
+  species.keys.length ** 2 * species.values.min / species.values.max
 end
 
 # puts biodiversity_index(["cat", "cat", "cat"]) # => 1
@@ -142,19 +142,21 @@ def can_tweak_sign?(normal_sign, vandalized_sign)
   norm_hash   = character_count(normal_sign)
   vandal_hash = character_count(vandalized_sign)
 
-  vandal_hash.each { |k, v| return false unless norm_hash.key?(k) && norm_hash[k] >= v }
+  vandal_hash.each do |k, v|
+    return false unless norm_hash.key?(k) && norm_hash[k] >= v
+  end
   true
 end
 
 def character_count(str)
   # No punctuation, no spaces, all downcase
-  validated_str = str.gsub(/[[:punct:][:space:]]/,'').downcase
+  validated_str = str.gsub(/[[:punct:][:space:]]/, '').downcase
   validated_str.chars.each_with_object(Hash.new(0)) { |e, h| h[e] += 1 }
 end
 
-sign                = "MIGHTY MISSISSIPPI"
-sign_vandalized     = "I MISS PIMS"
-sign_vandalized_alt = "I MISS MY TASTY PIMS"
+# sign                = 'MIGHTY MISSISSIPPI'
+# sign_vandalized     = 'I MISS PIMS'
+# sign_vandalized_alt = 'I MISS MY TASTY PIMS'
 
-puts can_tweak_sign?(sign, sign_vandalized)     # => true
-puts can_tweak_sign?(sign, sign_vandalized_alt) # => false
+# puts can_tweak_sign?(sign, sign_vandalized)     # => true
+# puts can_tweak_sign?(sign, sign_vandalized_alt) # => false
