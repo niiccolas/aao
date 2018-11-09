@@ -4,15 +4,12 @@
 # Define a method that, given a sentence, returns a hash of each of the words as
 # keys with their lengths as values. Assume the argument lacks punctuation.
 def word_lengths(str)
-  hash = Hash.new('')
-  str.split(' ').each do |word|
-    hash[word] = word.length
-  end
-
-  hash
+  length_hash = Hash.new('')
+  str.split(' ').each { |word| length_hash[word] = word.length }
+  length_hash
 end
 
-# p word_lengths('Destitutus ventis remos adhibere')
+# puts word_lengths('Destitutus ventis remos adhibere')
 # => {"Destitutus"=>10, "ventis"=>6, "remos"=>5, "adhibere"=>8}
 
 # -------
@@ -34,19 +31,21 @@ end
 # newer one. The method should update keys in the older inventory with values
 # from the newer one as well as add new key-value pairs to the older inventory.
 # The method should return the older inventory as a result.
-march = { rubies: 10, emeralds: 14, diamonds: 2 }
-april = { emeralds: 27, moonstones: 5 }
+
 def update_inventory(older, newer)
-  newer.each { |key1, val1| older[key1] = val1 }
+  newer.each { |key, val| older[key] = val }
   older
 end
 
+# march = { rubies: 10, emeralds: 14, diamonds: 2 }
+# april = { emeralds: 27, moonstones: 5 }
 # puts update_inventory(march, april)
 # => { rubies: 10, emeralds: 27, diamonds: 2, moonstones: 5 }
 
 # -------
 # Define a method that, given a word, returns a hash with the letters in the
 # word as keys and the frequencies of the letters as values.
+
 def letter_counts(word)
   count = Hash.new(0)
   word.chars.each { |char| count[char] += 1 }
@@ -63,7 +62,7 @@ end
 def my_uniq(arr)
   count = Hash.new(0)
   arr.each { |char| count[char] += 1 }
-  count.keys.to_a
+  count.keys
 end
 
 # print my_uniq([7, 9, 6, 7, 7, 9]) # => [7, 9, 6]
@@ -72,29 +71,30 @@ end
 # Define a method that, given an array of numbers, returns a hash with "even"
 # and "odd" as keys and the frequency of each parity as values.
 def evens_and_odds(numbers)
-  hash = Hash.new(0)
+  count_hash = Hash.new(0)
   numbers.each do |number|
-    number.even? ? hash[:even] += 1 : hash[:odd] += 1
+    number.even? ? count_hash[:even] += 1 : count_hash[:odd] += 1
   end
-  hash
+  count_hash
 end
 
-# puts evens_and_odds([1,2,3,1,5])
+# puts evens_and_odds([1, 2, 3, 1, 5]) # => {:odd=>4, :even=>1}
 
 # -------
 # Define a method that, given a string, returns the most common vowel. Do
 # not worry about ordering in the case of a tie. Assume all letters are
 # lower case.
 def most_common_vowel(string)
-  most_common = Hash.new(0)
+  vowel_count = Hash.new(0)
   string.chars.each do |char|
-    most_common[char] += 1
+    vowel_count[char] += 1 if 'aeiou'.include? char
   end
 
-  most_common.sort_by { |_key, value| value }.last[0]
+  vowel_count.sort_by { |_key, value| value }.last[0]
 end
 
-# puts most_common_vowel("eieeoaa") # => e
+puts most_common_vowel('zzzxxwaaeieeo') # => e
+puts most_common_vowel('eieeoaaa') # => a
 
 # HARD
 
@@ -139,11 +139,11 @@ end
 # using the available letters. Ignore capitalization and punctuation.
 
 def can_tweak_sign?(normal_sign, vandalized_sign)
-  norm_hash   = character_count(normal_sign)
+  normal_hash = character_count(normal_sign)
   vandal_hash = character_count(vandalized_sign)
 
   vandal_hash.each do |k, v|
-    return false unless norm_hash.key?(k) && norm_hash[k] >= v
+    return false unless normal_hash.key?(k) && normal_hash[k] >= v
   end
   true
 end
