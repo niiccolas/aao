@@ -29,6 +29,32 @@ haal() {
   then
     printf "🤖 Assign me a project URL please\n"
     exit
+  elif [[ $1 = "zip" ]] # ZIP
+  then
+    read -p "Are you in the project folder? (y/n) " answer
+    case "$answer" in
+      "y"|"YES")
+        read -p "Please type your name:         " name
+        read -p "Please type your lastname:     " lastname
+        read -p "Please type the project name:  " section
+        printf "🚀 creating "$name"_"$lastname"_"$section".zip in the parent folder...\n"
+        # name="jonn"
+        # lastname="maeda"
+        # section="hashes"
+        filename="../"$name"_"$lastname"_"$section""
+        # echo $filename
+
+        zip -r $filename .
+        printf "🤖 Done\n"
+      ;;
+      "n"|"NO")
+        printf "Navigate to the project folder first\n"
+      ;;
+      *)
+        printf "Wrong input, start again\n"
+      ;;
+    esac
+    exit
   elif [[ $1 = "sing" ]] # talented haal
   then
     # printf "%s\n" "$hr"
@@ -90,10 +116,10 @@ haal() {
     printf "🤖 Sorry $(whoami), I am afraid I cannot find a code editor\n"
   fi
 
-  printf "🤖 Open current directory with $editor\n"
+  printf "🚀 Open current directory with $editor\n"
 
   # haal parting tip
-  printf "🤖 Project set. You can now run your tests by typing:\n"
+  printf "🤖 Done. You can now run your tests by typing:\n"
   printf "bundle exec rspec --color\n\n"
 }
 
