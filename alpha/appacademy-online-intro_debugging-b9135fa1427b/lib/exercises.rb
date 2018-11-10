@@ -25,6 +25,8 @@ end
 # Write a method that returns the largest prime factor of a given integer.
 
 def prime?(num)
+  return false if num < 2
+
   (2...num).none? { |factor| (num % factor).zero? }
 end
 
