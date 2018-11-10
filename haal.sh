@@ -100,19 +100,19 @@ haal() {
   if which atom &> /dev/null
     then
     editor="Atom"
-    atom .
+    atom ..
   elif which code &> /dev/null
     then
     editor="VSCode"
-    code .
+    code ..
   elif which subl &> /dev/null
     then
     editor="Sublime"
-    subl .
+    subl ..
   elif which vi &> /dev/null
     then
     editor="Vim"
-    vi .
+    vi ..
   else
     printf "🤖 Sorry $(whoami), I am afraid I cannot find a code editor\n"
   fi
