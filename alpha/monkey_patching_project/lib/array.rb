@@ -45,17 +45,13 @@ class Array
 
   def my_transpose
     transposed = []
-    i          = 0
-    j          = 0
-    while i < self.length
+
+    self.each_with_index do |_el1, idx1|
       row = []
-      while j < self.length
-        row << self[j][i]
-        j += 1
+      self.each_with_index do |_el2, idx2|
+        row << self[idx2][idx1]
       end
       transposed << row
-      j = 0
-      i += 1
     end
 
     transposed
