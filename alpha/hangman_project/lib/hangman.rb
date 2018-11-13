@@ -18,7 +18,6 @@ class Hangman
   # Accessors
   attr_accessor :guess_word
   attr_accessor :attempted_chars
-  attr_accessor :secret_word
   attr_accessor :remaining_incorrect_guesses
 
   # Hangman# instance methods
@@ -34,5 +33,50 @@ class Hangman
 
   def fill_indices(char, arr)
     arr.each { |idx| @guess_word[idx] = char }
+  end
+
+  def try_guess(char)
+    if already_attempted?(char)
+      puts 'that has already been attempted'
+      false
+    else
+      @remaining_incorrect_guesses -= 1 unless @secret_word.include?(char)
+
+      @attempted_chars << char
+      fill_indices(char, get_matching_indices(char))
+      true
+    end
+  end
+
+  def ask_user_for_guess
+    puts 'Enter a char:'
+    try_guess(gets.chomp)
+  end
+
+  def win?
+    if @guess_word.join == @secret_word
+      print 'WIN'
+      true
+    else
+      false
+    end
+  end
+
+  def lose?
+    if @remaining_incorrect_guesses.zero?
+      puts 'LOSE'
+      true
+    else
+      false
+    end
+  end
+
+  def game_over?
+    if win? || lose?
+      puts @secret_word
+      true
+    else
+      false
+    end
   end
 end
