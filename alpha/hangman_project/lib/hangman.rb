@@ -55,7 +55,7 @@ class Hangman
 
   def win?
     if @guess_word.join == @secret_word
-      print 'WIN'
+      puts 'WIN'
       true
     else
       false
