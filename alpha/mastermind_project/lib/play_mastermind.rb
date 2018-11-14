@@ -4,7 +4,13 @@
 # running this file with `ruby lib/play_mastermind.rb` in your terminal!
 
 require_relative "mastermind"
-
+puts "Welcome to Mastermind"
+puts "Ruby edition"
+puts "* * *"
+puts "Instructions: Valid pegs are R, G, B and Y."
+puts "You must break the codemaker's code,"
+puts "by guessing its pattern of colors and positions."
+puts "* * *"
 puts "Enter a size for the game: "
 mastermind = Mastermind.new(gets.chomp.to_i)
 
