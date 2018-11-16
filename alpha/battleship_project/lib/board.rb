@@ -27,9 +27,11 @@ class Board
   end
 
   def num_ships
-    @grid.map { |row| row.count(:S) }.sum
+    @grid.flatten.count(:S) # Fortius
 
-    # ships_count = 0
+    # @grid.map { |row| row.count(:S) }.sum # Altius
+
+    # ships_count = 0 # Citius
     # @grid.each do |row|
     #   row.each do |square|
     #     ships_count += 1 if square == :S
