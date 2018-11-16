@@ -51,6 +51,6 @@ class Battleship
   def turn
     @remaining_misses -= 1 unless @board.attack(@player.get_move)
     @board.print
-    puts @remaining_misses
+    puts "#{@remaining_misses} remaining misses"
   end
 end
