@@ -3,13 +3,13 @@ require_relative 'player'
 
 # :nodoc:
 class Battleship
+  attr_reader :board, :player
+
   def initialize(n)
     @player = Player.new
     @board = Board.new(n)
     @remaining_misses = @board.size / 2
   end
-
-  attr_reader :board, :player
 
   def start_game
     @board.place_random_ships
@@ -19,13 +19,15 @@ class Battleship
   end
 
   def lose?
-    return false if @remaining_misses > 0
-
-    puts
-    puts '- - - - -'
-    puts 'you lose'
-    puts '- - - - -'
-    true
+    if @remaining_misses > 0
+      false
+    else
+      puts
+      puts '- - - - -'
+      puts 'you lose'
+      puts '- - - - -'
+      true
+    end
   end
 
   def win?
@@ -34,9 +36,10 @@ class Battleship
       puts '* * * *'
       puts 'you win'
       puts '* * * *'
-      return true
+      true
+    else
+      false
     end
-    false
   end
 
   def game_over?
