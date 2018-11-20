@@ -29,7 +29,7 @@ describe Array do
         expect(test_arr.bubble_sort! { |num1, num2| num1 <=> num2 } ).to eql(test_arr.sort)
       end
     end
-  end # describe .bubble_sort! end
+  end
 
   describe '.bubble_sort' do
     context 'given an unsorted array' do
@@ -37,13 +37,12 @@ describe Array do
         expect(test_arr.bubble_sort).to eql(test_arr.sort)
       end
 
-      test_arr_clone = test_arr.clone
       it 'should NOT modify the original array' do
         expect(test_arr.bubble_sort).to eql(test_arr)
       end
 
       it 'should take an optional block' do
-        expect(test_arr.bubble_sort { |num1, num2| num2 <=> num1 } ).to eql(test_arr.sort.reverse)
+        expect(test_arr.bubble_sort { |num1, num2| num2 <=> num1 }).to eql(test_arr.sort.reverse)
       end
     end
   end
@@ -55,7 +54,6 @@ describe "#substrings" do
       expect(substrings("fat")).to eq(["f", "fa", "fat", "a", "at", "t"])
       expect(substrings("foam")).to eq(["f", "fo", "foa", "foam", "o", "oa", "oam", "a", "am", "m"])
     end
-
   end
 end
 
@@ -72,5 +70,4 @@ describe "#subwords" do
       expect(subwords("sesafuoam", ["sea", "foam"])).to be_empty
     end
   end
-
 end

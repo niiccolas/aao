@@ -43,13 +43,3 @@ end
 def subwords(string, dictionary)
   substrings(string).select { |word| dictionary.include? word }.uniq
 end
-
-p subwords("seassoucat..sdqfoamazeazecat", ["cat","sea","foam"])
-p substrings("foam")
-p substrings("")
-
-# p ["c", "a", "t"].slice(0, 1).join
-# p "cat".slice(0, 2)
-# p "cat".slice(0, 3)
-
-# p "cat".unshift
