@@ -44,7 +44,7 @@ class Game
   end
 
   def valid_play?(string)
-    # return false unless ('a'..'z').cover?(string) && string.length == 1
+    return false unless ('a'..'z').cover?(string) && string.length == 1
 
     possible_word = @fragment + string
     @dictionary.each_key do |key|
