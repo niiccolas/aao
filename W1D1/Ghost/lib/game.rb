@@ -44,13 +44,10 @@ class Game
   end
 
   def valid_play?(string)
-    return false unless ('a'..'z').cover?(string) # alphabet letters only!
+    return false unless ('a'..'z').cover?(string) && string.length == 1
 
     possible_word = @fragment + string
-
     @dictionary.each_key do |key|
-      # puts key
-      # puts possible_word
       return true if key.start_with? possible_word
     end
     false
@@ -61,9 +58,8 @@ class Game
       take_turn(current_player)
 
     end
-    puts "👻 👻 👻"
-    print "#{@fragment.capitalize} is a word!"
-    print " #{previous_player.name.capitalize} lost this round!\n"
+    print "👻 #{@fragment.capitalize} is a word!"
+    print " #{previous_player.name.capitalize} lost this round.\n"
     @losses[previous_player.name] += 1
   end
 
@@ -73,7 +69,7 @@ class Game
 
   def display_standings
     puts
-    puts "Ghost Scores:"
+    puts 'Ghost Scores:'
     score = '_____'
     @players.each do |player|
       score[0, @losses[player.name]] = record(player)
@@ -92,6 +88,6 @@ class Game
     puts
     print "#{@losses.key(5).capitalize} has been ghosted."
     @losses.delete(@losses.key(5))
-    print "#{@losses.keys.first.capitalize} wins ✌️"
+    print "#{@losses.keys.first.capitalize} wins ✌️\n"
   end
 end
