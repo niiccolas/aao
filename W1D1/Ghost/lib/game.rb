@@ -44,7 +44,7 @@ class Game
   end
 
   def valid_play?(string)
-    return false unless ('a'..'z').cover?(string) && string.length == 1
+    # return false unless ('a'..'z').cover?(string) && string.length == 1
 
     possible_word = @fragment + string
     @dictionary.each_key do |key|
@@ -56,7 +56,7 @@ class Game
   def play_round
     take_turn(current_player) until @dictionary.key? @fragment
 
-    print "👻 “#{@fragment.upcase}” is a word!"
+    print "“#{@fragment.upcase}” is a word!"
     print " #{previous_player.name.capitalize} lost this round.\n"
     @losses[previous_player.name] += 1
   end
@@ -82,11 +82,10 @@ class Game
         display_standings
         play_round
       end
-      puts "\n*** #{@losses.key(5).capitalize} has been ghosted! 👋 ***"
+      puts "\n*** 👻 #{@losses.key(5).capitalize} has been ghosted! 👻 ***"
       @players.delete_if { |player| player.name == @losses.key(5) }
       @losses.delete(@losses.key(5))
     end
-    puts
-    "#{@losses.keys.first.capitalize} wins ✌️ "
+    puts "+++ ✌️  #{@losses.keys.first.capitalize} WINS ✌️  +++"
   end
 end
