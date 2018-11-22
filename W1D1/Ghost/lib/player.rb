@@ -5,10 +5,10 @@ class Player
   end
 
   def guess
-    gets.chomp
+    gets.chomp.downcase
   end
 
   def alert_invalid_guess
-    print "invalid input, try again: #{@fragment}"
+    print "invalid input, try again: #{Game.fragment}"
   end
 end
