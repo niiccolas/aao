@@ -2,8 +2,7 @@ require_relative './player.rb'
 
 # :nodoc:
 class Game
-
-  attr_reader :fragment, :dictionary, :players, :losses
+  attr_accessor :fragment, :dictionary, :players, :losses
 
   def initialize(players)
     @players    = players
@@ -57,7 +56,7 @@ class Game
   def play_round
     take_turn(current_player) until @dictionary.key? @fragment
 
-    print "👻 #{@fragment.capitalize} is a word!"
+    print "👻 “#{@fragment.upcase}” is a word!"
     print " #{previous_player.name.capitalize} lost this round.\n"
     @losses[previous_player.name] += 1
   end
@@ -67,25 +66,27 @@ class Game
   end
 
   def display_standings
-    puts
-    puts 'Ghost Scores:'
-    score = '_____'
+    puts "\nGhost Scores:"
+    ghost_score = '_____'
     @players.each do |player|
-      score[0, @losses[player.name]] = record(player)
-      puts "#{player.name.capitalize}: #{score}"
+      ghost_score[0, @losses[player.name]] = record(player)
+      puts "#{player.name.capitalize}: #{ghost_score}"
     end
     puts
   end
 
   def run
-    until @losses.values.any? { |value| value.eql?(5) }
-      @fragment = ''
-      display_standings
-      play_round
+    until @players.count == 1
+      until @losses.values.any? { |value| value.eql?(5) }
+        @fragment = ''
+        display_standings
+        play_round
+      end
+      puts "\n*** #{@losses.key(5).capitalize} has been ghosted! 👋 ***"
+      @players.delete_if { |player| player.name == @losses.key(5) }
+      @losses.delete(@losses.key(5))
     end
-
-    display_standings
-    @losses.delete(@losses.key(5))
+    puts
     "#{@losses.keys.first.capitalize} wins ✌️ "
   end
 end
