@@ -2,19 +2,20 @@ require_relative './player.rb'
 
 # :nodoc:
 class Game
+
+  attr_reader :fragment, :dictionary, :players, :losses
+
   def initialize(players)
     @players    = players
     @fragment   = ''
     @dictionary = {}
-    @losses     = Hash.new(0)
+    @losses     = Hash[*@players.collect { |player| [player.name, 0] }.flatten]
 
     Dir.chdir(File.dirname(__FILE__)) # dictionary file is in /lib
     File.open('dictionary.txt').each_line do |word|
       @dictionary[word.chomp] = true
     end
   end
-
-  attr_accessor :fragment, :dictionary, :players, :losses
 
   def current_player
     @players.first
@@ -54,10 +55,8 @@ class Game
   end
 
   def play_round
-    until @dictionary.key? @fragment
-      take_turn(current_player)
+    take_turn(current_player) until @dictionary.key? @fragment
 
-    end
     print "👻 #{@fragment.capitalize} is a word!"
     print " #{previous_player.name.capitalize} lost this round.\n"
     @losses[previous_player.name] += 1
@@ -79,15 +78,14 @@ class Game
   end
 
   def run
-    @losses = Hash.new(0)
     until @losses.values.any? { |value| value.eql?(5) }
       @fragment = ''
       display_standings
       play_round
     end
-    puts
-    print "#{@losses.key(5).capitalize} has been ghosted."
+
+    display_standings
     @losses.delete(@losses.key(5))
-    print "#{@losses.keys.first.capitalize} wins ✌️\n"
+    "#{@losses.keys.first.capitalize} wins ✌️ "
   end
 end
