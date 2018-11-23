@@ -1,4 +1,5 @@
 require_relative './player.rb'
+# require_relative './aiplayer.rb'
 
 # :nodoc:
 class Game
@@ -35,7 +36,7 @@ class Game
     loop do
       break if valid_play?(guess)
 
-      player.alert_invalid_guess
+      player.alert_invalid_guess(guess)
       guess = player.guess
     end
 
