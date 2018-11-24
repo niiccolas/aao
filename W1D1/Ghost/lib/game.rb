@@ -1,9 +1,9 @@
 require_relative './player.rb'
-# require_relative './aiplayer.rb'
+require_relative './aiplayer.rb'
 
 # :nodoc:
 class Game
-  attr_accessor :fragment, :dictionary, :players, :losses
+  attr_reader :fragment, :dictionary, :players, :losses
 
   def initialize(players)
     @players    = players
@@ -55,19 +55,41 @@ class Game
   end
 
   def play_round
+    @fragment = ''
     take_turn(current_player) until @dictionary.key? @fragment
 
-    print "“#{@fragment.upcase}” is a word!"
-    print " #{previous_player.name.capitalize} lost this round.\n"
     @losses[previous_player.name] += 1
+    display_lost_round
   end
 
   def record(player)
     'GHOST'.slice(0, @losses[player.name])
   end
 
+  def eliminate_ghosted_player
+    @players.delete_if { |player| player.name == @losses.key(5) }
+    @losses.delete(@losses.key(5))
+  end
+
+  def run
+    until @players.count == 1
+      until @losses.values.any? { |value| value.eql?(5) }
+        clear_screen
+        display_standings
+        play_round
+      end
+
+      display_ghosted_player
+      eliminate_ghosted_player
+    end
+    display_winner
+  end
+
+  # UI methods, display prompts & status
   def display_standings
-    puts "\nGhost Scores:"
+    round_num = losses.values.reduce(:+) + 1
+
+    puts "Round n°#{round_num} - Ghost Scores:"
     ghost_score = '_____'
     @players.each do |player|
       ghost_score[0, @losses[player.name]] = record(player)
@@ -76,17 +98,28 @@ class Game
     puts
   end
 
-  def run
-    until @players.count == 1
-      until @losses.values.any? { |value| value.eql?(5) }
-        @fragment = ''
-        display_standings
-        play_round
-      end
-      puts "\n*** 👻 #{@losses.key(5).capitalize} has been ghosted! 👻 ***"
-      @players.delete_if { |player| player.name == @losses.key(5) }
-      @losses.delete(@losses.key(5))
-    end
+  def display_ghosted_player
+    puts "\n*** 👻 #{@losses.key(5).capitalize} has been ghosted! 👻 ***"
+  end
+
+  def display_winner
+    puts
     puts "+++ ✌️  #{@losses.keys.first.capitalize} WINS ✌️  +++"
+  end
+
+  def display_lost_round
+    puts
+    print "*** “#{@fragment.upcase}” is a word!"
+    print " #{previous_player.name.capitalize} lost this round ***\n"
+
+    sleep(2) unless @losses[previous_player.name] == 5
+  end
+
+  def clear_screen
+    if RUBY_PLATFORM =~ /win32|win64|\.NET|windows|cygwin|mingw32/i
+      system('cls')
+    else
+      system('clear')
+    end
   end
 end
