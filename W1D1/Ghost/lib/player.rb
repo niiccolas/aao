@@ -11,7 +11,9 @@ class Player
   end
 
   def alert_invalid_guess(letter)
+    puts
     puts "#{letter} is invalid input! Pick a letter of the alphabet,\n"
     print "while forming an existing word. Try again: "
+    puts
   end
 end
