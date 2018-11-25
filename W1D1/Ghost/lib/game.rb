@@ -29,21 +29,6 @@ class Game
     @players.rotate!
   end
 
-  def take_turn(player)
-    print "Your turn #{player.name.capitalize}, pick a letter: #{@fragment}"
-    guess = player.guess
-
-    loop do
-      break if valid_play?(guess)
-
-      player.alert_invalid_guess(guess)
-      guess = player.guess
-    end
-
-    @fragment += guess
-    next_player!
-  end
-
   def valid_play?(string)
     return false unless ('a'..'z').cover?(string) && string.length == 1
 
@@ -52,14 +37,6 @@ class Game
       return true if key.start_with? possible_word
     end
     false
-  end
-
-  def play_round
-    @fragment = ''
-    take_turn(current_player) until @dictionary.key? @fragment
-
-    @losses[previous_player.name] += 1
-    display_lost_round
   end
 
   def record(player)
@@ -75,6 +52,7 @@ class Game
     until @players.count == 1
       until @losses.values.any? { |value| value.eql?(5) }
         clear_screen
+        clear_fragment
         display_standings
         play_round
       end
@@ -83,6 +61,36 @@ class Game
       eliminate_ghosted_player
     end
     display_winner
+  end
+
+  def clear_fragment
+    @fragment = ''
+  end
+
+  def play_round
+    take_turn(current_player) until @dictionary.key? @fragment
+
+    @losses[previous_player.name] += 1
+    display_lost_round
+  end
+
+  def take_turn(player)
+    prompt_player(player)
+    guess = player.guess(@dictionary, @fragment)
+    if player.type == 'ai'
+      print guess
+      puts
+    end
+
+    loop do
+      break if valid_play?(guess)
+
+      player.alert_invalid_guess(guess, fragment)
+      guess = player.guess
+    end
+
+    @fragment += guess
+    next_player!
   end
 
   # UI methods, display prompts & status
@@ -96,6 +104,12 @@ class Game
       puts "#{player.name.capitalize}: #{ghost_score}"
     end
     puts
+  end
+
+  def prompt_player(player)
+    puts
+    puts "current fragment: #{@fragment.upcase}" unless @fragment.empty?
+    print "Your turn #{player.name.capitalize}, pick a letter: "
   end
 
   def display_ghosted_player
