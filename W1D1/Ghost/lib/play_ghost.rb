@@ -3,10 +3,15 @@ require_relative './game.rb'
 def register_players
   players = []
 
-  print 'How many people will be playing?: '
+  print 'How many human players will be playing?: '
   gets.chomp.to_i.times do |player_number|
     print "Player ##{player_number + 1}, enter your name: "
     players << Player.new(gets.chomp)
+  end
+
+  print 'How many a.i. players will be playing?: '
+  gets.chomp.to_i.times do
+    players << AiPlayer.new
   end
 
   players
