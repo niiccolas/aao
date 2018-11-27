@@ -36,14 +36,4 @@ class AiPlayer
     # If added to @fragment, those letters would complete a word
     words_one_letter_away.keys.map { |word| word[-1] }
   end
-
-  def alert_invalid_guess(letter)
-    puts
-    puts "#{letter} is invalid input! Pick a letter of the alphabet,\n"
-    print "while forming an existing word. Try again: "
-    puts
-
-    puts "cancel if this goes in infinite loop"
-    gets.chomp
-  end
 end
