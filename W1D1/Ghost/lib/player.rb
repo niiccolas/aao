@@ -7,13 +7,11 @@ class Player
     @type = 'human'
   end
 
-  def guess(*args)
+  def guess(*_args)
     gets.chomp.downcase
   end
 
-  def alert_invalid_guess(letter, fragment)
-    puts
-    puts "🚫 “#{letter}” is invalid input! Pick a letter of the alphabet,\n"
-    print "while forming an existing word. Try again: "
+  def alert_invalid_guess(letter)
+    print GhostUi.message_to_color("“#{letter}” is invalid input! Try again: ", :red)
   end
 end
