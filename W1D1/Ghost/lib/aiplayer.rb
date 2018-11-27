@@ -2,7 +2,8 @@ class AiPlayer
   attr_reader :name, :type
 
   def initialize
-    @name = %w[Casper Jacob Slimey Abe Duppy].sample + ' (AI)'
+    ghosts = %w[Casper Jacob Slimey Abe Duppy Thyestes Churel]
+    @name = ghosts.sample + rand(100).to_s + ' (a.i.)'
     @type = 'ai'
   end
 
