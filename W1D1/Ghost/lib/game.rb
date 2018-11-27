@@ -39,28 +39,17 @@ class Game
     false
   end
 
-  def record(player)
-    'GHOST'.slice(0, @losses[player.name])
-  end
-
-  def eliminate_ghosted_player
-    @players.delete_if { |player| player.name == @losses.key(5) }
-    @losses.delete(@losses.key(5))
-  end
-
   def run
     until @players.count == 1
       until @losses.values.any? { |value| value.eql?(5) }
-        clear_screen
+        GhostUi.clear_screen
         clear_fragment
-        display_standings
         play_round
       end
-
-      display_ghosted_player
+      GhostUi.display_ghosted_player(@losses)
       eliminate_ghosted_player
     end
-    display_winner
+    GhostUi.display_winner(@losses)
   end
 
   def clear_fragment
@@ -68,14 +57,17 @@ class Game
   end
 
   def play_round
+    GhostUi.clear_screen
+    GhostUi.display_standings(@players, @losses)
+
     take_turn(current_player) until @dictionary.key? @fragment
 
     @losses[previous_player.name] += 1
-    display_lost_round
+    GhostUi.display_lost_round(@fragment, @losses, previous_player, @players)
   end
 
   def take_turn(player)
-    prompt_player(player)
+    GhostUi.display_guess_prompt(player, @fragment)
     guess = player.guess(@dictionary, @fragment)
     if player.type == 'ai'
       print guess
@@ -85,7 +77,7 @@ class Game
     loop do
       break if valid_play?(guess)
 
-      player.alert_invalid_guess(guess, fragment)
+      player.alert_invalid_guess(guess)
       guess = player.guess
     end
 
@@ -93,47 +85,8 @@ class Game
     next_player!
   end
 
-  # UI methods, display prompts & status
-  def display_standings
-    round_num = losses.values.reduce(:+) + 1
-
-    puts "Round n°#{round_num} - Ghost Scores:"
-    ghost_score = '_____'
-    @players.each do |player|
-      ghost_score[0, @losses[player.name]] = record(player)
-      puts "#{player.name.capitalize}: #{ghost_score}"
-    end
-    puts
-  end
-
-  def prompt_player(player)
-    puts
-    puts "current fragment: #{@fragment.upcase}" unless @fragment.empty?
-    print "Your turn #{player.name.capitalize}, pick a letter: "
-  end
-
-  def display_ghosted_player
-    puts "\n*** 👻 #{@losses.key(5).capitalize} has been ghosted! 👻 ***"
-  end
-
-  def display_winner
-    puts
-    puts "+++ ✌️  #{@losses.keys.first.capitalize} WINS ✌️  +++"
-  end
-
-  def display_lost_round
-    puts
-    print "*** “#{@fragment.upcase}” is a word!"
-    print " #{previous_player.name.capitalize} lost this round ***\n"
-
-    sleep(2) unless @losses[previous_player.name] == 5
-  end
-
-  def clear_screen
-    if RUBY_PLATFORM =~ /win32|win64|\.NET|windows|cygwin|mingw32/i
-      system('cls')
-    else
-      system('clear')
-    end
+  def eliminate_ghosted_player
+    @players.delete_if { |player| player.name == @losses.key(5) }
+    @losses.delete(@losses.key(5))
   end
 end
