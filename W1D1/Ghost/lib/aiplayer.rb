@@ -16,7 +16,12 @@ class AiPlayer
 
   def winning_moves(dictionary, fragment)
     winning_words = dictionary.select { |word| word.start_with? fragment }
-    winning_words.reject! { |word| losing_moves(dictionary, fragment).include? word[fragment.length] }
+
+    if fragment.length > 1
+      winning_words.reject! do |word|
+        losing_moves(dictionary, fragment).include? word[fragment.length]
+      end
+    end
 
     # winning letters, duplicates & nil removed
     winning_words.keys.map { |word| word[fragment.length] }.uniq.compact
