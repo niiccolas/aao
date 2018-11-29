@@ -52,19 +52,19 @@ class Maze
   def adjacent_is_exit
     @maze[current_row][current_column + 1] == 'E' ||
     @maze[current_row][current_column - 1] == 'E' ||
-    @maze[current_row][current_row - 1] == 'E' ||
-    @maze[current_row][current_row + 1] == 'E'
+    @maze[current_row - 1][current_column] == 'E' ||
+    @maze[current_row + 1][current_column] == 'E'
   end
 
   def pathfinder
     if empty_right
       move_right
+    elsif empty_up
+      move_up
     elsif empty_down
       move_down
     elsif empty_left
       move_left
-    elsif empty_up
-      move_up
     end
 
     mark_current_position
