@@ -19,10 +19,6 @@ describe Card do
       it 'should raise an error if given an integer greater than 26' do
         expect { Card.shuffled_pairs(44) }.to raise_error(ArgumentError)
       end
-
-      it 'should raise an error if given an odd integer' do
-        expect { Card.shuffled_pairs(3) }.to raise_error(ArgumentError)
-      end
     end
   end
 
