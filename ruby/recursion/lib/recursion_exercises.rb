@@ -62,3 +62,26 @@ class Array
     duplicate
   end
 end
+
+# Fibonacci
+# Write a recursive and an iterative Fibonacci method. The method should take in an integer n and return the first n Fibonacci numbers in an array.
+
+# Iterative Fibonacci
+def fibonacci(n, fib_sequence = [0, 1])
+  return [0]    if n.zero?
+  return [0, 1] if n == 1
+
+  (n - 2).times do
+    fib_sequence << fib_sequence[-1] + fib_sequence[-2]
+  end
+  fib_sequence
+end
+
+# Recursive Fibonacci
+def fibr(n)
+  return [0,1] if n <= 2
+
+  sequence = fibr(n - 1)
+  sequence << sequence[-2] + sequence[-1]
+  sequence
+end
