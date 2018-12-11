@@ -18,3 +18,27 @@ end
 def sum_array_iterative(arr)
   arr.reduce(:+)
 end
+
+# Exponentiation
+# Write two versions of exponent that use two different recursions: Note that for recursion 2, you will need to square the results of exp(b, n / 2) and (exp(b, (n - 1) / 2).
+
+def exponent_v1(b, n, counter = 0)
+  return 1 if n.zero?
+
+  b * exponent_v1(b, n - 1)
+end
+
+def exponent_v2(b, n)
+  return 1 if n.zero?
+
+  if n.odd?
+    b * square(exponent_v2(b, (n - 1) / 2))
+  else
+    square(exponent_v2(b, n / 2))
+  end
+end
+
+# helper method for exponent_v2
+def square(num)
+  num * num
+end
