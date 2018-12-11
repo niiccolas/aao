@@ -42,3 +42,23 @@ end
 def square(num)
   num * num
 end
+
+# Deep dup
+# Using recursion and the is_a? method, write an Array#deep_dup method that will perform a "deep" duplication of the interior arrays.
+
+class Array
+  def deep_dup
+    return self if self.none? { |el| el.is_a? Array }
+
+    duplicate = []
+    self.each do |el|
+      if el.is_a? Array
+        duplicate << Array.new(el).deep_dup
+      else
+        duplicate << el
+      end
+    end
+
+    duplicate
+  end
+end
