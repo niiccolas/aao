@@ -101,3 +101,29 @@ def bsearch(array, target)
     midpoint += bsearch(array[midpoint + 1..-1], target) + 1
   end
 end
+
+# Merge Sort
+# Implement a method merge_sort that sorts an Array:
+def merge_sort(arr)
+  return nil if arr.empty?
+  return arr if arr.length <= 1
+
+  midpoint = arr.length / 2
+  left     = merge_sort(arr[0...midpoint])
+  right    = merge_sort(arr[midpoint..-1])
+
+  merge(left, right)
+end
+
+# merge helper method for merge_sort
+def merge(left, right)
+  if left.empty?
+    right
+  elsif right.empty?
+    left
+  elsif left.first < right.first
+    [left.first] + merge(left[1..-1], right)
+  else
+    [right.first] + merge(left, right[1..-1])
+  end
+end
