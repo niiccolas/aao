@@ -85,3 +85,19 @@ def fibr(n)
   sequence << sequence[-2] + sequence[-1]
   sequence
 end
+
+# Binary Search
+# Write a recursive binary search: bsearch(array, target). Note that binary search only works on sorted arrays. Make sure to return the location of the found object (or nil if not found!). Hint: you will probably want to use subarrays.
+
+def bsearch(array, target)
+  return nil unless array.include?(target)
+
+  midpoint = array.length / 2
+  return midpoint if target == array[midpoint]
+
+  if target < array[midpoint]
+    bsearch(array[0...midpoint], target)
+  elsif target > array[midpoint]
+    midpoint += bsearch(array[midpoint + 1..-1], target) + 1
+  end
+end
