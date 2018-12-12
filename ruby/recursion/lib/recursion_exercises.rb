@@ -137,3 +137,44 @@ def subsets(arr)
   sets = subsets(arr[0...-1])
   sets + sets.map { |num| num + [arr.last] }
 end
+
+# Permutations
+# Write a recursive method permutations(array) that calculates all the permutations of the given array.
+
+def permutations(array)
+  # Base case
+  return [array] if array.length <= 1
+
+  # Remove the first element of array while saving it
+  # Ex. if arr = [1,2,3] => first = 1, arr = [2,3]
+  first = array.shift
+
+  # Recursively call permutations on the array that is now
+  # one element shorter thanks to first = array.shift
+  # This ensures that at some point,
+  # we'll hit the base case of array.lenght <= 1
+  perms = permutations(array)
+
+  # Store the permutations for each stack frame
+  total_permutations = []
+
+  # Once we've hit the base case of [[n]],
+  # iterate thru each element of perms
+  perms.each do |perm|
+    # for each permutation's index,
+    (0..perm.length).each do |i|
+      start_to_i = perm[0...i]
+      i_to_end   = perm[i..-1]
+      # depending on the current index, concat first element
+      # before current perm
+      # in the middle of current perm
+      # after current perm
+      total_permutations << start_to_i + [first] + i_to_end
+    end
+  end
+
+  # Return the permutations for each stack frame
+  total_permutations
+end
+
+p permutations([6, 7, 8])
