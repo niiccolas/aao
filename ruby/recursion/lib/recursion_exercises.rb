@@ -127,3 +127,13 @@ def merge(left, right)
     [right.first] + merge(left, right[1..-1])
   end
 end
+
+# Array Subsets
+# Write a method subsets that will return all subsets of an array
+
+def subsets(arr)
+  return [[]] if arr.empty?
+
+  sets = subsets(arr[0...-1])
+  sets + sets.map { |num| num + [arr.last] }
+end
