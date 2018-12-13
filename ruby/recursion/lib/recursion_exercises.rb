@@ -70,8 +70,8 @@ end
 
 # Iterative Fibonacci
 def fibonacci(n, fib_sequence = [0, 1])
-  return [0]    if n.zero?
-  return [0, 1] if n == 1
+  return []  if n.zero?
+  return [0] if n <= 1
 
   (n - 2).times do
     fib_sequence << fib_sequence[-1] + fib_sequence[-2]
@@ -81,11 +81,12 @@ end
 
 # Recursive Fibonacci
 def fibr(n)
-  return [0,1] if n <= 2
-
-  sequence = fibr(n - 1)
-  sequence << sequence[-2] + sequence[-1]
-  sequence
+  if n <= 2
+    [0,1].take(n)
+  else
+    sequence = fibr(n - 1)
+    sequence << sequence[-2] + sequence[-1]
+  end
 end
 
 # Binary Search
