@@ -24,19 +24,19 @@ end
 # Exponentiation
 # Write two versions of exponent that use two different recursions: Note that for recursion 2, you will need to square the results of exp(b, n / 2) and (exp(b, (n - 1) / 2).
 
-def exponent_v1(b, n)
-  return 1 if n.zero?
+def exponent_v1(base, exponent)
+  return 1 if exponent.zero?
 
-  b * exponent_v1(b, n - 1)
+  base * exponent_v1(base, exponent - 1)
 end
 
-def exponent_v2(b, n)
-  return 1 if n.zero?
+def exponent_v2(base, exponent)
+  return 1 if exponent.zero?
 
-  if n.odd?
-    b * square(exponent_v2(b, (n - 1) / 2))
+  if exponent.odd?
+    base * square(exponent_v2(base, (exponent - 1) / 2))
   else
-    square(exponent_v2(b, n / 2))
+    square(exponent_v2(base, exponent / 2))
   end
 end
 
