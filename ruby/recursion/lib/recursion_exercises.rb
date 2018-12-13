@@ -203,3 +203,11 @@ def greedy_make_change(amount, coins = [25, 10, 5, 1])
   largest_coin = coins.detect { |coin| coin <= amount }
   [largest_coin] + greedy_make_change(amount - largest_coin, coins)
 end
+
+# Recursive implementation returning the least amount of coins
+def make_better_change(amount, coins = [25, 10, 5, 1], possible_change_options = [])
+  coins.each do |coin|
+    possible_change_options << [coin] + greedy_make_change(amount - coin, coins)
+  end
+  possible_change_options.sort_by(&:length).first
+end
