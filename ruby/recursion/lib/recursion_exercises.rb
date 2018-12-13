@@ -16,13 +16,15 @@ end
 
 # .. and iteratively
 def sum_array_iterative(arr)
+  return arr[0] if arr.length == 1
+
   arr.reduce(:+)
 end
 
 # Exponentiation
 # Write two versions of exponent that use two different recursions: Note that for recursion 2, you will need to square the results of exp(b, n / 2) and (exp(b, (n - 1) / 2).
 
-def exponent_v1(b, n, counter = 0)
+def exponent_v1(b, n)
   return 1 if n.zero?
 
   b * exponent_v1(b, n - 1)
