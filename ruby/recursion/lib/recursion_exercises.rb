@@ -191,3 +191,15 @@ def make_change_iterative(amount, coins = [25, 10, 5, 1])
 
   change
 end
+
+# Recursive and greedy implementation
+def greedy_make_change(amount, coins = [25, 10, 5, 1])
+  # Each recursive call will take for amount the
+  # substraction of (amount - largest possible coin).
+  # As soon as, after substraction, amount is equal to
+  # any of the coins, we've hit the base case
+  return [amount] if coins.include?(amount)
+
+  largest_coin = coins.detect { |coin| coin <= amount }
+  [largest_coin] + greedy_make_change(amount - largest_coin, coins)
+end
