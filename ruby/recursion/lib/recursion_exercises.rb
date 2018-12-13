@@ -177,4 +177,17 @@ def permutations(array)
   total_permutations
 end
 
-p permutations([6, 7, 8])
+# Make Change
+# Create a method that makes change for a given amount
+# using as default the 25, 10, 5 and 1 cent coins of the US dollar.
+# Another system of coins can be passed to the method.
+
+def make_change_iterative(amount, coins = [25, 10, 5, 1])
+  coins = coins.sort.reverse # Make sure coins are in descending order
+  change = []
+  until change.sum == amount
+    change << coins.detect { |coin| (change.sum + coin) <= amount }
+  end
+
+  change
+end
