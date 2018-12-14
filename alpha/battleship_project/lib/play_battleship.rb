@@ -5,11 +5,11 @@
 
 require_relative "battleship"
 
-puts "Enter a size for the game: "
+puts 'Enter a size for the game: '
 battleship = Battleship.new(gets.chomp.to_i)
 battleship.start_game
 
-until battleship.game_over? do
-  puts "-------------------------"
+until battleship.game_over?
+  puts '-' * 25
   battleship.turn
 end
