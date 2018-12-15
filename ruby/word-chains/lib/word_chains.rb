@@ -30,15 +30,22 @@ class WordChainer
     end
   end
 
+  # For a given word, go thru each index and at that index,
+  # test every letter of the alphabet except the current one.
+  # If the letter collage creates an existing word,
+  # save it to the adjacent words array.
   def adjacent_words(adj_word)
-    adjacent = {}
-    (0...adj_word.length).each do |index|
-      adjacent = @dictionary.select do |dict_word|
-        dict_word.include?(adj_word.delete(adj_word[index])) &&
-        dict_word != adj_word
+    adjacent = []
+
+    adj_word.each_char.with_index do |old_letter, i|
+      ('a'..'z').each do |new_letter|
+        next if new_letter == old_letter
+
+        letter_collage    = adj_word.dup
+        letter_collage[i] = new_letter
+        adjacent << letter_collage if @dictionary.include?(letter_collage)
       end
     end
-
-    adjacent.empty? ? 'no adjacent found' : adjacent
+    adjacent
   end
 end
