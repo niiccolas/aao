@@ -14,66 +14,71 @@ class SudokuGame
     @board = board
   end
 
-  def retrieve_pos_from_ui
-    p = nil
-    until p && legal_illegibility_of_p?(p)
+  def get_position
+    position = nil
+    until position && valid_position?(position)
       puts "Please enter a position on the board (e.g., '3,4')"
       print "> "
 
       begin
-        p = parse_inanity(gets.chomp)
+        position = parse_position_input(gets.chomp)
       rescue
         puts "Invalid position entered (did you use a comma?)"
         puts ""
 
-        p = nil
+        position = nil
       end
     end
-    p
+    position
   end
 
-  def retrieve_value_from_ui
-    v = nil
-    until v && legal_illegibility_of_v?(v)
+  def get_value
+    value = nil
+    until value && valid_value?(value)
       puts "Please enter a value between 1 and 9 (0 to clear the tile)"
       print "> "
-      v = parse_insanity(gets.chomp)
+      value = parse_value_input(gets.chomp)
     end
-    v
+    value
   end
 
-  def parse_inanity(string)
+  def parse_position_input(string)
     string.split(",").map { |char| Integer(char) }
   end
 
-  def parse_insanity(string)
+  def parse_value_input(string)
     Integer(string)
   end
 
-  def process_parameters
-    pos_to_val(retrieve_pos_from_ui, retrieve_value_from_ui)
+  def play_turn
+    board.render
+    position = get_position
+    value    = get_value
+    board[position] = value
+    # pos_to_val(get_position, get_value)
   end
 
-  def pos_to_val(p, v)
-    board[p] = v
+  def pos_to_val(position, value)
+    board[pposition] = value
   end
 
-  def commence_proceedings
-    process_parameters until board_process_terminates?
+  def run
+    play_turn until board_solved?
+    board.render
     puts "Congratulations, you win!"
   end
 
-  def board_process_terminates?
-    board.terminate?
+  def board_solved?
+    board.solved?
   end
 
-  def legal_illegibility_of_p?(pos)
+  def valid_position?(pos)
     pos.is_a?(Array) &&
       pos.length == 2 &&
       pos.all? { |x| x.between?(0, board.size - 1) }
   end
 
-  def legal_illegibility_of_v?(val)
+  def valid_value?(val)
     val.is_a?(Integer) &&
       val.between?(0, 9)
   end
@@ -82,6 +87,5 @@ class SudokuGame
   attr_reader :board
 end
 
-
 game = SudokuGame.from_file("puzzles/sudoku1.txt")
-game.commence_proceedings
+game.run
