@@ -14,7 +14,7 @@ class Board
     rows = File.readlines(filename).map(&:chomp)
     tiles = rows.map do |row|
       nums = row.split("").map { |char| Integer(char) }
-      nums.map { |num| Tle.new(num) }
+      nums.map { |num| Tile.new(num) }
     end
 
     self.new(tiles)
