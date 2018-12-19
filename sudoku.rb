@@ -4,7 +4,7 @@ require 'colorize'
 puts "Only contractors write code this bad.".yellow
 
 class SudokuGame
-  def self.from_file(filename)
+  def Board.from_file(filename)
     board = self.from_file(filename)
     self.new(board)
   end
