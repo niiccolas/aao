@@ -11,6 +11,10 @@ class PolyTreeNode
     @parent
   end
 
+  def value
+    @value
+  end
+
   def parent=(value)
     if self.parent
       self.parent.children.delete(self)
@@ -22,10 +26,6 @@ class PolyTreeNode
     self
   end
 
-  def value
-    @value
-  end
-
   def add_child(child_node)
     child_node.parent = self
   end
@@ -34,5 +34,17 @@ class PolyTreeNode
     raise 'Not a child' unless self.children.include?(child_node)
 
     child_node.parent = nil
+  end
+
+  def dfs(target = nil, &prc)
+    prc ||= Proc.new { |node| node.value == target }
+    return self if prc.call(self)
+
+    children.each do |child|
+      search_result = child.dfs(&prc)
+      return search_result unless search_result.nil?
+    end
+
+    nil
   end
 end
