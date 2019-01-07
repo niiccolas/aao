@@ -3,17 +3,41 @@ class Maze
   require 'matrix'
   attr_reader :maze, :current_position
 
-  def initialize(maze_filename_txt)
-    @maze = []
-    Dir.chdir(File.dirname(__FILE__))
-    maze_file = File.open(maze_filename_txt.first)
-    maze_file.each_line { |line| @maze << line.chomp.chars }
-
+  def initialize(maze_filename)
+    @maze             = load_maze(maze_filename)
+    @start_index      = find_start_index
+    @end_index        = find_end_index
     @current_position = start_point
   end
 
+  def load_maze(maze_filename)
+    maze = []
+    Dir.chdir(File.dirname(__FILE__))
+    File.open(maze_filename.first).each_line do |line|
+      maze << line.chomp.chars
+    end
+
+    maze
+  end
+
+  def find_start_index
+    find_char('S')
+  end
+
+  def find_end_index
+    find_char('E')
+  end
+
+  def find_char(char)
+    @maze.each_with_index do |row, i|
+      row.each_with_index do |_col, j|
+        return [i, j] if @maze[i][j] == char
+      end
+    end
+  end
+
   def draw_maze
-    maze.each { |el| puts el.join }
+    maze.each { |row| puts row.join }
   end
 
   def start_point
