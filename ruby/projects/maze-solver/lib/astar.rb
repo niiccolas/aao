@@ -6,4 +6,9 @@ class AStar
   def initialize(maze)
     @maze = maze
   end
+
+  def solve(heuristic)
+    build_branching_paths(heuristic)
+    path = find_path
+    @maze.travel_path(path)
 end
