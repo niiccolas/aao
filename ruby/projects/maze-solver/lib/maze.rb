@@ -1,19 +1,23 @@
+require 'matrix'
+
 # :nodoc:
 class Maze
-  require 'matrix'
-  attr_reader :maze, :current_position
+  DELTAS = [[-1, 0], [0, -1], [0, 1], [1, 0]].freeze
+
+  attr_reader :maze, :start_index, :end_index #:current_position
 
   def initialize(maze_filename)
     @maze             = load_maze(maze_filename)
     @start_index      = find_start_index
     @end_index        = find_end_index
-    @current_position = start_point
+    # @current_position = start_point
   end
 
   def load_maze(maze_filename)
     maze = []
     Dir.chdir(File.dirname(__FILE__))
-    File.open(maze_filename.first).each_line do |line|
+    File.open(maze_filename).each_line do |line|
+    # File.open(maze_filename.first).each_line do |line|
       maze << line.chomp.chars
     end
 
@@ -31,7 +35,7 @@ class Maze
   def find_char(char)
     @maze.each_with_index do |row, i|
       row.each_with_index do |_col, j|
-        return [i, j] if @maze[i][j] == char
+        return [j, i] if @maze[i][j] == char
       end
     end
   end
@@ -93,6 +97,19 @@ class Maze
 
     mark_current_position
   end
+
+  def find_neighbors(point)
+    point_x, point_y = point
+    neighbors        = []
+
+    DELTAS.each do |delta_x, delta_y|
+      neighbor = [(delta_x + point_x), (delta_y + point_y)]
+      neighbors << neighbor if in_maze?(neighbor) && !is_wall?(neighbor)
+    end
+
+    neighbors
+  end
+
 
   def empty_right
     @maze[current_row][current_column + 1] == ' '
