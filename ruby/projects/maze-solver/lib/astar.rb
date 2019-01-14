@@ -16,17 +16,27 @@ class AStar
   def build_branching_paths(heuristic = :manhattan_heuristic)
     # initialize/reset the following instance variables:
     # @branching_path
-    # @current
+    # @current_pos
     reset_path
 
     queue   = [@current_pos]
     visited = [@current_pos]
 
     until queue.empty? || @current_pos == @maze.end_index
-      @current = manhattan_heuristic(queue)
-      queue.delete(@current)
-      visited << @current
+      @current_pos = manhattan_heuristic(queue)
+      queue.delete(@current_pos)
+      visited << @current_pos
+
+      adjacent_positions = @maze.find_neighbors(@current_pos)
+      adjacent_positions.each do |position|
+        unless visited.include?(position) || queue.include?(position)
+          queue << position
+          @branching_path[position] = @current_pos
+        end
+      end
     end
+
+    @branching_path
   end
 
   def reset_path
