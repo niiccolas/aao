@@ -110,8 +110,11 @@ class Maze
   end
 
   def in_maze?(position)
-    row, col = position
-    (0...@maze.length).cover?(row) && (0...@maze.length).cover?(col)
+    row, col             = position
+    coords_positive      = row.positive? && col.positive?
+    coords_within_bounds = row <= @maze[0].length && col <= @maze.length
+
+    coords_positive && coords_within_bounds
   end
 
   def wall?(position)
