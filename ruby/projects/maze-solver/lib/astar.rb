@@ -9,8 +9,7 @@ class AStar
 
   def solve(heuristic)
     build_branching_paths(heuristic)
-    path = find_path
-    @maze.travel_path(path)
+    @maze.travel_path(path_builder)
   end
 
   def build_branching_paths(heuristic = :manhattan_heuristic)
@@ -46,8 +45,8 @@ class AStar
 
   def manhattan_heuristic(queue)
     queue.inject do |first_loc, next_loc|
-      old_f = manhattan_estimate(first_loc)
-      new_f = manhattan_estimate(next_loc)
+      f_first = manhattan_estimate(first_loc)
+      f_next  = manhattan_estimate(next_loc)
 
       # Return the location with the lowest "f" score
       old_f > new_f ? next_loc : first_loc
@@ -55,23 +54,24 @@ class AStar
   end
 
   def manhattan_estimate(point)
-    traveled_so_far = path_to_exit(point).length
+    traveled_so_far = path_builder(point).length
 
-    distance_to_exit(point) + traveled_so_far
+    find_distance(point) + traveled_so_far
   end
 
-  def distance_to_exit(point)
+  #rename find_distance(point)
+  def find_distance(point)
     point_x, point_y = point
     exit_x,  exit_y  = @maze.maze_exit
 
     ((point_x - exit_x) + (point_y - exit_y)).abs
   end
 
-  def path_to_exit(goal = @maze.maze_exit)
+  def path_builder(goal = @maze.maze_exit)
     path = [goal]
     spot = goal
 
-    until @branching_path[spot] == nil
+    until @branching_path[spot].nil?
       path << @branching_path[spot]
 
       # To go BACK UP the history of @branching_path using the until loop
