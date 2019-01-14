@@ -1,4 +1,4 @@
-require 'matrix'
+require 'colorize'
 
 # :nodoc:
 class Maze
