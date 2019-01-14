@@ -7,7 +7,7 @@ class AStar
     @maze = maze
   end
 
-  def solve(heuristic)
+  def solve(heuristic = :manhattan_heuristic)
     build_branching_paths(heuristic)
     @maze.travel_path(path_builder)
   end
