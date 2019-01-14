@@ -7,10 +7,9 @@ class Maze
   attr_reader :maze, :start_index, :end_index #:current_position
 
   def initialize(maze_filename)
-    @maze             = load_maze(maze_filename)
-    @start_index      = find_start_index
-    @end_index        = find_end_index
-    # @current_position = start_point
+    @maze          = load_maze(maze_filename)
+    @maze_exit     = find_exit
+    @maze_entrance = find_entrance
   end
 
   def load_maze(maze_filename)
@@ -24,11 +23,11 @@ class Maze
     maze
   end
 
-  def find_start_index
+  def find_entrance
     find_char('S')
   end
 
-  def find_end_index
+  def find_exit
     find_char('E')
   end
 
