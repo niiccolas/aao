@@ -110,6 +110,15 @@ class Maze
     neighbors
   end
 
+  def in_maze?(position)
+    row, col = position
+    (0...@maze.length).cover?(row) && (0...@maze.length).cover?(col)
+  end
+
+  def is_wall?(position)
+    row, col = position
+    @maze[row][col] == '*'
+  end
 
   def empty_right
     @maze[current_row][current_column + 1] == ' '
