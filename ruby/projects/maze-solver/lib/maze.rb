@@ -115,7 +115,7 @@ class Maze
   end
 
   def wall?(position)
-    row, col = position
+    col, row = position
     @maze[row][col] == '*'
   end
 
