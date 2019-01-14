@@ -22,7 +22,7 @@ class AStar
     queue   = [@current_pos]
     visited = [@current_pos]
 
-    until queue.empty? || @current_pos == @maze.end_index
+    until queue.empty? || @current_pos == @maze.maze_exit
       @current_pos = manhattan_heuristic(queue)
       queue.delete(@current_pos)
       visited << @current_pos
@@ -41,7 +41,7 @@ class AStar
 
   def reset_path
     @branching_path = {}
-    @current_pos    = @maze.start_index
+    @current_pos    = @maze.maze_entrance
   end
 
   def manhattan_heuristic(queue)
@@ -62,12 +62,12 @@ class AStar
 
   def distance_to_exit(point)
     point_x, point_y = point
-    exit_x,  exit_y  = @maze.end_index
+    exit_x,  exit_y  = @maze.maze_exit
 
     ((point_x - exit_x) + (point_y - exit_y)).abs
   end
 
-  def path_to_exit(goal = @maze.end_index)
+  def path_to_exit(goal = @maze.maze_exit)
     path = [goal]
     spot = goal
 

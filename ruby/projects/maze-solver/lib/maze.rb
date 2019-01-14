@@ -4,7 +4,7 @@ require 'matrix'
 class Maze
   DELTAS = [[-1, 0], [0, -1], [0, 1], [1, 0]].freeze
 
-  attr_reader :maze, :start_index, :end_index #:current_position
+  attr_reader :maze, :maze_exit, :maze_entrance
 
   def initialize(maze_filename)
     @maze          = load_maze(maze_filename)
