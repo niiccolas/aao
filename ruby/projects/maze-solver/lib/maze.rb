@@ -104,7 +104,7 @@ class Maze
 
     DELTAS.each do |delta_x, delta_y|
       neighbor = [(delta_x + point_x), (delta_y + point_y)]
-      neighbors << neighbor if in_maze?(neighbor) && !is_wall?(neighbor)
+      neighbors << neighbor if in_maze?(neighbor) && !wall?(neighbor)
     end
 
     neighbors
@@ -115,7 +115,7 @@ class Maze
     (0...@maze.length).cover?(row) && (0...@maze.length).cover?(col)
   end
 
-  def is_wall?(position)
+  def wall?(position)
     row, col = position
     @maze[row][col] == '*'
   end
