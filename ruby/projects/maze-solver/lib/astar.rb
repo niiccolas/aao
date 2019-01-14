@@ -13,7 +13,7 @@ class AStar
   end
 
   def build_branching_paths(heuristic = :manhattan_heuristic)
-    # initialize/reset the following instance variables:
+    reset_path # initialize/reset the following instance variables:
     # @branching_path
     # @current_pos
     reset_path
@@ -22,7 +22,7 @@ class AStar
     visited = [@current_pos]
 
     until queue.empty? || @current_pos == @maze.maze_exit
-      @current_pos = manhattan_heuristic(queue)
+      @current_pos = manhattan_heuristic(queue) # uses the manhattan heuristic to pick from the queue the location with the lowest F score, that is, the "closest" to the exit
       queue.delete(@current_pos)
       visited << @current_pos
 
@@ -48,8 +48,10 @@ class AStar
       f_first = manhattan_estimate(first_loc)
       f_next  = manhattan_estimate(next_loc)
 
-      # Return the location with the lowest "f" score
-      old_f > new_f ? next_loc : first_loc
+      # Return the location with the lowest "f" score obtained adding:
+      # dist. travelled so far + dist. to exit
+      f_first > f_next  ? next_loc : first_loc
+      # choose first_loc when there is a tie
     end
   end
 
