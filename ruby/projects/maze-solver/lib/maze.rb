@@ -40,19 +40,9 @@ class Maze
   end
 
   def draw_maze
+    system('clear')
     maze.each { |row| puts row.join }
-  end
-
-  def start_point
-    Matrix[*@maze].index('S')
-  end
-
-  def end_point
-    Matrix[*@maze].index('E')
-  end
-
-  def current_row
-    @current_position[0]
+    sleep(0.05)
   end
 
   def current_column
@@ -122,13 +112,18 @@ class Maze
     @maze[row][col] == '*'
   end
 
-  def empty_right
-    @maze[current_row][current_column + 1] == ' '
-  end
-
-  def empty_left
-    @maze[current_row][current_column - 1] == ' '
-  end
+  def travel_path(path)
+    if path.length > 1
+      path.reverse_each do |pos|
+        row, col = pos
+        @maze[col][row] = 'X'.green
+        draw_maze
+      end
+      puts "We're out of here".green
+    else
+      draw_maze
+      puts 'There is no way out'.red
+    end
 
   def empty_up
     @maze[current_row - 1][current_column] == ' '
