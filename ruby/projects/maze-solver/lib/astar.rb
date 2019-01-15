@@ -16,8 +16,6 @@ class AStar
     reset_path # initialize/reset the following instance variables:
     # @branching_path
     # @current_pos
-    reset_path
-
     queue   = [@current_pos]
     visited = [@current_pos]
 
@@ -61,7 +59,6 @@ class AStar
     find_distance(point) + traveled_so_far
   end
 
-  #rename find_distance(point)
   def find_distance(point)
     point_x, point_y = point
     exit_x,  exit_y  = @maze.maze_exit
