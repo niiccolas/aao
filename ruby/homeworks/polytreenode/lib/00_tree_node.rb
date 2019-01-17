@@ -5,13 +5,7 @@ class PolyTreeNode
     @children = []
   end
 
-  def parent
-    @parent
-  end
-
-  def value
-    @value
-  end
+  attr_reader :value, :parent, :children
 
   def parent=(value)
     if self.parent
