@@ -36,25 +36,13 @@ class PolyTreeNode
     nil
   end
 
-  def bfs(target = nil, &prc)
-    prc ||= Proc.new { |node| node.value == target }
-
+  def bfs(target_value)
     queue = [self]
     until queue.empty?
       node = queue.shift
+      return node if node.value == target_value
 
-      return node if prc.call(node)
       queue.concat(node.children)
     end
-
-    nil
   end
 end
-
-
-def add_two_nums(a,b)
-  a + b
-end
-
-wu = add_two_nums(5,6)
-p wu
