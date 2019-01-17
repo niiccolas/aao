@@ -1,6 +1,4 @@
 class PolyTreeNode
-  attr_accessor :children
-
   def initialize(value)
     @value    = value
     @parent   = nil
@@ -62,3 +60,11 @@ class PolyTreeNode
     nil
   end
 end
+
+
+def add_two_nums(a,b)
+  a + b
+end
+
+wu = add_two_nums(5,6)
+p wu
