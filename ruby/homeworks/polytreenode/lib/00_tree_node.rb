@@ -7,15 +7,11 @@ class PolyTreeNode
 
   attr_reader :value, :parent, :children
 
-  def parent=(value)
-    if self.parent
-      self.parent.children.delete(self)
-    end
+  def parent=(node)
+    parent.children.delete(self) unless parent.nil?
 
-    @parent = value
-    value.children << self unless @parent.nil? || value.children.any? { |child| child == self }
-
-    self
+    @parent = node
+    node.children << self unless @parent.nil?
   end
 
   def add_child(child_node)
