@@ -21,9 +21,22 @@ class KnightPathFinder
   end
 
   def self.valid_moves(pos)
-    deltas.each do |delta|
-      p delta
+    valid_moves  = []
+    pos_x, pos_y = pos
+
+    KNIGHT_MOVES.each do |move|
+      move_x, move_y = move
+      valid_move     = [(pos_x - move_x), (pos_y - move_y)]
+      valid_moves << valid_move if within_board?(valid_move)
     end
+
+    valid_moves
+  end
+
+  def self.within_board?(pos)
+    row, col = pos
+    # (0..7) as indices of a standard 8x8 chess board
+    (0..7).cover?(row) && (0..7).cover?(col)
   end
 
   def new_move_positions(pos)
