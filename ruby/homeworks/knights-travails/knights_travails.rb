@@ -40,10 +40,8 @@ class KnightPathFinder
   end
 
   def new_move_positions(pos)
-    @considered_positions +=
-      KnightPathFinder.valid_moves(pos).reject do |move|
-        considered_positions.include?(move)
-      end
-    considered_positions
+    KnightPathFinder.valid_moves(pos)
+      .reject { |move_pos| considered_positions.include?(move_pos) }
+      .each   { |move_pos| considered_positions << move_pos }
   end
 end
