@@ -1,7 +1,7 @@
 require_relative '../polytreenode/lib/00_tree_node.rb'
 
 class KnightPathFinder
-  attr_accessor :starting_pos, :considered_positions
+  attr_reader   :starting_pos, :root_node, :considered_positions
 
   KNIGHT_MOVES = [
     [-1, -2],
