@@ -1,7 +1,7 @@
 require_relative '../polytreenode/lib/00_tree_node.rb'
 
 class KnightPathFinder
-  attr_reader   :starting_pos, :root_node, :considered_positions
+  attr_reader :starting_pos, :root_node, :considered_positions
 
   KNIGHT_MOVES = [
     [-1, -2],
@@ -59,5 +59,15 @@ class KnightPathFinder
     KnightPathFinder.valid_moves(pos)
       .reject { |move_pos| considered_positions.include?(move_pos) }
       .each   { |move_pos| considered_positions << move_pos }
+  end
+
+  def find_path(end_pos)
+    trace_path_back(root_node.bfs(end_pos))
+  end
+
+  def trace_path_back(node)
+    return [node.value] if node.parent == nil
+
+    trace_path_back(node.parent) + [node.value]
   end
 end
