@@ -35,12 +35,12 @@ class Simon
   end
 
   def game_over_message
-
+    puts "\nGame over 👎"
+    puts "Simon said: #{seq.join(' > ')}"
+    puts "You said:   #{seq_player.join(' > ')}"
   end
 
   def reset_game
 
-  def ticking_dots(num)
-    num.times { print '.'; sleep(0.5) }
   end
 end
