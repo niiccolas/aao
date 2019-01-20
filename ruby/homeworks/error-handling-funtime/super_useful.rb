@@ -1,8 +1,15 @@
 # PHASE 2
 def convert_to_int(str)
-  Integer(str)
-rescue ArgumentError => err
-  puts err.message
+  begin
+    num = Integer(str)
+  rescue ArgumentError => e
+    puts 'Argument must be a numeric string.'
+    puts "Error: #{e.message}"
+  ensure
+    num ||= 0
+  end
+
+  num
 end
 
 # PHASE 3
