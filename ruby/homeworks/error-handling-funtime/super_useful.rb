@@ -6,7 +6,7 @@ rescue ArgumentError => err
 end
 
 # PHASE 3
-FRUITS = ["apple", "banana", "orange"]
+FRUITS = ['apple', 'banana', 'orange'].freeze
 
 class CoffeeError < StandardError
   def message
@@ -23,9 +23,11 @@ end
 def reaction(maybe_fruit)
   if FRUITS.include? maybe_fruit
     puts "OMG, thanks so much for the #{maybe_fruit}!"
-  else 
-    raise StandardError 
-  end 
+  elsif maybe_fruit == 'coffee'
+    raise CoffeeError
+  else
+    raise NotAFruitError
+  end
 end
 
 def feed_me_a_fruit
