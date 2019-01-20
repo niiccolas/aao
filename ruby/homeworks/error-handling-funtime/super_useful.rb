@@ -46,13 +46,17 @@ end
 # PHASE 4
 class BestFriend
   def initialize(name, yrs_known, fav_pastime)
+    raise ArgumentError.new('@name cannot be blank') if name.empty?
+    raise ArgumentError.new("@yrs_known must be 5 minimum. 'Easy come, easy go'") if yrs_known < 5
+    raise ArgumentError.new('@fav_pastime cannot be blank')   if fav_pastime.empty?
+
     @name = name
     @yrs_known = yrs_known
     @fav_pastime = fav_pastime
   end
 
   def talk_about_friendship
-    puts "Wowza, we've been friends for #{@yrs_known}. Let's be friends for another #{1000 * @yrs_known}."
+    puts "Wowza, we've been friends for #{@yrs_known} years. Let's be friends for another #{1000 * @yrs_known}."
   end
 
   def do_friendstuff
@@ -60,7 +64,7 @@ class BestFriend
   end
 
   def give_friendship_bracelet
-    puts "Hey bestie, I made you a friendship bracelet. It says my name, #{@name}, so you never forget me." 
+    puts "Hey bestie, I made you a friendship bracelet. It says my name, #{@name}, so you never forget me."
   end
 end
 
