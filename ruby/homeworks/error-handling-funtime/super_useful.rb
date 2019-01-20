@@ -8,6 +8,18 @@ end
 # PHASE 3
 FRUITS = ["apple", "banana", "orange"]
 
+class CoffeeError < StandardError
+  def message
+    "I love coffee! Here, I'll let you try again."
+  end
+end
+
+class NotAFruitError < StandardError
+  def message
+    'This is not a fruit I know, I should go now.'
+  end
+end
+
 def reaction(maybe_fruit)
   if FRUITS.include? maybe_fruit
     puts "OMG, thanks so much for the #{maybe_fruit}!"
