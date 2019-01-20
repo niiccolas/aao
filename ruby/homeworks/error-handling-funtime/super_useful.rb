@@ -31,12 +31,17 @@ def reaction(maybe_fruit)
 end
 
 def feed_me_a_fruit
-  puts "Hello, I am a friendly monster. :)"
+  puts 'Hello, I am a friendly monster. :)'
 
-  puts "Feed me a fruit! (Enter the name of a fruit:)"
+  puts 'Feed me a fruit! (Enter the name of a fruit:)'
   maybe_fruit = gets.chomp
-  reaction(maybe_fruit) 
-end  
+  reaction(maybe_fruit)
+rescue CoffeeError => e
+  puts e.message
+  retry # if it's a CoffeeError, he's willing to let us retry
+rescue NotAFruitError => e
+  puts e.message
+end
 
 # PHASE 4
 class BestFriend
