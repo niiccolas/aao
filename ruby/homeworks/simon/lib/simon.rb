@@ -40,5 +40,7 @@ class Simon
 
   def reset_game
 
+  def ticking_dots(num)
+    num.times { print '.'; sleep(0.5) }
   end
 end
