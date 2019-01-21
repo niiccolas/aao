@@ -1,15 +1,15 @@
 require 'io/console'
 
 KEYMAP = {
-  " " => :space,
-  "h" => :left,
-  "j" => :down,
-  "k" => :up,
-  "l" => :right,
-  "w" => :up,
-  "a" => :left,
-  "s" => :down,
-  "d" => :right,
+  ' ' => :space,
+  'h' => :left,
+  'j' => :down,
+  'k' => :up,
+  'l' => :right,
+  'w' => :up,
+  'a' => :left,
+  's' => :down,
+  'd' => :right,
   "\t" => :tab,
   "\r" => :return,
   "\n" => :newline,
@@ -24,18 +24,19 @@ KEYMAP = {
 }
 
 MOVES = {
-  left: [0, -1],
-  right: [0, 1],
-  up: [-1, 0],
-  down: [1, 0]
+  left:  [ 0, -1],
+  right: [ 0,  1],
+  up:    [-1,  0],
+  down:  [ 1,  0]
 }
 
 class Cursor
-  attr_reader :cursor_pos, :board
+  attr_reader :cursor_pos, :board, :selected
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
+    @selected = false
   end
 
   def get_input
@@ -75,8 +76,32 @@ class Cursor
   end
 
   def handle_key(key)
+    case key
+    when :return, :space
+      @selected = !@selected
+      puts "yatta!"
+      puts selected
+      return cursor_pos
+    when :ctrl_c
+      Process.exit(0)
+    when :left
+      update_pos(:left)
+    when :right
+      update_pos(:right)
+    when :up
+      update_pos(:up)
+    when :down
+      update_pos(:down)
+    end
+
+    nil
   end
 
   def update_pos(diff)
+    c_x, c_y = cursor_pos
+    d_x, d_y = MOVES[diff]
+    new_pos  = [(c_x + d_x), (c_y + d_y)]
+
+    @cursor_pos = new_pos if @board.valid_pos?(new_pos)
   end
 end
