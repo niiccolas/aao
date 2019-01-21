@@ -29,10 +29,10 @@ class Manager < Employee
   end
 end
 
-ned    = Manager.new('Ned', 'Founder', 1000000, nil)
-darren = Manager.new('Darren', 'TA Manager', 78000, ned)
-shawna = Employee.new('Shawna', 'TA', 12000, darren)
-david  = Employee.new('David', 'TA', 10000, darren)
+ned    = Manager.new('Ned', 'Founder', 1_000_000, nil)
+darren = Manager.new('Darren', 'TA Manager', 78_000, ned)
+shawna = Employee.new('Shawna', 'TA', 12_000, darren)
+david  = Employee.new('David', 'TA', 10_000, darren)
 
 darren.add_subordinates(shawna, david)
 ned.add_subordinates(darren, shawna, david)
@@ -41,5 +41,3 @@ p david.bonus(3)  # 30_000
 p shawna.bonus(3) # 36_000
 p darren.bonus(4) # 88_000
 p ned.bonus(5)    # 500_000
-
-
