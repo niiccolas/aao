@@ -22,14 +22,15 @@ class Board
 
   def move_piece(start_pos, end_pos)
     raise ArgumentError.new("No piece in this location") if self[start_pos].is_a? NullPiece
-    raise ArgumentError.new("Location already occupied or not on the board") unless valid_pos?(end_pos)
+    raise ArgumentError.new("This location is not on the board") unless valid_pos?(end_pos)
+    # raise ArgumentError.new("Location already occupied or not on the board") unless valid_pos?(end_pos)
 
     self[start_pos] = NullPiece.new
     self[end_pos]   = Piece.new
   end
 
   def valid_pos?(pos)
-    BOARD_POSITIONS.include?(pos) && self[pos].is_a?(NullPiece)
+    BOARD_POSITIONS.include?(pos) #&& self[pos].is_a?(NullPiece)
   end
 
   def [](pos)
@@ -40,14 +41,5 @@ class Board
   def []=(pos, val)
     row, col = pos
     @board[row][col] = val
-  end
-
-  def render
-    board.each do |row|
-      row.each do |col|
-        print col.symbol + ' '
-      end
-      puts
-    end
   end
 end
