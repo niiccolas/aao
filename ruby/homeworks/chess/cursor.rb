@@ -79,8 +79,6 @@ class Cursor
     case key
     when :return, :space
       @selected = !@selected
-      puts "yatta!"
-      puts selected
       return cursor_pos
     when :ctrl_c
       Process.exit(0)
