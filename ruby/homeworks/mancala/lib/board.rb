@@ -9,7 +9,7 @@ class Board
   def place_stones
     stone_cup = [:stone] * 4
     cups.map!.with_index do |_cup, i|
-      [13, 6].include?(i) ? '' : stone_cup
+      [13, 6].include?(i) ? '' : Array.new(4) { :stone }
     end
   end
 
