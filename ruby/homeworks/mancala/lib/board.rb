@@ -1,5 +1,5 @@
 class Board
-  attr_accessor :cups
+  attr_accessor :cups, :player1, :player2
 
   def initialize(name1, name2)
     @cups = Array.new(14)
