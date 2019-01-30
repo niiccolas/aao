@@ -1,7 +1,7 @@
 class Piece
   attr_reader :color, :board
   attr_accessor :pos
-  #, :pos
+
   def initialize(color, board, position)
     @color = color
     @board = board
@@ -21,9 +21,15 @@ class Piece
     false
   end
 
+  def valid_moves
+    moves.reject { |mov_pos| move_into_check?(mov_pos) }
+  end
+
   private
 
   def move_into_check?(end_pos)
-
+    twin_board = board.dup
+    twin_board.move_piece(pos, end_pos)
+    twin_board.in_check?(color)
   end
 end
