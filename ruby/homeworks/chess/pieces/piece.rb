@@ -6,17 +6,21 @@ class Piece
     @pos   = position
   end
 
+  def to_s
+    " #{symbol}"
+  end
+
+  def symbol
+    # superseeded by subclasses
+    raise NotImplementedError
+  end
+
   def pos=(val)
     @pos = val
   end
 
-  def symbol
-    symbol
-  end
-
   def empty?(pos)
-    # board[pos]
-    brd[pos].instance.class == NullPiece
+    false
   end
 
   private
