@@ -1,5 +1,7 @@
 class Piece
-  attr_reader :color, :board, :pos
+  attr_reader :color, :board
+  attr_accessor :pos
+  #, :pos
   def initialize(color, board, position)
     @color = color
     @board = board
@@ -15,11 +17,7 @@ class Piece
     raise NotImplementedError
   end
 
-  def pos=(val)
-    @pos = val
-  end
-
-  def empty?(pos)
+  def empty?
     false
   end
 
