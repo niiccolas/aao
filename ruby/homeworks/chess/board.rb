@@ -30,7 +30,12 @@ class Board
   def populate_pawn_pieces(color)
     i = color == :white ? 6 : 1
     (0..7).each { |j| Pawn.new(color, self, [i, j]) }
-    end
+  end
+
+  def add_piece(piece, pos)
+    raise 'Position not empty' unless empty?(pos)
+
+    self[pos] = piece
   end
 
   def move_piece(start_pos, end_pos)
