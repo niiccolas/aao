@@ -1,4 +1,4 @@
-require_relative 'piece'
+require_relative 'pieces'
 
 class Board
   BOARD_POSITIONS = [*0..7].product([*0..7])
