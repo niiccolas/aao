@@ -48,7 +48,7 @@ class Board
   end
 
   def valid_pos?(pos)
-    BOARD_POSITIONS.include?(pos) #&& self[pos].is_a?(NullPiece)
+    BOARD_POSITIONS.include?(pos)
   end
 
   def [](pos)
@@ -59,5 +59,9 @@ class Board
   def []=(pos, val)
     row, col = pos
     @board[row][col] = val
+  end
+
+  def empty?(pos)
+    self[pos].empty?
   end
 end
