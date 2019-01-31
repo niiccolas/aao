@@ -10,13 +10,26 @@ class Board
   end
 
   def populate_board
-    BOARD_POSITIONS.each do |position|
-      if (2..5).cover? position.first
-        # from row 2 to 5, populate using NullPiece instances
-        self[position] = NullPiece.new
-      else
-        self[position] = Piece.new
-      end
+    %i[white black].each do |color|
+      populate_main_pieces(color)
+      populate_pawn_pieces(color)
+    end
+  end
+
+  def populate_main_pieces(color)
+    main_pieces = [
+      Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook
+    ]
+
+    i = color == :white ? 7 : 0
+    main_pieces.each_with_index do |main_piece, j|
+      main_piece.new(color, self, [i, j])
+    end
+  end
+
+  def populate_pawn_pieces(color)
+    i = color == :white ? 6 : 1
+    (0..7).each { |j| Pawn.new(color, self, [i, j]) }
     end
   end
 
