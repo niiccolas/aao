@@ -39,12 +39,12 @@ class Board
   end
 
   def move_piece(start_pos, end_pos)
-    raise ArgumentError.new("No piece in this location") if self[start_pos].is_a? NullPiece
-    raise ArgumentError.new("This location is not on the board") unless valid_pos?(end_pos)
-    # raise ArgumentError.new("Location already occupied or not on the board") unless valid_pos?(end_pos)
+    raise ArgumentError.new('Starting location is empty') if self[start_pos].is_a? NullPiece
+    raise ArgumentError.new('End location is not on the board') unless valid_pos?(end_pos)
 
-    self[start_pos] = NullPiece.new
-    self[end_pos]   = Piece.new
+    hold_moving_piece = self[start_pos]
+    self[start_pos]   = NullPiece.instance
+    self[end_pos]     = hold_moving_piece
   end
 
   def valid_pos?(pos)
