@@ -64,4 +64,14 @@ class Board
   def empty?(pos)
     self[pos].empty?
   end
+
+  def find_king(color)
+    all_pieces_array.find do |piece|
+      piece.class == King && piece.color == color
+    end
+  end
+
+  def all_pieces_array
+    board.flatten.reject(&:empty?)
+  end
 end
