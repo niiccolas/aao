@@ -65,6 +65,17 @@ class Board
     self[pos].empty?
   end
 
+  def in_check?(color)
+    # returns whether a player is in check
+    # 1. find the position of the King on the board
+    king_position = find_king(color).pos
+
+    # 2. See if any of the opposing pieces can move to that position
+    all_pieces_array.any? do |piece|
+      piece.color != color && piece.moves.include?(king_position)
+    end
+  end
+
   def find_king(color)
     all_pieces_array.find do |piece|
       piece.class == King && piece.color == color
