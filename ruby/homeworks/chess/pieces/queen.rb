@@ -11,6 +11,6 @@ class Queen < Piece
   protected
 
   def move_dirs
-    HORIZONTAL_DIR + PERPENDICULAR_DIR
+    DIAGONAL_DIR + PERPENDICULAR_DIR
   end
 end
