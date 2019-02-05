@@ -76,6 +76,14 @@ class Board
     end
   end
 
+  def checkmate?(color)
+    return false unless in_check?(color)
+
+    all_pieces_array.select { |piece| piece.color == color }.all? do |own_piece|
+      own_piece.valid_moves.empty?
+    end
+  end
+
   def find_king(color)
     all_pieces_array.find do |piece|
       piece.class == King && piece.color == color
