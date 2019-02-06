@@ -38,13 +38,25 @@ class Board
     self[pos] = piece
   end
 
-  def move_piece(start_pos, end_pos)
+  def move_piece(start_pos, end_pos, color = :black)
+
     raise ArgumentError.new('Starting location is empty') if self[start_pos].is_a? NullPiece
     raise ArgumentError.new('End location is not on the board') unless valid_pos?(end_pos)
 
-    hold_moving_piece = self[start_pos]
-    self[start_pos]   = NullPiece.instance
-    self[end_pos]     = hold_moving_piece
+    raise ArgumentError.new("It is #{color}'s turn") if self[start_pos].color != color
+
+    raise StandardError.new('You cannot take a friendly piece') if self[start_pos].color == self[end_pos].color
+
+    move_piece!(start_pos, end_pos)
+  end
+
+  def move_piece!(start_pos, end_pos)
+    moving_piece = self[start_pos]
+    raise 'This move is invalid' unless moving_piece.moves.include?(end_pos)
+
+    self[end_pos]    = moving_piece
+    self[start_pos]  = NullPiece.instance
+    moving_piece.pos = end_pos
   end
 
   def valid_pos?(pos)
