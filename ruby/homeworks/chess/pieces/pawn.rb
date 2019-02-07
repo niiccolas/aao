@@ -5,13 +5,8 @@ class Pawn < Piece
     color == :white ? '♙' : '♟'
   end
 
-  def move_dirs
-    [
-      [1,  0],
-      [2,  0],
-      [1, -1],
-      [1,  1]
-    ]
+  def moves
+    forward_steps + side_attacks
   end
 
   private
