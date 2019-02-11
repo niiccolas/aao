@@ -25,7 +25,7 @@ class Pawn < Piece
     one_step = [i + forward_dir, j]
     return [] unless board.valid_pos?(one_step) && board.empty?(one_step)
 
-    steps     = one_step
+    steps     = [one_step]
     two_steps = [i + 2 * forward_dir, j]
 
     steps << two_steps if at_start_row? && board.empty?(two_steps)
