@@ -105,4 +105,14 @@ class Board
   def all_pieces_array
     board.flatten.reject(&:empty?)
   end
+
+  def dup
+    duplicate_board = Board.new(false)
+
+    all_pieces_array.each do |piece|
+      piece.class.new(piece.color, duplicate_board, piece.pos)
+    end
+
+    duplicate_board
+  end
 end
