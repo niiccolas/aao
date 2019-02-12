@@ -4,12 +4,18 @@ class Board
   BOARD_POSITIONS = [*0..7].product([*0..7])
   attr_accessor :board
 
-  def initialize
-    @board = Array.new(8) { Array.new(8, NullPiece.instance) }
-    populate_board
+  def initialize(fill_board = true)
+    populate_board(fill_board)
   end
 
-  def populate_board
+  def populate_board(fill_board)
+    @board = Array.new(8) { Array.new(8, NullPiece.instance) }
+
+    # fill_board works with our custom #dup method
+    # if set to true, only a new EMPTY board is created,
+    # to be populated by already existing pieces.
+    return unless fill_board
+
     %i[white black].each do |color|
       populate_main_pieces(color)
       populate_pawn_pieces(color)
