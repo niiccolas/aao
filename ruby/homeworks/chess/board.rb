@@ -44,21 +44,23 @@ class Board
     self[pos] = piece
   end
 
-  def move_piece(start_pos, end_pos, color = :black)
+  def move_piece(start_pos, end_pos, current_player_color)
+    raise 'Starting position is empty' if empty?(start_pos)
 
-    raise ArgumentError.new('Starting location is empty') if self[start_pos].is_a? NullPiece
-    raise ArgumentError.new('End location is not on the board') unless valid_pos?(end_pos)
-
-    raise ArgumentError.new("It is #{color}'s turn") if self[start_pos].color != color
-
-    raise StandardError.new('You cannot take a friendly piece') if self[start_pos].color == self[end_pos].color
-
+    piece = self[start_pos]
+    if piece.color != current_player_color
+      raise "Pick a #{current_player_color.capitalize} piece"
+    elsif !piece.moves.include?(end_pos)
+      raise 'Invalid move'
+    elsif !piece.valid_moves.include?(end_pos)
+      raise 'Cannot move into check'
+    end
     move_piece!(start_pos, end_pos)
   end
 
   def move_piece!(start_pos, end_pos)
     moving_piece = self[start_pos]
-    raise 'This move is invalid' unless moving_piece.moves.include?(end_pos)
+    raise 'Invalid chess move' unless moving_piece.moves.include?(end_pos)
 
     self[end_pos]    = moving_piece
     self[start_pos]  = NullPiece.instance
