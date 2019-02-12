@@ -10,6 +10,8 @@ class Display
   end
 
   def render
+    system('clear')
+    puts "  Arrows to move cursor\n  Space bar to select/release\n\n"
     puts "  #{('a'..'h').to_a.join(' ')}"
     @board.board.each_with_index do |row, i|
       row_number = (8 - i).to_s + ' '
