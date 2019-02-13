@@ -19,14 +19,12 @@ class GhostUi
   def self.display_rules
     puts '            👻 Welcome to RubyGhost 👻'
     puts '* * * * * * * * * * * * * * * * * * * * * * * * * *'
-    puts
     puts 'In the game of Ghost, each player takes turns'
     puts 'adding a letter to an ever-growing word fragment.'
-    puts 'Try not to spell a word (of length 3 letters'
-    puts 'or more). Try to force other players to spell'
-    puts 'a word, or try to get a player to say a letter'
-    puts 'that makes it impossible to form a word.'
-    puts
+    puts '- Try NOT to spell a word (3 letters or more)'
+    puts '- Get other players to spell a word'
+    puts '- Get other players to say a letter that makes it'
+    puts '  impossible to form a word'
     puts '* * * * * * * * * * * * * * * * * * * * * * * * * *'
   end
 
