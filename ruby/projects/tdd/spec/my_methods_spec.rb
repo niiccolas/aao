@@ -1,4 +1,4 @@
-require 'my_array'
+require 'my_methods'
 
 describe 'my_uniq' do
   let(:dups_array) { [1, 1, 2, 2, 2, 2, 2, 3] }
