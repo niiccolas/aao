@@ -57,7 +57,7 @@ describe TowerOfHanoi do
 
     context 'when discs have all been moved to the last tower' do
       it 'returns true' do
-        subject.towers = { T: [], M: [], B: full_ordered_stack}
+        subject.towers = { T: [], M: [], B: full_ordered_stack }
         expect(subject.won?).to be true
       end
     end
