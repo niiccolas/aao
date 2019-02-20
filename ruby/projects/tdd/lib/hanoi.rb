@@ -30,7 +30,7 @@ class TowerOfHanoi
         display_piles
         move(*user_input)
       rescue StandardError => e
-        puts e.to_s.upcase; sleep(1)
+        puts "\n#{e.to_s.upcase}\n> Hit ENTER to retry"; gets
       end
     end
 
@@ -44,10 +44,22 @@ class TowerOfHanoi
   def user_input
     controls = '(T)op, (M)iddle or (B)ottom'
     print "Pick from\t#{controls}: "
-    from = gets.chomp.upcase.to_sym
+    from = gets.chomp!.upcase.to_sym
     print "Move to  \t#{controls}: "
-    to = gets.chomp.upcase.to_sym
+    to = gets.chomp!.upcase.to_sym
 
+    validate([from, to])
     [from, to]
   end
+end
+
+def validate(input)
+  raise 'Wrong input' unless (input & towers.keys) == input
+
+  input
+end
+
+if $PROGRAM_NAME == __FILE__
+  num_discs = ARGV.empty? ? 4 : ARGV.shift.to_i
+  TowerOfHanoi.new(num_discs).play
 end
