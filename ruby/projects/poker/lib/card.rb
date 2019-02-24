@@ -1,8 +1,8 @@
 class Card
-  attr_reader :suit, :face, :value
+  attr_reader :suit, :face, :rank
 
-  def initialize(suit, face, value)
-    @value    = value
+  def initialize(suit, face, rank)
+    @rank     = rank
     @face     = face
     @suit     = suit
     @revealed = false
