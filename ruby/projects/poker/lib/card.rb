@@ -12,7 +12,7 @@ class Card
     @revealed
   end
 
-  def reveal
+  def reveal!
     @revealed = true
   end
 end
