@@ -1,14 +1,14 @@
 require 'card'
 
 describe 'Card' do
-  let(:values) { (2..14).to_a }
+  ranks       = (2..14).to_a
   suits       = %i[diamonds clubs hearts spades]
   faces       = %i[2 3 4 5 6 7 8 9 10 J Q K A]
   random_face = faces.sample
-  subject { Card.new(suits.sample, random_face, 14) }
+  subject { Card.new(suits.sample, random_face) }
 
-  it 'has a value' do
-    expect(values).to include(subject.value)
+  it 'has a rank' do
+    expect(ranks).to include(subject.rank)
   end
 
   it 'has a suit' do
@@ -23,8 +23,22 @@ describe 'Card' do
     expect(subject.revealed?).to be false
   end
 
-  it 'can be revealed' do
-    subject.reveal
-    expect(subject.revealed?).to be true
+  describe '#revealed?' do
+    it 'returns false on a new card' do
+      expect(subject.revealed?).to be false
+    end
+    context 'when card has been revealed' do
+      it 'returns true' do
+        subject.reveal!
+        expect(subject.revealed?).to be true
+      end
+    end
+  end
+
+  describe '#reveal!' do
+    it 'sets @revealed to true' do
+      subject.reveal!
+      expect(subject.revealed?).to be true
+    end
   end
 end
