@@ -2,16 +2,36 @@ require_relative 'deck'
 
 class Hand
   HANDS = {
-    royal_straight_flush: { name: 'Royal Straight Flush', value: 10 },
-    straight_flush: { name: 'Straight Flush', value: 9 },
-    four_of_kind: { name: 'Four of a kind', value: 8 },
-    full_house: { name: 'Full house', value: 7 },
-    flush: { name: 'Flush', value: 6 },
-    straight: { name: 'Straight', value: 5 },
-    three_of_kind: { name: 'Three of a kind', value: 4 },
-    two_pair: { name: 'Two pairs', value: 3 },
-    pair: { name: 'Pair', value: 2 },
-    high_card: { name: 'High card', value: 1 }
+    royal_straight_flush: {
+      name: 'Royal Straight Flush', value: 10
+    },
+    straight_flush: {
+      name: 'Straight Flush', value: 9
+    },
+    four_of_kind: {
+      name: 'Four of a kind', value: 8, layout: { n_same_rank: 4, occurence: 1 }
+    },
+    full_house: {
+      name: 'Full house', value: 7
+    },
+    flush: {
+      name: 'Flush', value: 6
+    },
+    straight: {
+      name: 'Straight', value: 5
+    },
+    three_of_kind: {
+      name: 'Three of a kind', value: 4, layout: { n_same_rank: 3, occurence: 1 }
+    },
+    two_pair: {
+      name: 'Two pairs', value: 3, layout: { n_same_rank: 2, occurence: 2 }
+    },
+    pair: {
+      name: 'Pair', value: 2, layout: { n_same_rank: 2, occurence: 1 }
+    },
+    high_card: {
+      name: 'High card', value: 1, layout: { n_same_rank: 1, occurence: 5 }
+    }
   }.freeze
 
   attr_reader :hand
@@ -24,6 +44,10 @@ class Hand
 
   def draw_hand
     p hand.map(&:face).zip(hand.map(&:suit))
+  end
+
+  def ranks
+    hand.map(&:rank)
   end
 
   def hand_value
@@ -58,7 +82,7 @@ class Hand
   def in_sequence?
     in_order = ranks.map.with_index do |_el, i|
       i.zero? ? nil : ranks[i - 1] + 1 == ranks[i]
-    end.drop(1) # remove the first `nil` element for the upcoming Boolean comparison
+    end.drop(1) # remove the first `nil` element for upcoming Boolean comparison
 
     in_order.all? { |e| e == true }
   end
@@ -93,47 +117,15 @@ class Hand
     same_ranks.sort == [2, 3]
   end
 
-  def high_card?
-    same_ranks = ranks.each_with_object(Hash.new(0)) do |value, hash|
-      hash[value] += 1
-    end.values
+  # Create methods for checking hands based on rank siblings
+  HANDS.keys.select { |el| el =~ /pair|kind|high/ }.each do |hand|
+    define_method(hand.to_s + '?') do
+      same_ranks = ranks.each_with_object(Hash.new(0)) do |value, hash|
+        hash[value] += 1
+      end.values
 
-    same_ranks.count(1) == 5
-  end
-
-  def ranks
-    hand.map(&:rank)
-  end
-
-  def four_of_kind?
-    same_ranks = ranks.each_with_object(Hash.new(0)) do |value, hash|
-      hash[value] += 1
-    end.values
-
-    same_ranks.count(4) == 1
-  end
-
-  def three_of_kind?
-    same_ranks = ranks.each_with_object(Hash.new(0)) do |value, hash|
-      hash[value] += 1
-    end.values
-
-    same_ranks.count(3) == 1
-  end
-
-  def two_pair?
-    same_ranks = ranks.each_with_object(Hash.new(0)) do |value, hash|
-      hash[value] += 1
-    end.values
-
-    same_ranks.count(2) == 2
-  end
-
-  def pair?
-    same_ranks = ranks.each_with_object(Hash.new(0)) do |value, hash|
-      hash[value] += 1
-    end.values
-
-    same_ranks.count(2) == 1
+      same_ranks.count(HANDS[hand][:layout][:n_same_rank]) ==
+        HANDS[hand][:layout][:occurence]
+    end
   end
 end
