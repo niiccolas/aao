@@ -2,36 +2,16 @@ require_relative 'deck'
 
 class Hand
   HANDS = {
-    royal_straight_flush: {
-      name: 'Royal Straight Flush', value: 10
-    },
-    straight_flush: {
-      name: 'Straight Flush', value: 9
-    },
-    four_of_kind: {
-      name: 'Four of a kind', value: 8, layout: { n_same_rank: 4, occurence: 1 }
-    },
-    full_house: {
-      name: 'Full house', value: 7
-    },
-    flush: {
-      name: 'Flush', value: 6
-    },
-    straight: {
-      name: 'Straight', value: 5
-    },
-    three_of_kind: {
-      name: 'Three of a kind', value: 4, layout: { n_same_rank: 3, occurence: 1 }
-    },
-    two_pair: {
-      name: 'Two pairs', value: 3, layout: { n_same_rank: 2, occurence: 2 }
-    },
-    pair: {
-      name: 'Pair', value: 2, layout: { n_same_rank: 2, occurence: 1 }
-    },
-    high_card: {
-      name: 'High card', value: 1, layout: { n_same_rank: 1, occurence: 5 }
-    }
+    royal_straight_flush: { value: 10 },
+    straight_flush: { value: 9 },
+    four_of_a_kind: { value: 8, layout: { n_same_rank: 4, occurence: 1 } },
+    full_house: { value: 7 },
+    flush: { value: 6 },
+    straight: { value: 5 },
+    three_of_a_kind: { value: 4, layout: { n_same_rank: 3, occurence: 1 } },
+    two_pair: { value: 3, layout: { n_same_rank: 2, occurence: 2 } },
+    pair: { value: 2, layout: { n_same_rank: 2, occurence: 1 } },
+    high_card: { value: 1, layout: { n_same_rank: 1, occurence: 5 } }
   }.freeze
 
   attr_reader :hand
