@@ -108,4 +108,10 @@ class Hand
         HANDS[hand][:layout][:occurence]
     end
   end
+
+  def hand_name
+    HANDS.each do |name, value|
+      return name.to_s.capitalize.tr('_', ' ') if value.value?(hand_value)
+    end
+  end
 end
