@@ -10,11 +10,11 @@ describe Hand do
   HANDS = {
     royal_straight_flush: { name: 'Royal Straight Flush', rank: 10 },
     straight_flush: { name: 'Straight Flush', rank: 9 },
-    four_of_kind: { name: 'Four of a kind', rank: 8 },
+    four_of_a_kind: { name: 'Four of a kind', rank: 8 },
     full_house: { name: 'Full house', rank: 7 },
     flush: { name: 'Flush', rank: 6 },
     straight: { name: 'Straight', rank: 5 },
-    three_of_kind: { name: 'Three of a kind', rank: 4 },
+    three_of_a_kind: { name: 'Three of a kind', rank: 4 },
     two_pair: { name: 'Two pairs', rank: 3 },
     pair: { name: 'Pair', rank: 2 },
     high_card: { name: 'High card', rank: 1 }
@@ -35,7 +35,7 @@ describe Hand do
       Card.new(:hearts, :Q),
       Card.new(:hearts, :K)
     ],
-    four_of_kind: [
+    four_of_a_kind: [
       Card.new(:hearts, :J),
       Card.new(:clubs, :J),
       Card.new(:diamonds, :J),
@@ -70,7 +70,7 @@ describe Hand do
       Card.new(:clubs, :'5'),
       Card.new(:hearts, :'6')
     ],
-    three_of_kind: [
+    three_of_a_kind: [
       Card.new(:hearts, :J),
       Card.new(:clubs, :J),
       Card.new(:diamonds, :J),
@@ -126,7 +126,6 @@ describe Hand do
 
   describe 'Evaluating hands' do
     HELPER_HANDS.keys.each do |hand|
-      p hand
       let(hand) { Hand.new(HELPER_HANDS[hand]) }
     end
 
@@ -137,7 +136,7 @@ describe Hand do
       it 'returns false otherwise' do
         expect(high_card.pair?).to be false
         expect(high_card.two_pair?).to be false
-        expect(high_card.three_of_kind?).to be false
+        expect(high_card.three_of_a_kind?).to be false
       end
     end
 
@@ -165,15 +164,15 @@ describe Hand do
       end
     end
 
-    context '#three_of_kind?' do
+    context '#three_of_a_kind?' do
       it 'returns true when hand has one' do
-        expect(three_of_kind.three_of_kind?).to be true
+        expect(three_of_a_kind.three_of_a_kind?).to be true
       end
       it 'returns false otherwise' do
-        expect(high_card.three_of_kind?).to be false
+        expect(high_card.three_of_a_kind?).to be false
       end
-      it 'differentiates with #four_of_kind?' do
-        expect(three_of_kind.four_of_kind?).to be false
+      it 'differentiates with #four_of_a_kind?' do
+        expect(three_of_a_kind.four_of_a_kind?).to be false
       end
     end
 
@@ -207,15 +206,15 @@ describe Hand do
       end
     end
 
-    context '#four_of_kind?' do
+    context '#four_of_a_kind?' do
       it 'returns true when hand has one' do
-        expect(four_of_kind.four_of_kind?).to be true
+        expect(four_of_a_kind.four_of_a_kind?).to be true
       end
       it 'returns false otherwise' do
-        expect(high_card.four_of_kind?).to be false
+        expect(high_card.four_of_a_kind?).to be false
       end
-      it 'differentiates with #three_of_kind?' do
-        expect(four_of_kind.three_of_kind?).to be false
+      it 'differentiates with #three_of_a_kind?' do
+        expect(four_of_a_kind.three_of_a_kind?).to be false
       end
     end
 
@@ -244,29 +243,22 @@ describe Hand do
     end
 
     describe '#winning_hand?' do
-      # context 'when comparing more than 6 hands' do
-      #   it 'raises an error' do
-      #     expect{ Hand.new.winning_hand?(*Array.new(10)) }.to raise_error('6 players / 6 hands maximum')
-      #   end
-      # end
-
       context 'when facing stronger hands' do
         it 'returns false' do
           expect(pair.winning_hand?(two_pair, flush)).to be false
-          expect(straight.winning_hand?(full_house, four_of_kind, flush)).to be false
+          expect(straight.winning_hand?(full_house, four_of_a_kind, flush)).to be false
         end
       end
 
       context 'when facing weaker hands' do
         it 'returns true' do
           expect(straight_flush.winning_hand?(straight, flush)).to be true
-          expect(three_of_kind.winning_hand?(two_pair, high_card, pair)).to be true
+          expect(three_of_a_kind.winning_hand?(two_pair, high_card, pair)).to be true
         end
       end
 
-      context 'when there is a hand tie' do
+      context 'when there is a tie' do
         it 'compares kicker values to determine the winner' do
-          # expect(three_of_kind.winning_hand?(three_of_kind)).to be true
           expect(pair_40pts.winning_hand?(pair_24pts)).to be true
           expect(pair_40pts.winning_hand?(pair_24pts, high_card)).to be true
           expect(pair_24pts.winning_hand?(pair_40pts)).to be false
@@ -298,15 +290,21 @@ describe Hand do
         expect(pair.hand_value).to be < two_pair.hand_value
       end
     end
-    # describe '#calculate_hand' do
-    # # describe '#is_four_of_a_kind' do
-    #   context 'when passed a Four of a Kind' do
-    #     it 'returns true' do
-    #       expect(subject.is_four_of_a_kind(helper_hands[:four_of_kind])).to be true
-    #     end
-    #   end
-    #   # expect(subject.hand.size).to eq(5)
-    #   # subject.is_four_of_a_kind(helper_hands[:four_of_kind])
-    # end
+
+    describe '#hand_name' do
+      it 'returns a string' do
+        expect(pair.hand_name).to be_an_instance_of String
+      end
+
+      it 'capitalizes the first letter' do
+        expect(/[[:upper:]]/.match?(pair.hand_name[0])).to be true
+      end
+
+      it 'returns the name of the current hand' do
+        expect(high_card.hand_name).to eq('High card')
+        expect(two_pair.hand_name).to eq('Two pair')
+        expect(royal_straight_flush.hand_name).to eq('Royal straight flush')
+      end
+    end
   end
 end
