@@ -16,10 +16,12 @@ class Hand
 
   attr_reader :hand
 
-  def initialize(hand = nil)
-    @deck = Deck.new
-    @deck.shuffle!
-    @hand = (hand || @deck.take_cards(5)).sort_by!(&:rank)
+  def initialize
+    @hand = []
+  end
+
+  def add_card(card)
+    @hand << card
   end
 
   def draw_hand
