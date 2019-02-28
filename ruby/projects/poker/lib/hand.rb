@@ -24,7 +24,7 @@ class Hand
     @hand << card
   end
 
-  def draw_hand
+  def draw
     p hand.map(&:face).zip(hand.map(&:suit))
   end
 
