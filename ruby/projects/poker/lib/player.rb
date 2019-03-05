@@ -48,4 +48,12 @@ class Player
   def pay(ante)
     @player_pot -= ante
   end
+
+  def wins(game_pot)
+    @player_pot += game_pot
+  end
+
+  def bankrupt?
+    @player_pot.zero?
+  end
 end
