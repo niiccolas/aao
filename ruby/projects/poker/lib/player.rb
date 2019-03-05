@@ -33,6 +33,21 @@ class Player
     @status = "raised #{player_raise} 🍪"
     player_raise
   end
+  end
+
+  def discard(hand_indices)
+    rejects = hand.cards.select.with_index { |_, i| hand_indices.include? i }
+
+    # actually removing unwanted cards from Hand
+    hand.cards.reject!.with_index { |_, i| hand_indices.include? i }
+
+    rejects
+  end
+
+  def call_bet(last_raise)
+    @status      = 'calls'
+    @player_pot -= last_raise
+  end
 
   def check
     @status = 'checks'
