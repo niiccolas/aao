@@ -1,38 +1,43 @@
 require_relative 'hand'
 
 class Player
-  attr_reader :hand, :name, :player_pot, :folded, :status
+  attr_reader :hand, :name, :player_pot
+  attr_accessor :status
 
   def initialize(name = nil)
     @name       = name
     @hand       = Hand.new
-    @player_pot = 50 # default starting pot
-    @folded     = false
+    @player_pot = 51 # default starting pot
     @status     = ''
   end
 
-  def bet?
-    print prompt = '(F)old, (C)heck, (R)aise? '
-    while (user_input = gets.chomp.upcase.to_sym)
-      return fold      if user_input == :F
-      return check_bet if user_input == :C
-      return true      if user_input == :R
-
-      print "Input error! Retry. #{prompt}"
-    end
+  def empty_hand
+    @hand = Hand.new
   end
 
-  def raise_bet
-    print prompt = "You can raise from 1 to #{player_pot}: "
+  def bet(last_raise = false)
+    prompt = last_raise ? 'raise' : 'bet'
+    print "How many chips to #{prompt}? "
+
     until (1..player_pot).cover?(player_raise = gets.chomp.to_i)
-      print "Wrong input! #{prompt}"
+      print 'Wrong input! Retry: '
     end
 
-    puts "#{name} is ALL-IN!" if player_raise == player_pot
-    @player_pot -= player_raise
-    @status = "raised #{player_raise} 🍪"
-    player_raise
-  end
+    if player_raise == player_pot
+      @status = "ALL-IN!"
+    elsif last_raise
+      @status = "Calls #{last_raise} and #{prompt}s #{player_raise}"
+    else
+      @status = "#{prompt}s #{player_raise}"
+    end
+
+    if last_raise
+      @player_pot -= (player_raise+ last_raise)
+      (player_raise + last_raise)
+    else
+      @player_pot -= player_raise
+      player_raise
+    end
   end
 
   def discard(hand_indices)
@@ -51,13 +56,10 @@ class Player
 
   def check
     @status = 'checks'
-    false
   end
 
   def fold
-    @folded = true
     @status = 'folds'
-    false
   end
 
   def pay(ante)
