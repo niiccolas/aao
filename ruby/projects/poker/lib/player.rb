@@ -34,7 +34,7 @@ class Player
     player_raise
   end
 
-  def check_bet
+  def check
     @status = 'checks'
     false
   end
