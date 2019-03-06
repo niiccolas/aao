@@ -11,7 +11,7 @@ class Player
     @status     = ''
   end
 
-  def empty_hand
+  def hand_to_deck
     @hand = Hand.new
   end
 
