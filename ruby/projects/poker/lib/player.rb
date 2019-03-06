@@ -59,7 +59,7 @@ class Player
   end
 
   def fold
-    @status = 'folds'
+    @status = 'folded'
   end
 
   def pay(ante)
