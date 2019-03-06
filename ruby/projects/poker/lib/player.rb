@@ -63,6 +63,9 @@ class Player
   end
 
   def pay(ante)
+    return 'BANKRUPT!' if @player_pot - ante < 0
+
+    @status      = "paid ante ($#{ante})"
     @player_pot -= ante
   end
 
