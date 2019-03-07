@@ -1,5 +1,7 @@
 require_relative 'deck'
 require_relative 'player'
+require 'tty-table'
+require 'tty-prompt'
 
 class Game
   attr_reader :deck, :players, :ante, :dealer
@@ -20,6 +22,7 @@ class Game
     @last_raise     = 0
     @dealer         = @players[0]
     @current_player = @players[1]
+    @tty            = TTY::Prompt.new
   end
 
   def play
@@ -86,15 +89,35 @@ class Game
   def showdown
   end
 
-  def render_game
+  def render_game(current_player = nil)
     system('clear')
+    players_render = {}
+    players.each_with_index do |player, i|
+      name = if current_player
+               if current_player.name == player.name
+                 Pastel.new.decorate(player.name, :black, :on_green)
+               else
+                 player.name
+               end
+             else
+               player.name
+             end
 
-    players.each_with_index do |player|
-      dealer_tag = player == dealer ? '- DEALER' : ''
-      puts "#{player.name} - #{player.player_pot} #{dealer_tag}"
-      puts "#{player.status.capitalize}"
+      dealer = i.zero? ? '(dealer)' : ''
+      players_render["player#{i}".to_sym] = "#{name} - $#{player.player_pot} #{dealer}\n#{player.hand.draw}\n#{player.status}"
     end
 
-    puts "Game pot: 💰#{game_pot}"
+    pot   = { value: "\n$#{game_pot}", alignment: :center, padding: 5 }
+    table = TTY::Table.new [ # Game is rendered within a 3x3 table
+      ['', players_render[:player2], ''],
+      [players_render[:player1], pot, players_render[:player3]],
+      ['', players_render[:player0], '']
+    ]
+
+    puts table.render(
+      border: { separator: :each_row },
+      multiline: true,
+      padding: [0, 2], # left-right, top-bottom
+    )
   end
 end
