@@ -4,8 +4,7 @@ require 'tty-table'
 require 'tty-prompt'
 
 class Game
-  attr_reader :deck, :players, :ante, :dealer
-
+  attr_reader :deck, :players, :ante, :dealer, :tty
   attr_accessor :game_pot, :last_raise
 
   def initialize
@@ -16,7 +15,7 @@ class Game
       Player.new('Player04')
     ]
     @deck           = Deck.new
-    @muck           = [] # discarded cards in poker parlance
+    @muck           = [] # Cards discarded in-game
     @ante           = 1
     @game_pot       = 0
     @last_raise     = 0
@@ -25,60 +24,99 @@ class Game
     @tty            = TTY::Prompt.new
   end
 
-  def play
-    deal_cards
-    pay_ante
-
-    players.rotate!
-    betting_round
-    # discard
-    # showdown #! pot is split if players have equally ranked hands
+  def pay_ante
+    players.each do |player|
+      render_game
+      player.pay(ante)
+      @game_pot += ante
+    end
   end
 
-  def pay_ante
-    players.each { |player| player.pay(ante) }
-    @game_pot += players.count * ante
+  def play
+    until game_over?
+      reset_statuses_and_raise
+      deal_cards
+      pay_ante
+      betting_round until all_bets_called?
+      draw
+      reset_statuses_and_raise
+      betting_round until all_bets_called?
+      showdown
+      recompose_deck
+      switch_dealer
+    end
+  end
+
+  def game_over?
+    bankrupt_players = 0
+    players.each do |player|
+      bankrupt_players += 1 if player.bankrupt?
+    end
+    (players.count - bankrupt_players) == 1
+  end
+
+  def recompose_deck
+    players.each(&:hand_to_deck)
+    @deck = Deck.new
+    @deck.shuffle!
+  end
+
+  def switch_dealer
+    @dealer         = @players[0]
+    @current_player = @players[1]
   end
 
   def deal_cards
     5.times do
       players.each do |player|
         player.hand.add_card(deck.take_first_card)
+        player.hand.sort_by_rank
       end
     end
   end
 
+  def reset_statuses_and_raise
+    players.each { |player| player.status = ' ' }
+    @last_raise = 0
+  end
+
+  def all_bets_called?
+    statuses = ['bets', 'calls', 'folded', 'raises', 'ALL-IN']
+    counter  = 0
+    players.each { |player| counter += 1 if player.status.start_with?(*statuses) }
+    all_checks    = players.all? { |player| player.status == 'checks' }
+    all_stand_pat = players.all? { |player| player.status == 'stands pat' }
+
+    counter == players.count || all_checks || all_stand_pat
+  end
+
   def betting_round
-    players.each do |player|
-      render_game
-      puts "\n\n#{player.name}"
-      puts '-' * 35
+    players.rotate.each do |player|
+      render_game(player)
+      next if player.status == 'folded'
+      break if all_bets_called?
 
-      prompt = last_raise.zero? ? 'c(h)eck, (b)et,' : '(c)all, (r)aise,'
-      print prompt + ' (f)old? '
-      # print "#{prompt} (f)old? "
-
-      while (user_input = gets.chomp.upcase.to_sym)
-        if user_input == :F
+      menu_options = last_raise.zero? ? %w[check bet fold] : %w[call raise fold]
+      while (menu = tty.select("\n\n#{player.name}, what to do?", menu_options, filter: true))
+        if menu == 'fold'
           player.fold
           break
-        elsif user_input == :C && last_raise > 0
+        elsif menu == 'call' && last_raise > 0
           player.call_bet(last_raise)
           @game_pot += last_raise
           break
-        elsif user_input == :R && last_raise > 0
+        elsif menu == 'raise' && last_raise > 0
           @last_raise = bet = player.bet(last_raise)
           @game_pot += bet
           break
-        elsif user_input == :H && last_raise.zero?
+        elsif menu == 'check' && last_raise.zero?
           player.check
           break
-        elsif user_input == :B && last_raise.zero?
+        elsif menu == 'bet' && last_raise.zero?
           @last_raise = bet = player.bet
           @game_pot += bet
           break
         end
-        print 'Input error! Retry '
       end
     end
   end
