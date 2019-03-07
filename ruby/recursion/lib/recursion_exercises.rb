@@ -69,22 +69,21 @@ end
 # Write a recursive and an iterative Fibonacci method. The method should take in an integer n and return the first n Fibonacci numbers in an array.
 
 # Iterative Fibonacci
-def fibonacci(n, fib_sequence = [0, 1])
-  return []  if n.zero?
-  return [0] if n <= 1
+def fibonacci(num)
+  return []  if num.zero?
+  return [0] if num <= 1
 
-  (n - 2).times do
-    fib_sequence << fib_sequence[-1] + fib_sequence[-2]
+  (num - 2).times.with_object([0, 1]) do |_el, arr|
+    arr << arr[-1] + arr[-2]
   end
-  fib_sequence
 end
 
 # Recursive Fibonacci
-def fibr(n)
-  if n <= 2
-    [0,1].take(n)
+def fibr(num)
+  if num <= 2
+    [0, 1].take(num)
   else
-    sequence = fibr(n - 1)
+    sequence = fibr(num - 1)
     sequence << sequence[-2] + sequence[-1]
   end
 end
