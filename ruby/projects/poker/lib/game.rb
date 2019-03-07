@@ -83,7 +83,33 @@ class Game
     end
   end
 
-  def discard
+  def draw
+    players.rotate.each do |player|
+      next if player.status == 'folded'
+
+      render_game(player)
+      choices = [
+        { name: 'Yes', value: true },
+        { name: 'Stand pat', value: false }
+      ]
+      prompt = tty.select("\n\nChange cards #{player.name}?", choices, filter: true)
+
+      unless prompt
+        player.status = 'stands pat'
+        next
+      end
+
+      choices = {}
+      player.hand.draw.split(' ').each_with_index { |card, i| choices[card] = i }
+      discards = tty.multi_select('Which ones?', choices, cycle: true)
+      @muck += player.discard(discards) # add discards to the muck
+      player.status = "discards #{discards.count}"
+
+      discards.count.times do # distribe n discards new cards
+        player.hand.add_card(deck.take_first_card)
+        player.hand.sort_by_rank
+      end
+    end
   end
 
   def showdown
