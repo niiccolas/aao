@@ -19,9 +19,14 @@ class Player
     prompt = last_raise ? 'raise' : 'bet'
     print "How many chips to #{prompt}? "
 
-    until (1..player_pot).cover?(player_raise = gets.chomp.to_i)
-      print 'Wrong input! Retry: '
-    end
+    @status = if player_raise == player_pot
+                'ALL-IN!'
+              elsif last_raise
+                "raises $#{player_raise}"
+              else
+                "bets $#{player_raise}"
+                # "#{prompt}s $#{player_raise}"
+              end
 
     if player_raise == player_pot
       @status = "ALL-IN!"
