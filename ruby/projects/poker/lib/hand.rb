@@ -33,7 +33,12 @@ class Hand
   end
 
   def ranks
-    hand.map(&:rank)
+    cards.map(&:rank)
+  end
+
+  def name
+    hand_name = HANDS.find { |_key, hash| hash[:value] == hand_value }.first
+    hand_name.to_s.tr('_', ' ').capitalize
   end
 
   def hand_value
