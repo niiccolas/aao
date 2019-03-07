@@ -20,6 +20,10 @@ class Hand
     @cards = []
   end
 
+  def sort_by_rank
+    @cards.sort_by!(&:rank)
+  end
+
   def add_card(card)
     @hand << card
   end
