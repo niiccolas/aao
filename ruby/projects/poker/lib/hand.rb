@@ -1,4 +1,5 @@
 require_relative 'deck'
+require 'colorize'
 
 class Hand
   HANDS = {
@@ -29,7 +30,22 @@ class Hand
   end
 
   def draw
-    p hand.map(&:face).zip(hand.map(&:suit))
+    suits = cards.map { |card| draw_suit(card.suit) }
+    faces = cards.map { |card| card.face.to_s }
+
+    suits.zip(faces).map(&:join).join(' ')
+  end
+
+  def draw_suit(suit)
+    if suit == :spades
+      '♠'.green
+    elsif suit == :clubs
+      '♣'.green
+    elsif suit == :diamonds
+      '♦'.red
+    elsif suit == :hearts
+      '♥'.red
+    end
   end
 
   def ranks
