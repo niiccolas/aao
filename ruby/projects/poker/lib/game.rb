@@ -87,6 +87,28 @@ class Game
   end
 
   def showdown
+    render_game
+    hand_values   = players.map { |player| player.hand.hand_value }
+    kicker_values = players.map { |player| player.hand.kicker_value }
+    tie           = hand_values.count(hand_values.max) > 1
+    winner        = ''
+
+    if tie
+      hand_values.each_with_index do |value, i|
+        kicker_values[i] = 0 unless value == hand_values.max
+      end
+      winner = kicker_values.index(kicker_values.max)
+    else
+      winner = hand_values.index(hand_values.max)
+    end
+
+    players.each { |player| player.status = player.hand.name }
+    render_game
+
+    print "\n\n  #{players[winner].name} wins with a #{players[winner].hand.name}"
+    players[winner].wins(@game_pot)
+    @game_pot = 0 # reset the game pot
+    gets
   end
 
   def render_game(current_player = nil)
