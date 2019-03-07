@@ -14,7 +14,7 @@ class Hand
     high_card: { value: 1, layout: { n_same_rank: 1, occurence: 5 } }
   }.freeze
 
-  attr_reader :hand
+  attr_reader :cards
 
   def initialize
     @cards = []
@@ -25,7 +25,7 @@ class Hand
   end
 
   def add_card(card)
-    @hand << card
+    @cards << card
   end
 
   def draw
@@ -67,7 +67,7 @@ class Hand
   end
 
   def kicker_value
-    hand.map(&:rank).sum
+    cards.map(&:rank).sum
   end
 
   def in_sequence?
@@ -79,7 +79,7 @@ class Hand
   end
 
   def same_suit?
-    hand.map(&:suit).uniq.size == 1
+    cards.map(&:suit).uniq.size == 1
   end
 
   def straight?
@@ -97,7 +97,7 @@ class Hand
 
   def royal_straight_flush?
     in_sequence? && same_suit? &&
-      hand.map(&:face) == %i[10 J Q K A]
+      cards.map(&:face) == %i[10 J Q K A]
   end
 
   def full_house?
