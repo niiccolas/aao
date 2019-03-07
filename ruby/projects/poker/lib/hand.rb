@@ -17,7 +17,7 @@ class Hand
   attr_reader :hand
 
   def initialize
-    @hand = []
+    @cards = []
   end
 
   def add_card(card)
