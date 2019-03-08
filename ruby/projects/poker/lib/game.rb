@@ -71,6 +71,7 @@ class Game
   end
 
   def switch_dealer
+    players.rotate!
     @dealer         = @players[0]
     @current_player = @players[1]
   end
@@ -193,22 +194,28 @@ class Game
   end
 
   def render_game(current_player = nil)
-    system('clear')
-    players_render = {}
+    players_info = {}
     players.each_with_index do |player, i|
+      playerID = players.find { |player| player.id == i }
       name = if current_player
-               if current_player.name == player.name
-                 Pastel.new.decorate(player.name, :black, :on_green)
+               if current_player.name == playerID.name
+                 Pastel.new.decorate(playerID.name, :black, :on_green)
                else
-                 player.name
+                 playerID.name
                end
              else
-               player.name
+               playerID.name
              end
 
-      dealer = i.zero? ? '(dealer)' : ''
-      players_render["player#{i}".to_sym] = "#{name} - $#{player.player_pot} #{dealer}\n#{player.hand.draw}\n#{player.status}"
+      button = playerID.name == dealer.name ? '(DEALER)' : ''
+      players_info["player#{i}".to_sym] = <<~PLAYER_INFO
+      #{name} - $#{playerID.player_pot} #{button}
+      #{playerID.hand.draw}
+      #{playerID.status}
+      PLAYER_INFO
+      render_table(players_info)
     end
+  end
 
     pot   = { value: "\n$#{game_pot}", alignment: :center, padding: 5 }
     table = TTY::Table.new [ # Game is rendered within a 3x3 table
