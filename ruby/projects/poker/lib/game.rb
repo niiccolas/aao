@@ -102,10 +102,7 @@ class Game
     statuses = ['bets', 'calls', 'folded', 'raises', 'ALL-IN']
     counter  = 0
     players.each { |player| counter += 1 if player.status.start_with?(*statuses) }
-    all_checks    = players.all? { |player| player.status == 'checks' }
-    all_stand_pat = players.all? { |player| player.status == 'stands pat' }
-
-    counter == players.count || all_checks || all_stand_pat
+    counter == players.count || all_check? || all_stand_pat?
   end
 
   def betting_round
