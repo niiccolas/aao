@@ -109,7 +109,7 @@ class Game
     players.rotate.each do |player|
       render_game(player)
       next if player.status == 'folded'
-      break if all_bets_called?
+      break if betting_over?
 
       menu_options = last_raise.zero? ? %w[check bet fold] : %w[call raise fold]
       while (menu = tty.select("\n\n#{player.name}, what to do?", menu_options, filter: true))
