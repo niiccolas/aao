@@ -8,12 +8,8 @@ class Game
   attr_accessor :game_pot, :last_raise
 
   def initialize
-    @players = [
-      Player.new('Player01'),
-      Player.new('Player02'),
-      Player.new('Player03'),
-      Player.new('Player04')
-    ]
+    register_players(4)
+    @players_info   = {}
     @deck           = Deck.new
     @muck           = [] # Cards discarded in-game
     @ante           = 1
@@ -22,6 +18,14 @@ class Game
     @dealer         = @players[0]
     @current_player = @players[1]
     @tty            = TTY::Prompt.new
+  end
+
+  def register_players(n_players)
+    @players = []
+    names = %w[South West North East]
+    n_players.times do |player_id|
+      @players << Player.new(player_id, names[player_id])
+    end
   end
 
   def pay_ante
