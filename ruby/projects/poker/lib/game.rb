@@ -39,7 +39,6 @@ class Game
   def play
     until game_over?
       reset_statuses_and_raise
-      deal_cards
       pay_ante
       deal_cards
       betting_round until betting_over?
@@ -112,7 +111,7 @@ class Game
       break if betting_over?
 
       menu_options = last_raise.zero? ? %w[check bet fold] : %w[call raise fold]
-      while (menu = tty.select("\n\n#{player.name}, what to do?", menu_options, filter: true))
+      while (menu = tty.select("\n\n#{player.name}, what to do?", menu_options, filter: true, cycle: true))
         if menu == 'fold'
           player.fold
           break
@@ -145,7 +144,7 @@ class Game
         { name: 'Yes', value: true },
         { name: 'Stand pat', value: false }
       ]
-      prompt = tty.select("\n\nChange cards #{player.name}?", choices, filter: true)
+      prompt = tty.select("\n\nChange cards #{player.name}?", choices, filter: true, cycle: true)
 
       unless prompt
         player.status = 'stands pat'
@@ -214,17 +213,16 @@ class Game
     end
   end
 
+  def render_table(players_info)
+    system('clear')
     pot   = { value: "\n$#{game_pot}", alignment: :center, padding: 5 }
-    table = TTY::Table.new [ # Game is rendered within a 3x3 table
-      ['', players_render[:player2], ''],
-      [players_render[:player1], pot, players_render[:player3]],
-      ['', players_render[:player0], '']
+    table = TTY::Table.new [ # Game is rendered within a 3x3 TTY table
+      ['', players_info[:player2], ''],
+      [players_info[:player1], pot, players_info[:player3]],
+      ['', players_info[:player0], '']
     ]
-
     puts table.render(
-      border: { separator: :each_row },
-      multiline: true,
-      padding: [0, 2], # left-right, top-bottom
+      border: { separator: :each_row }, multiline: true, padding: [0, 2]
     )
   end
 end
