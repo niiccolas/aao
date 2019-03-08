@@ -41,11 +41,16 @@ class Game
       reset_statuses_and_raise
       deal_cards
       pay_ante
-      betting_round until all_bets_called?
+      deal_cards
+      betting_round until betting_over?
       draw
-      reset_statuses_and_raise
-      betting_round until all_bets_called?
-      showdown
+      if all_stand_pat?
+        showdown
+      else
+        reset_statuses_and_raise
+        betting_round until betting_over?
+        showdown
+      end
       recompose_deck
       switch_dealer
     end
