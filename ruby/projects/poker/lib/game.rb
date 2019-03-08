@@ -89,7 +89,15 @@ class Game
     @last_raise = 0
   end
 
-  def all_bets_called?
+  def all_stand_pat?
+    players.all? { |player| player.status == 'stands pat' }
+  end
+
+  def all_check?
+    players.all? { |player| player.status == 'checks' }
+  end
+
+  def betting_over?
     statuses = ['bets', 'calls', 'folded', 'raises', 'ALL-IN']
     counter  = 0
     players.each { |player| counter += 1 if player.status.start_with?(*statuses) }
