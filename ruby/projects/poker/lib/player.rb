@@ -2,14 +2,15 @@ require_relative 'hand'
 require 'tty-prompt'
 
 class Player
-  attr_reader :hand, :name, :player_pot, :tty
+  attr_reader :hand, :name, :player_pot, :tty, :id
   attr_accessor :status
 
-  def initialize(name = nil)
+  def initialize(id, name = nil)
     @name       = name
     @hand       = Hand.new
     @player_pot = 50 # default starting pot
     @status     = ' '
+    @folded     = false
     @tty        = TTY::Prompt.new
     @id         = id
   end
@@ -60,7 +61,17 @@ class Player
   end
 
   def fold
-    @status = 'folded'
+    pastel = Pastel.new
+    @status = pastel.red.on_black('folded')
+    @folded = true
+  end
+
+  def unfold
+    @folded = false
+  end
+
+  def folded?
+    @folded
   end
 
   def pay(ante)
