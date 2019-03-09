@@ -107,7 +107,7 @@ class Game
   def betting_round
     players.rotate.each do |player|
       render_game(player)
-      next if player.status == 'folded'
+      next if player.folded?
       break if betting_over?
 
       menu_options = last_raise.zero? ? %w[check bet fold] : %w[call raise fold]
