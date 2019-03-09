@@ -11,6 +11,7 @@ class Player
     @player_pot = 50 # default starting pot
     @status     = ' '
     @tty        = TTY::Prompt.new
+    @id         = id
   end
 
   def hand_to_deck
