@@ -166,8 +166,12 @@ class Game
 
   def showdown
     render_game
-    hand_values   = players.map { |player| player.hand.hand_value }
-    kicker_values = players.map { |player| player.hand.kicker_value }
+    hand_values   = players.map do |player|
+      player.folded? ? 0 : player.hand.hand_value
+    end
+    kicker_values = players.map do |player|
+      player.folded? ? 0 : player.hand.kicker_value
+    end
     tie           = hand_values.count(hand_values.max) > 1
     winner        = ''
 
