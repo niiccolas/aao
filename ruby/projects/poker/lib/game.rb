@@ -89,6 +89,11 @@ class Game
     @last_raise = 0
   end
 
+  def others_folded
+    n_folded_players = players.count { |player| player.folded? }
+    n_folded_players == players.count - 1
+  end
+
   def all_stand_pat?
     players.all? { |player| player.status == 'stands pat' }
   end
@@ -98,9 +103,13 @@ class Game
   end
 
   def betting_over?
-    statuses = ['bets', 'calls', 'folded', 'raises', 'ALL-IN']
+    statuses = ['bets', 'calls', 'raises', 'ALL-IN']
     counter  = 0
-    players.each { |player| counter += 1 if player.status.start_with?(*statuses) }
+    players.each do |player|
+      if player.status.start_with?(*statuses) || player.folded?
+        counter += 1
+      end
+    end
     counter == players.count || all_check? || all_stand_pat?
   end
 
