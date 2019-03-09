@@ -137,7 +137,7 @@ class Game
 
   def draw
     players.rotate.each do |player|
-      next if player.status == 'folded'
+      next if player.folded?
 
       render_game(player)
       choices = [
