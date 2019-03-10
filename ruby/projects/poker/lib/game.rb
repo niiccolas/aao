@@ -60,10 +60,7 @@ class Game
   end
 
   def game_over?
-    bankrupt_players = 0
-    players.each do |player|
-      bankrupt_players += 1 if player.bankrupt?
-    end
+    bankrupt_players = players.count { |player| player.bankrupt? }
     (players.count - bankrupt_players) == 1
   end
 
