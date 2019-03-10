@@ -38,17 +38,21 @@ class Game
 
   def play
     until game_over?
-      reset_statuses_and_raise
       pay_ante
       deal_cards
+      reset_statuses_and_raise
       betting_round until betting_over?
-      draw
-      if all_stand_pat?
+      if others_folded
         showdown
       else
-        reset_statuses_and_raise
-        betting_round until betting_over?
-        showdown
+        draw
+        if all_stand_pat?
+          showdown
+        else
+          reset_raises
+          betting_round until betting_over?
+          showdown
+        end
       end
       recompose_deck
       switch_dealer
@@ -78,6 +82,7 @@ class Game
   def deal_cards
     5.times do
       players.each do |player|
+        next if player.bankrupt?
         player.hand.add_card(deck.take_first_card)
         player.hand.sort_by_rank
       end
@@ -86,6 +91,11 @@ class Game
 
   def reset_statuses_and_raise
     players.each { |player| player.status = ' ' }
+    players.each { |player| player.unfold }
+    reset_raises
+  end
+
+  def reset_raises
     @last_raise = 0
   end
 
@@ -95,28 +105,36 @@ class Game
   end
 
   def all_stand_pat?
-    players.all? { |player| player.status == 'stands pat' }
+    active_players.all? { |player| player.status == 'stands pat' }
   end
 
   def all_check?
-    players.all? { |player| player.status == 'checks' }
+    active_players.all? { |player| player.status == 'checks' }
+  end
+
+  def active_players
+    active_players = players.reject { |player| player.folded? }
+  end
+
+  def all_call?
+    num_calling = active_players.count do |player|
+      player.status == "calls $#{last_raise}"
+    end
+    num_calling == active_players.count - 1
   end
 
   def betting_over?
-    statuses = ['bets', 'calls', 'raises', 'ALL-IN']
-    counter  = 0
-    players.each do |player|
-      if player.status.start_with?(*statuses) || player.folded?
-        counter += 1
-      end
-    end
-    counter == players.count || all_check? || all_stand_pat?
+    bets = ['bets', 'raises', 'ALL-IN!']
+    one_bet = active_players.count { |player| player.status.start_with?(*bets) } == 1
+
+    one_bet && all_call? || all_check? || all_stand_pat?
   end
 
   def betting_round
     players.rotate.each do |player|
       render_game(player)
       next if player.folded?
+      next if player.bankrupt?
       break if betting_over?
 
       menu_options = last_raise.zero? ? %w[check bet fold] : %w[call raise fold]
@@ -147,6 +165,7 @@ class Game
   def draw
     players.rotate.each do |player|
       next if player.folded?
+      next if player.bankrupt?
 
       render_game(player)
       choices = [
@@ -218,7 +237,7 @@ class Game
 
       button = playerID.name == dealer.name ? '(DEALER)' : ''
       players_info["player#{i}".to_sym] = <<~PLAYER_INFO
-      #{name} - $#{playerID.player_pot} #{button}
+      #{name}, $#{playerID.player_pot} #{button}
       #{playerID.hand.draw}
       #{playerID.status}
       PLAYER_INFO
