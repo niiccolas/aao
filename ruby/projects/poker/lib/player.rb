@@ -1,5 +1,4 @@
 require_relative 'hand'
-require 'tty-prompt'
 
 class Player
   attr_reader :hand, :name, :player_pot, :tty, :id
@@ -11,7 +10,7 @@ class Player
     @player_pot = 50 # default starting pot
     @status     = ' '
     @folded     = false
-    @tty        = TTY::Prompt.new
+    @bankrupt   = false
     @id         = id
   end
 
@@ -20,8 +19,8 @@ class Player
   end
 
   def bet(last_raise = false)
-    slider_options = { min: 1, max: @player_pot, step: 2, default: 3}
-    puts player_raise = tty.slider('How much?', slider_options)
+    print 'How much? $'
+    player_raise = gets.to_i
     @status = if player_raise == player_pot
                 'ALL-IN!'
               elsif last_raise
@@ -52,7 +51,7 @@ class Player
   end
 
   def call_bet(last_raise)
-    @status      = 'calls'
+    @status      = "calls $#{last_raise}"
     @player_pot -= last_raise
   end
 
