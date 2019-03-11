@@ -11,7 +11,6 @@ class Game
     register_players(4)
     @players_info   = {}
     @deck           = Deck.new
-    @muck           = [] # Cards discarded in-game
     @ante           = 1
     @game_pot       = 0
     @last_raise     = 0
@@ -189,7 +188,6 @@ class Game
       choices = {}
       player.hand.draw.split(' ').each_with_index { |card, i| choices[card] = i }
       discards = tty.multi_select('Which ones?', choices, cycle: true)
-      @muck += player.discard(discards) # add discards to the muck
       player.status = "discards #{discards.count}"
 
       discards.count.times do # distribe n discards new cards
