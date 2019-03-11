@@ -54,6 +54,7 @@ class Game
           showdown
         end
       end
+      remove_bankrupt_players
       recompose_deck
       switch_dealer
     end
@@ -87,7 +88,8 @@ class Game
   end
 
   def reset_statuses_and_raise
-    players.each { |player| player.status = ' ' }
+    # "Bankrupt" status is never reset
+    players.each { |player| player.status = ' ' unless player.bankrupt? }
     players.each { |player| player.unfold }
     reset_raises
   end
@@ -110,7 +112,9 @@ class Game
   end
 
   def active_players
-    active_players = players.reject { |player| player.folded? }
+    players.reject do |player|
+      player.folded? || player.bankrupt?
+    end
   end
 
   def all_call?
@@ -125,6 +129,12 @@ class Game
     one_bet = active_players.count { |player| player.status.start_with?(*bets) } == 1
 
     one_bet && all_call? || all_check? || all_stand_pat?
+  end
+
+  def remove_bankrupt_players
+    players.each do |player|
+      player.bankrupt! if player.player_pot <= 0
+    end
   end
 
   def betting_round
@@ -191,11 +201,11 @@ class Game
 
   def showdown
     render_game
-    hand_values   = players.map do |player|
-      player.folded? ? 0 : player.hand.hand_value
+    hand_values   = active_players.map do |player|
+      player.hand.hand_value
     end
-    kicker_values = players.map do |player|
-      player.folded? ? 0 : player.hand.kicker_value
+    kicker_values = active_players.map do |player|
+      player.hand.kicker_value
     end
     tie           = hand_values.count(hand_values.max) > 1
     winner        = ''
@@ -209,11 +219,11 @@ class Game
       winner = hand_values.index(hand_values.max)
     end
 
-    players.each { |player| player.status = player.hand.name }
+    active_players.each { |player| player.status = player.hand.name }
     render_game
 
-    print "\n\n  #{players[winner].name} wins with a #{players[winner].hand.name}"
-    players[winner].wins(@game_pot)
+    print "\n\n  #{active_players[winner].name} wins with a #{active_players[winner].hand.name}"
+    active_players[winner].wins(@game_pot)
     @game_pot = 0 # reset the game pot
     gets
   end
@@ -223,23 +233,24 @@ class Game
     players.each_with_index do |player, i|
       playerID = players.find { |player| player.id == i }
       name = if current_player
-               if current_player.name == playerID.name
-                 Pastel.new.decorate(playerID.name, :black, :on_green)
-               else
-                 playerID.name
-               end
-             else
-               playerID.name
-             end
+                if current_player.name == playerID.name
+                  Pastel.new.decorate(playerID.name, :black, :on_green)
+                #  Pastel.new.decorate(playerID.name, :black, :on_green)
+                else
+                  playerID.name
+                end
+              else
+                playerID.name
+              end
 
       button = playerID.name == dealer.name ? '(DEALER)' : ''
       players_info["player#{i}".to_sym] = <<~PLAYER_INFO
       #{name}, $#{playerID.player_pot} #{button}
-      #{playerID.hand.draw}
       #{playerID.status}
+      #{playerID.hand.draw}
       PLAYER_INFO
-      render_table(players_info)
     end
+    render_table(players_info)
   end
 
   def render_table(players_info)
