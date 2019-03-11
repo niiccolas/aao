@@ -57,6 +57,8 @@ class Game
       recompose_deck
       switch_dealer
     end
+    render_game
+    puts "  Congratulations #{winner_name},you win!\n"
   end
 
   def game_over?
@@ -72,8 +74,35 @@ class Game
 
   def switch_dealer
     players.rotate!
-    @dealer         = @players[0]
-    @current_player = @players[1]
+    players.each_with_index do |player, i|
+      unless player.bankrupt?
+        @dealer = player
+        # @current_player = @players[i + 2]
+        break
+      end
+    end
+
+
+    # players.index(@dealer)
+      # puts player.name
+      # unless player.bankrupt?
+      # # puts player.name
+      #   @current_player = player
+      #   break
+      # end
+    # end
+    @current_player = @players[players.index(@dealer) + 1]
+
+    # puts "---------- INDEX in players ------"
+    # puts players.index(@dealer)
+
+
+
+    # @dealer = @players.first
+    # @current_player = @players[1]
+
+    puts "dealer: #{@dealer.name}"
+    puts "current_player: #{@current_player.name}"
   end
 
   def deal_cards
@@ -188,6 +217,7 @@ class Game
       choices = {}
       player.hand.draw.split(' ').each_with_index { |card, i| choices[card] = i }
       discards = tty.multi_select('Which ones?', choices, cycle: true)
+      player.discard(discards)
       player.status = "discards #{discards.count}"
 
       discards.count.times do # distribe n discards new cards
@@ -262,5 +292,14 @@ class Game
     puts table.render(
       border: { separator: :each_row }, multiline: true, padding: [0, 2]
     )
+  end
+
+  def render_logo
+    Dir.chdir(File.dirname(__FILE__))
+    puts File.read('logo.txt')
+  end
+
+  def winner_name
+    active_players.first.name
   end
 end
