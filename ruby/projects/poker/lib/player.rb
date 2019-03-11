@@ -86,6 +86,11 @@ class Player
   end
 
   def bankrupt?
-    @player_pot.zero?
+    @bankrupt
+  end
+
+  def bankrupt!
+    @bankrupt = true
+    @status = Pastel.new.decorate('BANKRUPT', :cyan, :on_black)
   end
 end
