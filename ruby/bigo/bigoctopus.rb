@@ -5,13 +5,15 @@ fishes = %w[fish fiiish fiiiiish fiiiish fffish ffiiiiisshh fsh fiiiissshhhhhh]
 # Sluggish Octopus
 # Finds the longest fish in O(n^2) quadratic time complexity
 def sluggish_octopus(arr)
-  longest_fish = ''
   arr.each do |fish1|
+    max_length = true
     arr.each do |fish2|
-      longest_fish = fish1 if fish1.length > fish2.length
+      next if fish1 == fish2
+
+      max_length = false if fish2.length > fish1.length
     end
+    return fish1 if max_length
   end
-  longest_fish
 end
 p sluggish_octopus(fishes) # => "fiiiissshhhhhh"
 
