@@ -1,17 +1,29 @@
-/* Introduction to Cascading Style Sheets */
-
 body {
-  /* If the user cannot load the Arial font, the sans-serif font is used */
   font-family: Arial, sans-serif;
   background-color: #FEFFF1;
+  padding: 0.5em;
 }
 
 h1 {
   font-size: 38px;
+  font-weight: 800;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
 }
 
 h2 {
+  font-weight: 800;
   font-size: 32px;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+}
+
+figure {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 40px;
+  margin-inline-end: 40px;
 }
 
 /* This selector selects ALL anchor tag children of ALL list elements that
@@ -36,6 +48,10 @@ header > img {
 
 ol {
   list-style: upper-roman inside;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  padding-inline-start: 2em;
+
 }
 
 .user_review h4 {
@@ -43,4 +59,49 @@ ol {
   font-weight: bold;
 }
 
+.user_review p {
+  margin-block-start: 1em;
+  /* margin: 1em 0; */
+}
 
+/* Set the cursor:pointer and outline:none properties for all radio buttons, select elements, and submit buttons. */
+input[type=radio], input[type=submit], select {
+  cursor: pointer;
+  outline: none;
+}
+
+/* Style the background-color of the submit button gold using the last-child selector and give it a darkening hover effect. */
+input:last-child {
+  background-color: gold;
+}
+
+input:last-child:hover {
+  filter: brightness(80%);
+}
+
+/* Color every other list element in the directions list with a light-grey background. */
+ol li:nth-child(even) {
+  background-color: lightgrey;
+}
+
+/* Use the + operator to select the first review immediately after the Reviews header element and give it a 1px, solid, black, top border */
+h2 + .user_review  {
+  border-top: 1px solid black;
+}
+
+/* Style the radio buttons with stars! Use the stars.png file in the assets folder. The stars will be blue when hovered and will be yellow when checked. Use the :hover and :checked pseudo-classes to change the background-position property of the radio buttons */
+input[type=radio] {
+  -webkit-appearance: none;
+  background-image: url(./stars.png);
+  vertical-align: bottom;
+  width: 27px;
+  height: 27px;
+}
+
+input[type=radio]:hover {
+  background-position: 0 60px;
+}
+
+input[type=radio]:checked {
+  background-position: 0 30px;
+}
