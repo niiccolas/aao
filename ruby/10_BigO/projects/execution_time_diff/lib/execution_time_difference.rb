@@ -20,8 +20,8 @@ def my_min_linear(arr)
   min_num
 end
 
-# O(n^2) quadratic time complexity
-def largest_contiguous_subsum_quadratic(arr)
+# O(n^3) cubic time complexity
+def largest_contiguous_subsum_cubic(arr)
   subsums = []
 
   arr.each_index do |i|

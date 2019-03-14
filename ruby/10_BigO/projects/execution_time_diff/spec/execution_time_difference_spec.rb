@@ -24,14 +24,14 @@ context 'Given an array of integers' do
   list2 = [-13, -3, -25, -20, -3, -16, -23, -12, -5, -22, -15, -4, -7]
   list3 = [-2, 1, -3, 4, -1, 2, 1, -5, 4] # 6
 
-  describe '#largest_contiguous_subsum_quadratic' do
+  describe '#largest_contiguous_subsum_cubic' do
     it 'returns the maximum sub-array sum' do
-      expect(largest_contiguous_subsum_quadratic(list1)).to eq(8)
-      expect(largest_contiguous_subsum_quadratic(list2)).to eq(-3)
-      expect(largest_contiguous_subsum_quadratic(list3)).to eq(6)
+      expect(largest_contiguous_subsum_cubic(list1)).to eq(8)
+      expect(largest_contiguous_subsum_cubic(list2)).to eq(-3)
+      expect(largest_contiguous_subsum_cubic(list3)).to eq(6)
     end
     it 'returns the same result as the linear implementation' do
-      expect(largest_contiguous_subsum_quadratic(list1)).to eq(largest_contiguous_subsum_linear(list1))
+      expect(largest_contiguous_subsum_cubic(list1)).to eq(largest_contiguous_subsum_linear(list1))
     end
   end
 
@@ -43,7 +43,7 @@ context 'Given an array of integers' do
     end
 
     it 'returns the same result as the quadratic implementation' do
-      expect(largest_contiguous_subsum_linear(list1)).to eq(largest_contiguous_subsum_quadratic(list1))
+      expect(largest_contiguous_subsum_linear(list1)).to eq(largest_contiguous_subsum_cubic(list1))
     end
   end
 end
