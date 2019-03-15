@@ -5,7 +5,7 @@ def bad_two_sum(arr, target_sum)
     arr[i..-1].each do |num2|
       next if num1 == num2
 
-      return true if (num1 + num2) == target
+      return true if (num1 + num2) == target_sum
     end
   end
 
