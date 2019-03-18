@@ -87,4 +87,34 @@ context 'Two Sum problem' do
       end
     end
   end
+
+  describe '#two_sum_indices?' do
+    context 'when any two integers in the array amount to the target sum' do
+      it 'returns an array of two integers' do
+        expect(two_sum_indices?(*has_sum)).to be_a(Array)
+        expect(two_sum_indices?(*has_sum).length).to eq(2)
+        expect(two_sum_indices?(*has_sum)).to eq([1, 3])
+        expect(two_sum_indices?(*has_sum2)).to eq([1, 3])
+      end
+    end
+
+    context 'else' do
+      it 'returns false' do
+        expect(two_sum_indices?(*has_not_sum)).to be false
+        expect(two_sum_indices?(*has_not_sum2)).to be false
+      end
+    end
+
+    context 'when passed an empty array' do
+      it 'returns false' do
+        expect(two_sum_indices?([], 22)).to eq(false)
+      end
+    end
+
+    context 'when passed an array of length 1' do
+      it 'returns false' do
+        expect(two_sum_indices?([22], 22)).to eq(false)
+      end
+    end
+  end
 end
