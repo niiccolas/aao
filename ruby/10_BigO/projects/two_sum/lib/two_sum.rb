@@ -18,12 +18,27 @@ end
 # O(n) linear space complexity
 def okay_two_sum?(arr, target_sum)
   arr.sort!
-  arr.each_with_index do |el, i|
+  arr.each_with_index do |num, i|
     match_index = arr.bsearch_index do |value|
-      (target_sum - el) <=> value
+      (target_sum - num) <=> value
     end
 
     return true if match_index && match_index != i
+  end
+
+  false
+end
+
+# Hash map
+# O(n) linear time complexity
+# O(n) linear space complexity
+def two_sum?(arr, target_sum)
+  summands = {}
+
+  arr.each do |num|
+    return true if summands[target_sum - num]
+
+    summands[num] = true
   end
 
   false
