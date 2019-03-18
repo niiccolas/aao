@@ -43,3 +43,19 @@ def two_sum?(arr, target_sum)
 
   false
 end
+
+# Hash map, returning the indices if true
+# O(n) linear time complexity
+# O(n) linear space complexity
+def two_sum_indices?(arr, target_sum)
+  summands = {}
+
+  arr.each_with_index do |num, i|
+    summand = target_sum - num
+    return [target_sum[summand], i] if summands.key?(summand)
+
+    summands[num] = i
+  end
+
+  false
+end
