@@ -5,10 +5,10 @@ def windowed_max_range(arr, window_size)
   num_windows = (arr.length - window_size) + 1
 
   num_windows.times do |i|
-    window = arr.slice(i, window_size)
-    range  = window.max - window.min
+    window        = arr.slice(i, window_size)
+    current_range = window.max - window.min
 
-    max_range = range if max_range.nil? || range > max_range
+    max_range = current_range if max_range.nil? || current_range > max_range
   end
 
   max_range
