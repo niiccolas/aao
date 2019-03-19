@@ -30,7 +30,7 @@ class MinMaxStack
   end
 
   def pop
-    @store.pop[:value]
+    @store.pop[:val] unless empty?
   end
 
   def peek
@@ -38,10 +38,10 @@ class MinMaxStack
   end
 
   def min
-    @store.peek[:min]
+    @store.peek[:min] unless empty?
   end
 
   def max
-    @store.peek[:max]
+    @store.peek[:max] unless empty?
   end
 end
