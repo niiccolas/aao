@@ -57,23 +57,14 @@ class Board
   end
 
   def render_cheat
-    # system('clear')
-    @grid.each do |row|
-      row.each do |card|
-        card.reveal
-      end
-    end
+    @grid.each { |row| row.each(&:reveal) }
     puts '  ' + (0...board_size).to_a.join(' ')
 
     grid.each_with_index do |row, i|
       puts "#{i} #{row.join(' ')}"
     end
 
-    @grid.each do |row|
-      row.each do |card|
-        card.hide
-      end
-    end
+    @grid.each { |row| row.each(&:hide) }
   end
 
   def won?
