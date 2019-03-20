@@ -17,7 +17,6 @@ class HumanPlayer
 
   def parse(input_string)
     input_string.to_i.divmod(10)
-    # input_string.split(',').map(&:to_i)
   end
 
   def receive_match(_pos1, _pos2)
