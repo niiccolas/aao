@@ -2,24 +2,6 @@ require 'hand'
 require 'card'
 
 describe Hand do
-  subject { Hand.new }
-  let(:hand) { subject.hand }
-
-  SUITS = %i[diamonds clubs hearts spades].freeze
-  FACES = %i[2 3 4 5 6 7 8 9 10 J Q K A].freeze
-  HANDS = {
-    royal_straight_flush: { name: 'Royal Straight Flush', rank: 10 },
-    straight_flush: { name: 'Straight Flush', rank: 9 },
-    four_of_a_kind: { name: 'Four of a kind', rank: 8 },
-    full_house: { name: 'Full house', rank: 7 },
-    flush: { name: 'Flush', rank: 6 },
-    straight: { name: 'Straight', rank: 5 },
-    three_of_a_kind: { name: 'Three of a kind', rank: 4 },
-    two_pair: { name: 'Two pairs', rank: 3 },
-    pair: { name: 'Pair', rank: 2 },
-    high_card: { name: 'High card', rank: 1 }
-  }
-
   HELPER_HANDS = {
     royal_straight_flush: [
       Card.new(:hearts, :'10'),
@@ -114,19 +96,19 @@ describe Hand do
     ]
   }
 
-  it 'it is composed of 5 cards' do
-    expect(hand.length).to eq(5)
-  end
-
-  it 'is made of Cards objects only' do
-    hand.each do |card|
-      expect(card).to be_an_instance_of(Card)
-    end
-  end
-
   describe 'Evaluating hands' do
     HELPER_HANDS.keys.each do |hand|
       let(hand) { Hand.new(HELPER_HANDS[hand]) }
+    end
+
+    it 'it is composed of 5 cards' do
+      expect(two_pair.hand.length).to eq(5)
+    end
+
+    it 'is made of Cards objects only' do
+      two_pair.hand.each do |card|
+        expect(card).to be_an_instance_of(Card)
+      end
     end
 
     context '#high_card?' do
@@ -304,6 +286,11 @@ describe Hand do
         expect(high_card.hand_name).to eq('High card')
         expect(two_pair.hand_name).to eq('Two pair')
         expect(royal_straight_flush.hand_name).to eq('Royal straight flush')
+      end
+
+      it 'removes underscores from the original symbols' do
+        expect(royal_straight_flush.hand_name).not_to eq('Royal_straight_flush')
+        expect(royal_straight_flush.hand_name).not_to eq(:royal_straight_flush)
       end
     end
   end
