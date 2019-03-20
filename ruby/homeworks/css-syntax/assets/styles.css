@@ -1,0 +1,45 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #b5b4f7; /* fallback for browsers not supporing linear-gradient() */
+  background: linear-gradient(#b5b4f7, #fcd7e1);
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+h1 {
+  font-size: 38px;
+}
+
+h2 {
+  font-size: 32px;
+}
+
+.ingredients-list {
+  list-style: square inside;
+}
+
+ol {
+  list-style: disc inside;
+}
+
+header > img {
+  width: 100px;
+}
+
+ul li a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.user_review {
+  padding: 1em;
+  background-color: #fbc7d4;
+}
+
+.user_review:nth-of-type(odd) {
+  background-color: #9796f0;
+}
+
+.user_review h4 {
+  font-weight: bold;
+}
