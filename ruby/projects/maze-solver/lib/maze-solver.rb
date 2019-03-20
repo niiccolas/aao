@@ -1,5 +1,6 @@
 require_relative 'astar'
 
+Dir.chdir(File.dirname(__FILE__))
 if ARGV.empty?
   puts "Usage:\n  ruby maze-solver.rb maze-file.txt"
 elsif File.file?(ARGV[0])
