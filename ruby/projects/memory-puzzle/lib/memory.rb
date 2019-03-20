@@ -1,5 +1,6 @@
 require_relative 'board'
 require_relative 'human_player'
+require_relative 'ai_player'
 
 class MemoryGame
   attr_reader :player
@@ -58,10 +59,6 @@ class MemoryGame
     compare_guess(pos)
   end
 
-  def match?(pos1, pos2)
-    @memory_game[pos1] == @memory_game[pos2]
-  end
-
   def valid_pos?(pos)
     pos.is_a?(Array) &&
       pos.count == 2 &&
@@ -74,5 +71,6 @@ class MemoryGame
   attr_reader   :memory_game
 end
 
-new_memory_game = MemoryGame.new(HumanPlayer.new)
+board_size = ARGV.empty? ? 4 : ARGV[0].to_i
+new_memory_game = MemoryGame.new(HumanPlayer.new, board_size)
 new_memory_game.play
