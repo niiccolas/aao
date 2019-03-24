@@ -28,6 +28,7 @@ class Board
   end
 
   def render
+    system('clear')
     ui = UI.new(@grid, @squares)
     ui.draw(:top_border)
 
