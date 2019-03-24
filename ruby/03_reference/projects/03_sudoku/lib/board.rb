@@ -29,7 +29,7 @@ class Board
 
   def render
     ui = UI.new(@grid, @squares)
-    ui.draw(:first_row)
+    ui.draw(:top_border)
 
     grid.each_with_index do |numbers, frame|
       ui.draw(numbers.map(&:to_s))

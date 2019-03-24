@@ -5,7 +5,7 @@ class UI
   end
 
   def draw(item)
-    return top_border    if item == :first_row
+    return top_border    if item == :top_border
     return numbers(item) if item.is_a? Array
 
     bottom_border        if item == 8
