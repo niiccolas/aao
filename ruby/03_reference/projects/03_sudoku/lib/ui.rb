@@ -8,6 +8,7 @@ class UI
     return top_border    if item == :top_border
     return numbers(item) if item.is_a? Array
 
+    middle_border        if [2, 5].include?(item)
     bottom_border        if item == 8
     middle_border        if [2, 5].include?(item)
     puts
@@ -32,12 +33,12 @@ class UI
 
   def top_border
     line = '─' * 8
-    print "\n┌#{line}┬#{line}┬#{line}┐\n"
+    print "┌#{line}┬#{line}┬#{line}┐\n"
   end
 
   def bottom_border
     line = '─' * 8
-    print "\n└#{line}┴#{line}┴#{line}┘\n"
+    print "\n└#{line}┴#{line}┴#{line}┘"
   end
 
   def middle_border
