@@ -10,7 +10,6 @@ class UI
 
     middle_border        if [2, 5].include?(item)
     bottom_border        if item == 8
-    middle_border        if [2, 5].include?(item)
     puts
   end
 
