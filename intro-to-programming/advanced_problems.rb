@@ -336,26 +336,26 @@ end
 # -------
 # For a given string, return a collapsed version of that string
 def same_char_collapse(str)
-  while has_double_adjacent(str)
-    str.each_char.with_index do |char, i|
+  while adjacent_same_char?(str)
+    str.chars.each_index do |i|
       if str[i] == str[i + 1]
         str[i..i + 1] = ''
         break
       end
     end
   end
+
   return str
 end
 
 # Helper method for same_char_collapse()
-def has_double_adjacent(string)
-  string.each_char.with_index do |char, i|
-    if string[i] == string[i + 1]
-      return true
-    end
+def adjacent_same_char?(string)
+  string.chars.each_index do |i|
+    return true if string[i] == string[i + 1]
   end
-  false
+
+  return false
 end
 
-# puts same_char_collapse('zzzxaaxy')   #=> 'zy'
+puts same_char_collapse('zzzxaaxy')   #=> 'zy'
 # 'zzzxaaxy' -> 'zxaaxy' -> 'zxxy' -> 'zy'
