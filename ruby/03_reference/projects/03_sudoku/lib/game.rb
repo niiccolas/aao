@@ -5,8 +5,8 @@ require 'colorize'
 class Game
   attr_reader :board
 
-  def initialize(board)
-    @board = board
+  def initialize(puzzle_file)
+    @board = Board.new(puzzle_file)
   end
 
   def play
