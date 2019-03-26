@@ -34,9 +34,9 @@ class ChessGame
 
   def notify_players
     if current_player.color == :white
-      print "\n  " + " White's turn ".black.on_light_white
+      print "\n  " + " White plays ".black.on_light_white
     else
-      print "\n  " + " Black's turn ".on_black
+      print "\n  " + " Black plays ".on_black
     end
 
     if board.checkmate?(current_player.color)
