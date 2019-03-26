@@ -1,4 +1,5 @@
 require_relative 'board'
+require_relative 'ui'
 require 'colorize'
 
 class Game
@@ -21,6 +22,7 @@ class Game
         gets
       end
     end
+    UI.congratulate
   end
 
   def prompt
