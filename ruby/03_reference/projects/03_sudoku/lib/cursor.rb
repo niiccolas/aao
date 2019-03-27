@@ -38,9 +38,8 @@ class Cursor
   attr_reader :position, :board
 
   def initialize(board, position = [0, 0])
-    @board      = board
+    @board    = board
     @position = position
-    # @selected   = false
   end
 
   def keyboard_input
@@ -80,20 +79,20 @@ class Cursor
 
   def handle_key(key)
     case key
-    when :backspace, :delete
-      return {pos: position, val: nil}
+    when (1..9) # Update tile with value from 1-9
+      { pos: position, val: key }
+    when :backspace, :delete # Clean an existing tile
+      return { pos: position, val: nil }
+    when :left, :right, :up, :down # Move cursor position
+      update_pos(MOVES[key])
     when :ctrl_c
       Process.exit(0)
-    when :left, :right, :up, :down
-      update_pos(MOVES[key])
-    when (1..9)
-      { pos: position, val: key }
     end
   end
 
   def update_pos(diff)
-    c_x, c_y = position
-    d_x, d_y = diff
+    c_x, c_y  = position
+    d_x, d_y  = diff
 
     new_pos   = [(c_x + d_x), (c_y + d_y)]
     @position = new_pos if @board.valid_pos?(new_pos)
