@@ -6,7 +6,8 @@ class Game
   attr_reader :board
 
   def initialize(puzzle_file)
-    @board = Board.new(puzzle_file)
+    @board        = Board.new(puzzle_file)
+    @elapsed_time = Time.now
   end
 
   def play
@@ -22,7 +23,8 @@ class Game
         gets
       end
     end
-    UI.congratulate
+
+    UI.congratulate(@elapsed_time)
   end
 
   def prompt
