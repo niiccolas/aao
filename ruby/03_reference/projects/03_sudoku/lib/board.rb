@@ -42,6 +42,8 @@ class Board
     rows_solved? && columns_solved? && squares_solved?
   end
 
+  private
+
   def rows_solved?
     grid.all? do |row|
       row.map(&:value).compact.uniq.length == grid.length
