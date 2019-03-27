@@ -1,47 +1,80 @@
+require_relative 'cursor'
+require 'chronic_duration'
+require 'paint'
+
 class UI
-  def initialize(grid, squares)
-    @grid_length = grid.length
-    @squares     = squares
+  attr_reader :cursor
+
+  def initialize(board, squares)
+    @board   = board
+    @squares = squares
+    @cursor  = Cursor.new(@board)
   end
 
-  def draw(item)
-    return top_border    if item == :top_border
-    return numbers(item) if item.is_a? Array
+  def self.congratulate(game_start_time)
+    elapsed_time = (Time.now - game_start_time).round
+    parse_time   = ChronicDuration.output(elapsed_time, format: :short)
+    congrats     = " Congratulations 👍\n Puzzle solved in #{parse_time}\n"
 
-    middle_border        if [2, 5].include?(item)
-    bottom_border        if item == 8
-    puts
+    puts Paint[congrats, 'gold', :bright]
   end
 
-  def numbers(row)
-    n_col_borders = (@grid_length / @squares) + 1
-    col_indices   = (0..n_col_borders * @squares).step(n_col_borders).to_a
-
-    col_indices.each { |i| row.insert(i, '│ ') }
-
-    print row.join(' ').chop
+  def self.warning(e)
+    puts Paint[" #{e.message}!\n Press Enter", :red, :bright]
+    gets
   end
 
-  def verticals
-    '│ '
+  def keyboard_input
+    @cursor.keyboard_input
   end
 
-  def left_vertical
-    print '│ '
+  def draw(grid)
+    system('clear')
+    draw_top_border
+
+    grid.each_with_index do |row, row_idx|
+      draw_numbers(row)
+      draw_middle_border if [2, 5].include?(row_idx)
+      draw_bottom_border if row_idx == 8
+      puts
+    end
   end
 
-  def top_border
-    line = '─' * 8
+  private
+
+  def draw_numbers(row)
+    num_col_borders = (@board.grid.length / @squares) + 1
+    col_indices     = (0..num_col_borders * @squares).step(num_col_borders).to_a
+    row_idx         = @board.grid.index(row)
+
+    dup_row = []
+    row.each_with_index do |el, i|
+      if @cursor.position == [row_idx, i]
+        dup_row << Paint[el.to_s, 'gold', :bright, :underline]
+      else
+        dup_row << el.to_s
+      end
+    end
+
+    col_indices.each { |i| dup_row.insert(i, '│ ') }
+    print dup_row.join(' ').chop
+  end
+
+  def draw_top_border
+    print Paint[' SUDOKU', 'gold']
+    print Paint["RB \n", :red, ]
     print "┌#{line}┬#{line}┬#{line}┐\n"
   end
 
-  def bottom_border
-    line = '─' * 8
+  def draw_middle_border
+    print "\n├#{line}┼#{line}┼#{line}┤"
+  end
+
+  def draw_bottom_border
     print "\n└#{line}┴#{line}┴#{line}┘"
   end
 
-  def middle_border
-    line = '─' * 8
-    print "\n├#{line}┼#{line}┼#{line}┤"
+  def line
+    '─' * (@board.grid.length - 1)
   end
 end
