@@ -44,13 +44,13 @@ class Board
 
   def rows_solved?
     grid.all? do |row|
-      row.map(&:value).compact.length == grid.length
+      row.map(&:value).compact.uniq.length == grid.length
     end
   end
 
   def columns_solved?
     grid.transpose.all? do |col|
-      col.map(&:value).compact.length == grid.length
+      col.map(&:value).compact.uniq.length == grid.length
     end
   end
 
@@ -62,7 +62,7 @@ class Board
           @grid[x][y].value
         end
 
-        return false unless square.compact.length == grid.length
+        return false unless square.compact.uniq.length == grid.length
       end
     end
     true
