@@ -36,6 +36,10 @@ class Board
     rows_solved? && columns_solved? && squares_solved?
   end
 
+  def valid_pos?(pos)
+    [*0..8].product([*0..8]).include? pos
+  end
+
   private
 
   def rows_solved?
