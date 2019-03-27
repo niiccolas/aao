@@ -1,6 +1,5 @@
 require_relative 'board'
 require_relative 'ui'
-require 'colorize'
 
 class Game
   attr_reader :board
