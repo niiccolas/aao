@@ -2,10 +2,11 @@ require_relative 'tile'
 require_relative 'ui'
 
 class Board
-  attr_reader :grid, :intervals
-  def initialize(grid_file, squares = 3)
+  attr_reader :grid, :intervals, :ui
+
+  def initialize(grid_file, n_squares = 3)
     @grid      = Board::from_file(grid_file)
-    @squares   = squares
+    @n_squares = n_squares
     @intervals = [[*0..2], [*3..5], [*6..8]]
     @ui        = UI.new(self, @n_squares)
   end
