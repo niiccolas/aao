@@ -7,6 +7,7 @@ class Board
     @grid      = Board::from_file(grid_file)
     @squares   = squares
     @intervals = [[*0..2], [*3..5], [*6..8]]
+    @ui        = UI.new(self, @n_squares)
   end
 
   def self.from_file(file)
@@ -28,14 +29,7 @@ class Board
   end
 
   def render
-    system('clear')
-    ui = UI.new(@grid, @squares)
-    ui.draw(:top_border)
-
-    grid.each_with_index do |numbers, frame|
-      ui.draw(numbers.map(&:to_s))
-      ui.draw(frame)
-    end
+    ui.draw(@grid)
   end
 
   def solved?
