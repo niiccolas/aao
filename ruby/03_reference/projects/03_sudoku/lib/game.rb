@@ -15,23 +15,25 @@ class Game
       break if @board.solved?
 
       begin
-        user_input = prompt
-        @board[*user_input[:pos]] = user_input[:val][0]
-      rescue RuntimeError => e
-        puts "Error: #{e.message}. Press enter to continue".red
-        gets
+        solve_board(user_input)
+      rescue RuntimeError => e # Changing a "given" tile throws an error
+        UI.warning(e)
       end
     end
 
     UI.congratulate(@elapsed_time)
   end
 
-  def prompt
-    %i[pos val].each.with_object({}) do |key, user_input|
-      print key == :pos ? 'Position? (e.g. 91): ' : 'Value? (1-9):    '
+  private
 
-      user_input[key] = gets.chomp.chars.map(&:to_i)
+  def solve_board(user_input)
+    if user_input.is_a? Hash # Validated input is sent as Hash
+      @board[*user_input[:pos]] = user_input[:val]
     end
+  end
+
+  def user_input
+    @board.ui.keyboard_input
   end
 end
 
