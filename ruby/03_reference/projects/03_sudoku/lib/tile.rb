@@ -1,4 +1,4 @@
-require 'colorize'
+require 'paint'
 
 class Tile
   attr_reader :value
@@ -9,14 +9,14 @@ class Tile
   end
 
   def value=(value)
-    raise 'Cannot modify given tile' if @given
+    raise 'Cannot modify given tiles' if @given
 
     @value = value
   end
 
   def to_s
-    return @value.to_s.green if @given
-    return @value.to_s       if @value
+    return Paint[@value.to_s, :green] if @given
+    return @value.to_s                if @value
 
     ' '
   end
