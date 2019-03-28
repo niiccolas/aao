@@ -15,7 +15,7 @@ class Game
       break if @board.solved?
 
       begin
-        solve_board(user_input)
+        solve_board
       rescue RuntimeError => e # Changing a "given" tile throws an error
         UI.warning(e)
       end
@@ -26,14 +26,11 @@ class Game
 
   private
 
-  def solve_board(user_input)
-    if user_input.is_a? Hash # Validated input is sent as Hash
-      @board[*user_input[:pos]] = user_input[:val]
-    end
-  end
+  def solve_board
+    input = @board.ui.keyboard_input
 
-  def user_input
-    @board.ui.keyboard_input
+    # Valid input is returned as a Hash
+    @board[*input[:pos]] = input[:val] if input.is_a? Hash
   end
 end
 
