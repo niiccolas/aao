@@ -7,7 +7,6 @@ class UI
 
   def initialize(board)
     @board   = board
-    @squares = squares
     @cursor  = Cursor.new(@board)
   end
 
@@ -43,21 +42,17 @@ class UI
   private
 
   def draw_numbers(row)
-    num_col_borders = (@board.grid.length / @squares) + 1
-    col_indices     = (0..num_col_borders * @squares).step(num_col_borders).to_a
-    row_idx         = @board.grid.index(row)
-
-    dup_row = []
+    rendered_row = []
     row.each_with_index do |el, i|
-      if @cursor.position == [row_idx, i]
-        dup_row << Paint[el.to_s, 'gold', :bright, :underline]
+      if @cursor.position == [@board.grid.index(row), i]
+        rendered_row << Paint[el.to_s, 'gold', :bright, :underline]
       else
-        dup_row << el.to_s
+        rendered_row << el.to_s
       end
     end
+    [0, 4, 8, 12].each { |i| rendered_row.insert(i, '│ ') }
 
-    col_indices.each { |i| dup_row.insert(i, '│ ') }
-    print dup_row.join(' ').chop
+    print rendered_row.join(' ')
   end
 
   def draw_top_border
