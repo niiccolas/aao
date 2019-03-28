@@ -5,17 +5,17 @@ class Tile
 
   def initialize(value)
     @value = !(1..9).cover?(value) ? nil : value
-    @given = (1..9).cover?(value) ? true : false
+    @clue  = (1..9).cover?(value) ? true : false
   end
 
   def value=(value)
-    raise 'Cannot modify given tiles' if @given
+    raise 'Cannot modify clues' if @clue
 
     @value = value
   end
 
   def to_s
-    return Paint[@value.to_s, :green] if @given
+    return Paint[@value.to_s, :green] if @clue
     return @value.to_s                if @value
 
     ' '
