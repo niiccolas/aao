@@ -4,11 +4,10 @@ require_relative 'ui'
 class Board
   attr_reader :grid, :intervals, :ui
 
-  def initialize(grid_file, n_squares = 3)
+  def initialize(grid_file)
     @grid      = Board::from_file(grid_file)
-    @n_squares = n_squares
     @intervals = [[*0..2], [*3..5], [*6..8]]
-    @ui        = UI.new(self, @n_squares)
+    @ui        = UI.new(self)
   end
 
   def self.from_file(file)

@@ -5,7 +5,7 @@ require 'paint'
 class UI
   attr_reader :cursor
 
-  def initialize(board, squares)
+  def initialize(board)
     @board   = board
     @squares = squares
     @cursor  = Cursor.new(@board)
