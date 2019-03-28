@@ -13,7 +13,7 @@ class UI
   def self.congratulate(game_start_time)
     elapsed_time = (Time.now - game_start_time).round
     parse_time   = ChronicDuration.output(elapsed_time, format: :short)
-    congrats     = " Congratulations 👍\n Puzzle solved in #{parse_time}\n"
+    congrats     = " Pretty good 👍\n Puzzle solved in #{parse_time}\n"
 
     puts Paint[congrats, 'gold', :bright]
   end
