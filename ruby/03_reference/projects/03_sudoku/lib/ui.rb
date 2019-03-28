@@ -19,8 +19,8 @@ class UI
     puts Paint[congrats, 'gold', :bright]
   end
 
-  def self.warning(e)
-    puts Paint[" #{e.message}!\n Press Enter", :red, :bright]
+  def self.warning(error)
+    puts Paint[" #{error.message}!\n Press Enter", :red, :bright]
     gets
   end
 
