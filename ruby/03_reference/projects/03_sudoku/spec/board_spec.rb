@@ -16,7 +16,7 @@ describe 'Board' do
       expect(file_parser.all? { |el| el.is_a? Array }).to be true
     end
 
-    it 'fills array with Tile instances' do
+    it 'returns an array of Tile instances' do
       all_tiles_instances = file_parser.flatten.all? { |el| el.is_a? Tile }
 
       expect(all_tiles_instances).to be true
@@ -26,16 +26,16 @@ describe 'Board' do
   context 'given a tile x,y position in the grid' do
     describe '#[]=' do
       it "updates the tile's value" do
-        subject[0, 0] = 9
-        expect(subject[0, 0].value).to eq(9)
+        sudoku[0, 0] = 9
+        expect(sudoku[0, 0].value).to eq(9)
 
-        subject[0, 0] = 7
-        expect(subject[0, 0].value).to eq(7)
+        sudoku[0, 0] = 7
+        expect(sudoku[0, 0].value).to eq(7)
       end
     end
 
     describe '#[]' do
-      it 'returns the tile' do
+      it 'returns the tile object' do
         expect(almost_solved[0, 8]).to be_an_instance_of Tile
         expect(almost_solved[0, 8].value).to eq(7)
         expect(sudoku_solved[0, 0].value).to eq(4)
@@ -43,42 +43,39 @@ describe 'Board' do
     end
   end
 
-  describe '#rows_solved?' do
-    context 'when all rows are solved' do
+  describe '#solved?' do
+    context 'when all rows, columns and squares are solved' do
       it 'returns true' do
-        expect(sudoku_solved.rows_solved?).to be true
+        expect(sudoku_solved.solved?).to be true
       end
     end
 
-    it 'returns false' do
-      expect(sudoku.rows_solved?).to be false
-      expect(almost_solved.rows_solved?).to be false
+    context 'when one row or column or square is not solved' do
+      it 'returns false' do
+        expect(almost_solved.solved?).to be false
+        expect(sudoku.solved?).to be false
+      end
     end
   end
 
-  describe '#columns_solved?' do
-    context 'when all columns are solved' do
+  describe '#valid_pos?' do
+    let!(:within_board) { [*0..8].product([*0..8]) }
+    let!(:outside_board) { [*-1..9].product([*-1..9]) - within_board }
+
+    context 'given a position that is on the board' do
       it 'returns true' do
-        expect(sudoku_solved.columns_solved?).to be true
+        within_board.all? do |pos|
+          expect(sudoku.valid_pos?(pos)).to be true
+        end
       end
     end
 
-    it 'returns false' do
-      expect(sudoku.columns_solved?).to be false
-      expect(almost_solved.columns_solved?).to be false
-    end
-  end
-
-  describe '#squares_solved?' do
-    context 'when all 3x3 squares are solved' do
-      it 'returns true' do
-        expect(sudoku_solved.squares_solved?).to be true
+    context 'given a position outside the board' do
+      it 'returns false' do
+        outside_board.all? do |pos|
+          expect(sudoku.valid_pos?(pos)).to be false
+        end
       end
-    end
-
-    it 'returns false' do
-      expect(sudoku.squares_solved?).to be false
-      expect(almost_solved.squares_solved?).to be false
     end
   end
 end
