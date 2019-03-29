@@ -35,5 +35,5 @@ class Game
 end
 
 if $PROGRAM_NAME == __FILE__
-  Game.new('./puzzles/sudoku1.txt').play
+  Game.new("./puzzles/#{ARGV[0]}").play
 end
