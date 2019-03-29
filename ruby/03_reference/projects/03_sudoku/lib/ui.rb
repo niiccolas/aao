@@ -57,19 +57,19 @@ class UI
 
   def draw_top_border
     print Paint[' SUDOKU', 'gold']
-    print Paint["RB \n", :red, ]
-    print "┌#{line}┬#{line}┬#{line}┐\n"
+    print Paint["RB \n", :red]
+    print "┌#{horizontal}┬#{horizontal}┬#{horizontal}┐\n"
   end
 
   def draw_middle_border
-    print "\n├#{line}┼#{line}┼#{line}┤"
+    print "\n├#{horizontal}┼#{horizontal}┼#{horizontal}┤"
   end
 
   def draw_bottom_border
-    print "\n└#{line}┴#{line}┴#{line}┘"
+    print "\n└#{horizontal}┴#{horizontal}┴#{horizontal}┘"
   end
 
-  def line
+  def horizontal
     '─' * (@board.grid.length - 1)
   end
 end
