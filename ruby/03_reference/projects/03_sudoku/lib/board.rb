@@ -2,7 +2,7 @@ require_relative 'tile'
 require_relative 'ui'
 
 class Board
-  attr_reader :grid, :intervals, :ui
+  INTERVALS = [[*0..2], [*3..5], [*6..8]].freeze
 
   def initialize(grid_file)
     @grid      = Board::from_file(grid_file)
@@ -55,8 +55,8 @@ class Board
   end
 
   def squares_solved?
-    intervals.each do |int1|
-      intervals.each do |int2|
+    INTERVALS.each do |int1|
+      INTERVALS.each do |int2|
         square = int1.product(int2).map! do |pos|
           x, y = pos
           @grid[x][y].value
