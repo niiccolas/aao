@@ -4,9 +4,10 @@ require_relative 'ui'
 class Board
   INTERVALS = [[*0..2], [*3..5], [*6..8]].freeze
 
+  attr_reader :grid, :ui
+
   def initialize(grid_file)
     @grid      = Board::from_file(grid_file)
-    @intervals = [[*0..2], [*3..5], [*6..8]]
     @ui        = UI.new(self)
   end
 
@@ -14,7 +15,9 @@ class Board
     Dir.chdir(File.dirname(__FILE__))
 
     File.open(file).each.with_object([]) do |line, array|
-      array << line.chomp.chars.map { |num| Tile.new(num.to_i) }
+      array << line.chomp.chars.map do |tile_content|
+        Tile.new(tile_content.to_i)
+      end
     end
   end
 
