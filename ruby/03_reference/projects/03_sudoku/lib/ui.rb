@@ -3,11 +3,13 @@ require 'chronic_duration'
 require 'paint'
 
 class UI
+  AI_SOLVER = caller_locations.any? { |e| e.to_s.include? 'solver' }
+
   attr_reader :cursor
 
   def initialize(board)
-    @board   = board
-    @cursor  = Cursor.new(@board)
+    @board     = board
+    @cursor    = AI_SOLVER ? nil : Cursor.new(@board)
   end
 
   def self.congratulate(game_start_time)
@@ -44,12 +46,14 @@ class UI
   def draw_numbers(row)
     rendered_row = []
     row.each_with_index do |el, i|
-      if @cursor.position == [@board.grid.index(row), i]
-        rendered_row << Paint[el.to_s, 'gold', :bright, :underline]
-      else
+      if AI_SOLVER || @cursor.position != [@board.grid.index(row), i]
         rendered_row << el.to_s
+      else
+        rendered_row << Paint[el.to_s, 'gold', :bright, :underline]
       end
     end
+
+    # Draw each square's vertical lines
     [0, 4, 8, 12].each { |i| rendered_row.insert(i, '│ ') }
 
     print rendered_row.join(' ')
