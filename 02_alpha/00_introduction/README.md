@@ -417,6 +417,3 @@ say hello world
 ```
 Keyboard Shortcuts
 Just like using the terminal, these keyboard shortcuts will make development much faster. Use them often and they will become second nature in no time. When someone is cruising around their code with shortcuts on the job or in an interview, it demonstrates experience and dedication towards making their development workflow more efficient.
-
-[VS Code Shortcuts Cheat Sheet](https://github.com/jlollis/AAA-AppAcademy/blob/master/vscode-keyboard-shortcuts-windows.pdf)
-

@@ -206,13 +206,3 @@ Let's apply this to the last example:
     puts 2 * num
 
 If the user enters 42, the program will correctly print 84.
-
-<br/>
-
-### Projects:
-
-* [Guessing Game](https://github.com/jlollis/AAA-AppAcademy/tree/master/02-Alpha/12-Input-Output/exercises/guessing-game/guessing_game_project)
-
-* [Hangman](https://github.com/jlollis/AAA-AppAcademy/tree/master/02-Alpha/12-Input-Output/exercises/hangman/hangman_project)
-
-* [Hotel](https://github.com/jlollis/AAA-AppAcademy/tree/master/02-Alpha/12-Input-Output/exercises/hotel/hotel_project)

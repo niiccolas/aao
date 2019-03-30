@@ -27,7 +27,7 @@ Below is a class that does not abstract how to enroll a student into a course:
       def students
         @students
       end
-    end  
+    end
 
     course = Course.new("Object Oriented Programming 101", ["Ada Lovelace", "Brian Kernighan"], 3)
 
@@ -49,7 +49,7 @@ Below is the class with a nicely abstracted `#enroll` method:
       def enroll(student)
         @students << student if @students.length < @max_students
       end
-    end  
+    end
 
     course = Course.new("Object Oriented Programming 101", ["Ada Lovelace", "Brian Kernighan"], 3)
 
@@ -132,8 +132,6 @@ You'll notice that above we decided to not include a getter for `@line`, that is
 ### Wrapping Up
 
 Abstraction and Encapsulation are just two pillars of OOP. As you progress in your programming career, you'll learn how to support other pillars of object oriented programming! So stay tuned.
-
-<br/>
 
 ## Attribute Methods
 
@@ -270,8 +268,6 @@ Often times we may want to both a getter and setter for an attribute. If we are 
 
 Awesome, our code looks much cleaner! However, be cautious. Like we explored in our chat about _encapsulation_, don't just take all your class's attributes and pass them to `attr_accessor`. Consider if a user of the class _needs_ to manipulate that data with a raw getter or setter. Or more importantly consider if it is _safe_ for a user to do so. Only use getters and setters for what you want to expose in your classes.
 
-<br/>
-
 ## Syntactic Sugar
 
 As you've been learning with us through the course, you may have noticed we often write code in a particular way only to replace that code style with a shortcut that is more elegant and preferred later on. We introduce the longhand ways of writing things first so you have deep understanding of the underlying concepts. Once you do learn the shortcuts, you also have an appreciation of how expressive of a language Ruby is! There's a _method_ to the madness.†
@@ -394,14 +390,3 @@ Building off of the `#[]` method what if I wanted the ability to assign to a spe
 From the above we see that `grocery_checkout.[]=(0, "Grace")` is equivalent to `grocery_checkout[0] = "Grace"`. Looking at how we defined the `[]=` method, we can gather that when we use the syntactic sugar for calling `[]=`, the data that we put between the brackets will be the first argument, and what comes after the equal sign will be the second argument to our method
 
 † pun intended
-
-<br/>
-
-### Projects:
-
-* [Startup](https://github.com/jlollis/AAA-AppAcademy/tree/master/02-Alpha/13-OOP/exercises/startup_project)
-
-* [Mastermind](https://github.com/jlollis/AAA-AppAcademy/tree/master/02-Alpha/13-OOP/exercises/mastermind_project)
-
-* [Battleship](https://github.com/jlollis/AAA-AppAcademy/tree/master/02-Alpha/13-OOP/exercises/battleship_project)
-
