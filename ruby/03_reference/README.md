@@ -4,12 +4,12 @@ In the Ruby language variables hold **references** to objects.
 
     my_object = Object.new
     # my_object now refers to a new instance of Object
-
+    
     my_object = Object.new
     # a new Object instance is created, and the my_object variable is
     # reassigned so that it now refers to this object, rather than the old
     # object.
-
+    
     # call `my_method` on the object that `my_object` refers to
     my_object.my_method
 
@@ -20,7 +20,7 @@ Here is another example.
     def add_to_array!(array, item)
       array << item
     end
-
+    
     my_array = []
     add_to_array!(my_array, "an item!")
     p my_array
@@ -52,7 +52,7 @@ Other writer methods work similarly:
     class Cat
       attr_accessor :name
     end
-
+    
     my_cat = Cat.new
     my_cat.name = "Breakfast" # == my_cat.name=("Breakfast")
 
@@ -87,7 +87,7 @@ There's an "or trick" that uses `||=`:
       def initialize
         @values = {}
       end
-
+    
       def fib(n)
         @values[n] ||= calculate_fib(n)
         # expands to:
@@ -95,7 +95,7 @@ There's an "or trick" that uses `||=`:
         # if @values[n] is nil (not previously computed), will call
         # `calculate_fib` and store the result for later reference.
       end
-
+    
       private
       def calculate_fib(n)
         case n
@@ -150,7 +150,7 @@ Okay, we've seen that arrays store references to objects. We've seen a naive pro
 You may have previously written code like this:
 
     arr2 = Array.new(3, 1)
-
+    
     arr2[0] += 1
     arr2[0] == 2
     arr2[1] == 1
@@ -261,10 +261,10 @@ We can't use a variable before it is defined:
       i = 0
       while i < exponent
         result = result * base  # Error: result is being used before it has been defined.
-
+    
         i += 1
       end
-
+    
       result
     end
 
@@ -275,15 +275,15 @@ We can't use a variable from a deeper scope. In the below example, `cat_age` is 
       :name => "Breakfast",
       :age => 8
     }
-
+    
     def extract_cat_age
       # creates a new local variable inside this method; won't add
       # variable to global scope; variable will be lost when method is
       # over
-
+    
       cat_age = cat[:age]
     end
-
+    
     extract_cat_age
     cat_age # ERROR: variable out of scope
 
@@ -292,14 +292,14 @@ Sometimes things are subtle:
     def fourth_power(i)
       square(i) * square(i)   # wait, isn't square not defined yet?
     end
-
+    
     def square(i)
       i * i
     end
-
+    
     # Ah, but by the time we _call_ `fourth_power` and run the
     # interior code, `square` will have been defined.
-
+    
     fourth_power(2)
 
 ## Global variables
@@ -309,8 +309,6 @@ Sometimes things are subtle:
 While you shouldn't typically create global variables, you can do so with the `<section class="sc-ipXKqB eevSDq sc-hEsumM fwPWBm" prefix.
 
 You can also create file-local global variables by defining a variable without `<section class="sc-ipXKqB eevSDq sc-hEsumM fwPWBm" at the top-level (outside any block, method, class). However, file-local global variable won't be accessible to other Ruby files that load the file.
-
-<br/>
 
 
 In _The Pragmatic Programmer_, Hunt and Thomas define the DRY principle as follows:
@@ -325,15 +323,15 @@ The most common way to avoid repetition is to break duplicated code into methods
       unless fields[:zip] =~ /[1-9][0-9]{4}/
         raise InvalidZipCodeError
       end
-
+    
       # more form processing
     end
-
+    
     def process_business_address_form(fields)
       unless fields[:zip] =~ /[1-9][0-9]{4}/
         raise InvalidZipCodeError
       end
-
+    
       # more form processing
     end
 
@@ -343,12 +341,12 @@ See how we've repeated the bit that checks that the zip code is valid? This is b
       raise InvalidZipCodeError unless valid_zip?(fields[:zip])
       # more form processing
     end
-
+    
     def process_business_address_form(fields)
       raise InvalidZipCodeError unless valid_zip?(fields[:zip])
       # more form processing
     end
-
+    
     def valid_zip?(zip)
       zip =~ /[1-9][0-9]{4}/
     end
@@ -356,8 +354,6 @@ See how we've repeated the bit that checks that the zip code is valid? This is b
 Breaking the duplicated code into a method has the side-effect of making the consumer/business methods shorter and more focused on the details of checking the form, rather than the details of zip code validation.
 
 A good rule of thumb with DRY is that if you find yourself copying and pasting code into other places, you should most likely refactor to avoid duplication.
-
-<br/>
 
 # Method Decomposition & Design
 
@@ -367,52 +363,49 @@ A good rule of thumb with DRY is that if you find yourself copying and pasting c
 
 Here's the problem description in case you don't remember it:
 
-    Write a Towers of Hanoi game.
-
-    Keep three arrays, which represents the piles of discs. Pick a representation 
-    of the discs to store in the arrays; maybe just a number representing their size.
-
-    In a loop, prompt the user (using gets) and ask what pile to select a disc 
-    from, and where to put it.
-
-    After each move, check to see if they have succeeded in moving all the discs, 
-    to the final pile. If so, they win!
+> Write a Towers of Hanoi game.
+> Keep three arrays, which represents the piles of discs. Pick a representation of the discs to store in the arrays; maybe just a number representing their size.
+> In a loop, prompt the user (using gets) and ask what pile to select a disc from, and where to put it.
+> After each move, check to see if they have succeeded in moving all the discs, to the final pile.
+> If so, they win!
 
 Here's an example of a one-method solution:
 
-    def hanoi
-      disks = (1..3).to_a.reverse
-      stacks = [disks, [], []]
-      until stacks[0].empty? && stacks[1..2].any?(&:empty?)
-        max_height = stacks.map(&:count).max
-        render_string = (max_height - 1).downto(0).map do |height|
-          stacks.map do |stack|
-            stack[height] || " "
-          end.join("\t")
-        end.join("\n")
-        puts render_string
-        move_hash = { "a" => 0, "b" => 1, "c" => 2 }
-        while true
-          print "Move From: "
-          from_stack_num = move_hash[gets.chomp]
-          break unless from_stack_num.nil?
-          puts "Invalid move!"
-        end
-        while true
-          print "Move To: "
-          to_stack_num = move_hash[gets.chomp]
-          break unless to_stack_num.nil?
-          puts "Invalid move!"
-        end
-        from_stack, to_stack = stacks.values_at(from_stack_num, to_stack_num)
-        raise "cannot move from empty stack" if from_stack.empty?
-        unless (to_stack.empty? || to_stack.last > from_stack.last)
-          raise "cannot move onto smaller disk"
-        end
-        to_stack.push(from_stack.pop)
-      end
-      puts "You did it!"
+```ruby
+def hanoi
+  disks = (1..3).to_a.reverse
+  stacks = [disks, [], []]
+  until stacks[0].empty? && stacks[1..2].any?(&:empty?)
+    max_height = stacks.map(&:count).max
+    render_string = (max_height - 1).downto(0).map do |height|
+      stacks.map do |stack|
+        stack[height] || " "
+      end.join("\t")
+    end.join("\n")
+    puts render_string
+    move_hash = { "a" => 0, "b" => 1, "c" => 2 }
+    while true
+      print "Move From: "
+      from_stack_num = move_hash[gets.chomp]
+      break unless from_stack_num.nil?
+      puts "Invalid move!"
     end
+    while true
+      print "Move To: "
+      to_stack_num = move_hash[gets.chomp]
+      break unless to_stack_num.nil?
+      puts "Invalid move!"
+    end
+    from_stack, to_stack = stacks.values_at(from_stack_num, to_stack_num)
+    raise "cannot move from empty stack" if from_stack.empty?
+    unless (to_stack.empty? || to_stack.last > from_stack.last)
+      raise "cannot move onto smaller disk"
+    end
+    to_stack.push(from_stack.pop)
+  end
+  puts "You did it!"
+end
+```
 
 Let's start breaking this method into smaller methods. What are the steps that we take in this one fairly long method?
 
@@ -429,7 +422,7 @@ Now that we've listed the atomic steps, it will be easy to split the method into
     def disks
       (1..3).to_a.reverse
     end
-
+    
     def hanoi
       stacks = [disks, [], []]
       # ...
@@ -441,11 +434,11 @@ Lets extract stacks into a method that builds the stacks using disks.
     def disks
       (1..3).to_a.reverse
     end
-
+    
     def stacks
       [disks, [], []]
     end
-
+    
     def hanoi
       until stacks[0].empty? && stacks[1..2].any?(&:empty?)
       # ...
@@ -457,7 +450,7 @@ Now we're looping until the game is over, but it looks like this over condition 
     def over?
       stacks[0].empty? && stacks[1..2].any?(&:empty?)
     end
-
+    
     def hanoi
       until over?
       # ...
@@ -472,7 +465,7 @@ While we're taking turns moving disks we'll probably want to display the current
         end.join("\t")
       end.join("\n")
     end
-
+    
     def hanoi
       until over?
         puts display
@@ -489,7 +482,7 @@ The next step is to get the from and to stacks. This logic for getting a stack i
         puts "Invalid move!"
       end
     end
-
+    
     def hanoi
       until over?
         puts display
@@ -513,7 +506,7 @@ Our methods are starting to look leaner :). The next step is to extract the work
       end
       to_stack.push(from_stack.pop)
     end
-
+    
     def hanoi
       until over?
         puts display
@@ -539,18 +532,18 @@ Here's an example of something super terrible:
 
     # create a global i variable
     $i = nil
-
+    
     def square_then_add_two(num)
       $i = num
       square
-
+    
       $i = $i + 2
     end
-
+    
     def square
       # get global variable, square it, and reset
       $i = $i * $i
-
+    
       nil
     end
 
@@ -566,11 +559,11 @@ Callers do not typically expect you to modify an argument. For instance:
 
     def combine_ingredients(alcohols, mixers)
       drinks = []
-
+    
       alcohols.length.times do
         drinks << [alcohols.pop, mixers.pop]
       end
-
+    
       drinks
     end
 
@@ -580,11 +573,11 @@ Instead do something like:
 
     def combine_ingredients(alcohols, mixers)
       drinks = []
-
+    
       alcohols.each_index do |i|
         drinks << [alcohols[i], mixers[i]]
       end
-
+    
       drinks
     end
 
@@ -615,7 +608,7 @@ We list a few kinds of smells here here:
 
     bicycle.front_tire.rotate
     bicycle.rear_tire.rotate
-
+    
     # vs
     bicycle.rotate_tires
 
@@ -695,7 +688,7 @@ The following are examples of popular tags in HTML and how they are used.
 ### Paragraphs and Headings
 
     <p>A paragraph tag is used to wrap a multi-line body of text</p>
-
+    
     <h1>A heading1 tag is used to denote the largest title on the page</h1>
 
 **N.B.** The `<h1>` tag is used in site ranking algorithms by search engines such as Google. It is important to only have one `<h1>` element per page and to have it contain a keyword summarizing the page content.
@@ -797,23 +790,23 @@ For example, it would be hard to test `card.hide` by calling the method below. T
 
       class Board
         #...
-
+    
         def update_cards
           puts "updating the cards"
           self.repopulate
           # a bunch of other methods
-
+    
           @cards.each do |card|
             @grid << card
             card.flip
             # a bunch of other methods
-
+    
             card.hide #the actual line we want to test
           end
         end
-
+    
       end
-
+    
       board = Board.new
       board.update_cards
       board.render
