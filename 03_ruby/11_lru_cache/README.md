@@ -1,7 +1,6 @@
 # How the Hash Works in Ruby
 
-[source](https://launchschool.com/blog/how-the-hash-works-in-ruby) 
-
+[source](https://launchschool.com/blog/how-the-hash-works-in-ruby)
 
 A brief overview of the hash data structure, how it is implemented in Ruby and a peek at the history of changes made to the hash in MRI Ruby.
 
@@ -11,28 +10,27 @@ A Hash is a data structure that organizes data in key-value pairs. It is also re
 
 In Ruby a hash can be declared literally as
 
-
-
-```
-`h = {color: "black", font: "Monaco"} h = {:color=>"black", :font=>"Monaco"} `
+```ruby
+h = {color: "black", font: "Monaco"}
+h = {:color=>"black", :font=>"Monaco"}
 ```
 
 or declaratively with the new method
 
-
-
-```
-`h = Hash.new h[:color] = "black" h[:font] = "Monoco" `
+```ruby
+h = Hash.new
+h[:color] = "black"
+h[:font] = "Monoco"
 ```
 
 ## How does a Hash store data and why is it efficient?
 
 To understand how data is stored in a hash and why it is efficient, let’s revisit the basic linear data structure, the *array*. An array allows us to randomly access any element that it stores if we know the index of that element beforehand.
 
-
-
-```
-`a = [1,2,4,5] puts a[2]  #> 4 `
+```ruby
+a = [1,2,4,5]
+puts a[2]
+#> 4
 ```
 
 If the key-value pairs we were trying to store were integers within a limited range such as 1-20 or 1-100, we would simply use an array and our key would be the integer.
@@ -52,10 +50,8 @@ We could simply store their names represented by the table below in an array
 | 3    | Peter Pan    |
 | 4    | Mickey Mouse |
 
-
-
-```
-`students= ['Belle', 'Ariel', 'Peter Pan', 'Mickey Mouse'] `
+```ruby
+students = ['Belle', 'Ariel', 'Peter Pan', 'Mickey Mouse']
 ```
 
 But, what if the student id was a 4-digit number? Then we would have to assign a 10000 element table to access the names by the id. To solve this we simplify the key to the last 2 digits of the 4 digit number and use that as the location inside the table, so we can get random access to the record. Now, if we have another student with id “3221”, also ending in “21”, we would have to save two values at that location resulting in a collision.
@@ -67,10 +63,11 @@ But, what if the student id was a 4-digit number? Then we would have to assign a
 | 4612       | 12                        | Peter Pan    |
 | 1514       | 14                        | Mickey Mouse |
 
-
-
-```
-`students= Array.new(100) students[21]=['Belle','Sofia'] students[57]='Ariel' students[12]='Peter Pan' students[14]='Mickey Mouse' `
+```ruby
+students     = Array.new(100)
+students[21] = ['Belle','Sofia'] students[57] = 'Ariel'
+students[12] = 'Peter Pan'
+students[14] = 'Mickey Mouse' `
 ```
 
 What if the id was a 10-digit number or an alphanumeric string? This gets inefficient and unwieldy quickly. Unfortunately, too simple a hashing strategy can lead to problems.
@@ -86,7 +83,7 @@ So, now we have an understanding that the purpose of a hash function is to conve
 
 But in real life programming the keys are not always nice integers, they are strings, objects, or some other data type. This is solved by using a one-way hash function(digest) over the key and then applying the division method to get the location. The *hash function* is a mathematical function that takes a string of any length and produces a fixed length integer value. The hash data structure derives it’s name from this hashing mechanism. Ruby uses the [murmur hash function](http://en.wikipedia.org/wiki/MurmurHash) and then applies the division method with a prime number M, which Ruby determines based on the table size that is needed for storage.
 
-```
+```ruby
 murmur_hash(key) % M
 ```
 
@@ -102,26 +99,18 @@ It has been found that if divisor M is prime, the results are not as biased and 
 
 Ruby sets the maximum allowed density value to 5.
 
-
-
-```
-`#define ST_DEFAULT_MAX_DENSITY 5 `
-```
+`#define ST_DEFAULT_MAX_DENSITY 5`
 
 When the density of the records reaches 5, then Ruby adjusts the value of M, re-computes and adjust the hash for all the records that are in that hash. “The algorithm that computes M is one that generates prime numbers near powers of 2”, from [Data Structures using C](http://www.amazon.com/Data-Structures-Using-Aaron-Tenenbaum/dp/0131997467). Look at the function new_size in [st.c](https://github.com/ruby/ruby/blob/1b5acebef2d447a3dbed6cf5e146fda74b81f10d/st.c) at line 158. This is where the size of the new hash is computed.
 
-
-
 ```
-`new_size(st_index_t size) {     st_index_t i;     for (i=3; i<31; i++) {       if ((st_index_t)(1<<i) > size) return 1<<i;     }     return -1; } `
+new_size(st_index_t size) {     st_index_t i;     for (i=3; i<31; i++) {       if ((st_index_t)(1<<i) > size) return 1<<i;     }     return -1; }
 ```
 
 This is easier to read in the [JRuby’s](https://github.com/jruby/jruby/blob/master/core/src/main/java/org/jruby/RubyHash.java) implementation of Hash where the prepared prime number values are statically used from an int array. As you can see the next values are 11, 19 and so on.
 
-
-
 ```
-`private static final int MRI_PRIMES[] = { 8 + 3, 16 + 3, 32 + 5, 64 + 3, 128 + 3, 256 + 27, ....}; `
+private static final int MRI_PRIMES[] = { 8 + 3, 16 + 3, 32 + 5, 64 + 3, 128 + 3, 256 + 27, ....};
 ```
 
 This *rehashing* as the data grows larger causes a spike in the performance when the hash reaches certain specific sizes. Pat Shaughnessy does a detailed analysis of this in [Ruby under a Microscope](http://patshaughnessy.net/ruby-under-a-microscope) and graphs the data so you can see the spikes that occur when rehashing happens.
@@ -150,10 +139,15 @@ Starting with Ruby 1.9.3, a property of the hash is that the keys are ordered ba
 
 Note: Keyword arguments were added to Ruby in 2.0, and an example is below
 
+```ruby
+def books(title: 'Programming Ruby')
+  puts title
+end
 
-
-```
-`def books(title: 'Programming Ruby')   puts title end  books # => 'Programming Ruby' books(title: 'Eloquent Ruby') # => 'Eloquent Ruby' `
+books 
+# => 'Programming Ruby'
+books(title: 'Eloquent Ruby')
+# => 'Eloquent Ruby'
 ```
 
 ## Two potential upcoming changes in Hash
@@ -164,16 +158,17 @@ Currently we need to declare a symbol with a space using a hash rocket
 
 
 
-```
-`  h = {:"a perfect color" => "vermilion"} #=> {:"a perfect color"=>"vermilion"} `
+```ruby
+h = {:"a perfect color" => "vermilion"}
+#=> {:"a perfect color"=>"vermilion"}
 ```
 
 With the change it will simply be the symbol within quotes followed by a colon.
 
 
 
-```
-`h = {"a perfect color": "vermilion"} `
+```ruby
+h = {"a perfect color": "vermilion"}
 ```
 
 2) Another interesting change that is in the works is a method that will allow returning [default values for missing keys in a hash](https://bugs.ruby-lang.org/issues/10017).
@@ -182,16 +177,23 @@ Currently you can return the default value of only one key using `hash.fetch`, h
 
 
 
-```
-`h = {color: "black", font: "monaco"} h.fetch(:fontsize, "12pt") #=> "12pt" h.values_at(:color, :font) #=> ["black", "monaco"] `
+```ruby
+h = {color: "black", font: "monaco"}
+h.fetch(:fontsize, "12pt")
+#=> "12pt"
+h.values_at(:color, :font)
+#=> ["black", "monaco"]
 ```
 
 The change proposed is to combine these two methods into one. It might work something like the `fetch_values` method shown below. Please note the new method name is still being voted on and the example is hypothetical.
 
 
 
-```
-`h.fetch_values(:color, :font, :fontsize, :border) do |k| k == "fontsize" ? "12pt" : "#{k} is missing" end #=> ["black", "monaco", "12pt", "border is missing"] `
+```ruby
+h.fetch_values(:color, :font, :fontsize, :border) do |k|
+  k == "fontsize" ? "12pt" : "#{k} is missing"
+end
+#=> ["black", "monaco", "12pt", "border is missing"]
 ```
 
 ## Conclusion
