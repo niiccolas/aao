@@ -79,7 +79,7 @@ describe LinkedList do
   end
 
   describe "#get" do
-    it "gets by key" do
+    it "gets val by key" do
       expect(list.get(:first)).to eq(1)
       expect(list.get(:second)).to eq(2)
       expect(list.get(:third)).to eq(3)
