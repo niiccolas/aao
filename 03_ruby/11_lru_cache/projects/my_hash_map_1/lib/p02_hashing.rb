@@ -25,10 +25,3 @@ class Hash
     flatten.map(&:to_s).map(&:ord).sort.join.to_i
   end
 end
-
-
-
-
-# [2,3,4].each_with_index.inject(0) do |interm, (e, i)|
-#   e ^ interm
-# end
