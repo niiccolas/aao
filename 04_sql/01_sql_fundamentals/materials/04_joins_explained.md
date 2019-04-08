@@ -53,7 +53,7 @@ null  null       3     Darth Vader
 
 ![full_outer_join](./assets/full_outer_join.png)
 
-## Left Outer Join
+## Left/Right Outer Join
 
 Produces a complete set of records from Table A, with the matching records (where available) in Table B. If there is no match, the right side will contain null.
 
