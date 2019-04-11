@@ -8,7 +8,7 @@ Let's start with the code from the video lectures. Download the skeleton [here](
 
 Next, let's create our database. In SQLite, our databases are just files that store all our data. They are updated by executing SQL commands (creating/updating tables and rows). Our `import_db.sql` has all the code to create our tables and some seed data. We can create our database with the following command:
 
-```
+```bash
 cat import_db.sql | sqlite3 plays.db
 ```
 
@@ -36,22 +36,10 @@ Remember, our `PlayDBConnection` class accesses the database stored in `plays.db
 
 - Open up pry and load the plays.rb file
 
-- Initialize an instance of the Playwright class by calling
-
-   
-
-  ```
-  Playwright#new
-  ```
-
-   
-
-  and passing it the necessary arguments.
+- Initialize an instance of the Playwright class by calling `Playwright#new` and passing it the necessary arguments.
 
   - Call `Playwright#create` on the instance that you just initialized. Then call `Playwright::all` to see that it was added to the database correctly.
 
 - Similarly, test `Playwright#update`, and `Playwright#get_plays` by calling them on instances of the Playwright class.
 
-For a more detailed look at how to test your ORM, refer to the [ORM Demo](https://vimeo.com/167672029#t=18m24s)(Jump to 18m25s).
-
-Did you find this lesson helpful?
+For a more detailed look at how to test your ORM, refer to the [ORM Demo](https://vimeo.com/167672029#t=18m24s) (Jump to 18m25s).
