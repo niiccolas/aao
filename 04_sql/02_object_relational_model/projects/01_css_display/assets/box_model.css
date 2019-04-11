@@ -2,8 +2,23 @@
 
 body {
   /* If the user cannot load the Arial font, the sans-serif font is used */
-  font-family: Arial, sans-serif;
+  font-family: Avenir, Arial, sans-serif;
   background-color: #FEFFF1;
+  width: 900px;
+  margin: 0 auto;
+}
+
+aside {
+  width: 180px;
+  margin-right: 15px;
+  vertical-align: top;
+  float: left;
+  font-size: 0.85rem;
+}
+
+section:first-of-type {
+  float: left;
+  width: 700px;
 }
 
 h1 {
@@ -14,28 +29,55 @@ h2 {
   font-size: 32px;
 }
 
+nav {
+  display: inline-flex;
+}
+
+nav li {
+  display: inline-block;
+  padding: 20px;
+}
+
 /* This selector selects ALL anchor tag children of ALL list elements that
-are children of an Unordered Lsit element */
-ul li a, figcaption a {
+are children of an Unordered List element */
+ul li a,
+figcaption a {
   text-decoration: none;
   color: inherit;
+  vertical-align: super;
 }
 
 /* This selector selects only IMMEDIATE (1 level deep) image element children
 of the header element */
-header > img {
+header>img {
   width: 100px;
 }
 
 /* Selects all elements with the class attribute "ingredients-list" */
 .ingredients-list {
-
   /* The list style property is shorthand for multiple list-style properties*/
   list-style: square inside;
 }
 
+.ingredients-list li {
+  margin: 15px 0;
+}
+
 ol {
   list-style: upper-roman inside;
+}
+
+/* Directions list */
+ol li {
+  margin: 15px 0;
+}
+
+.user_review {
+  padding: 20px 15px;
+}
+
+.user_review:nth-child(even) {
+  background-color: antiquewhite;
 }
 
 .user_review h4 {
@@ -43,32 +85,62 @@ ol {
   font-weight: bold;
 }
 
+.user_review p {
+  margin: 0;
+}
+
+#name {
+  display: block;
+}
+
+#expertise {
+  display: block;
+}
+
+#review {
+  display: block;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+}
+
+input[type="text"],
+select,
+textarea {
+  width: 200px;
+  font-family: Avenir, Arial, sans-serif;
+  font-size: 0.7rem;
+}
+
 input[type="radio"] {
-    -webkit-appearance: none;
-    width: 27px;
-    height: 27px;
-    background-image: url(../assets/stars.png);
-    vertical-align: bottom;
+  -webkit-appearance: none;
+  width: 27px;
+  height: 27px;
+  background-image: url(stars.png);
+  vertical-align: bottom;
 }
 
 input[type="radio"]:checked {
   background-position: 30px 30px;
 }
 
-
 input:last-child {
-    background: gold;
+  border-radius: 2px;
+  display: block;
+  margin-top: 15px;
+  background: gold;
 }
 
 input:last-child:hover {
-    -webkit-filter: brightness(90%);
+  -webkit-filter: brightness(90%);
 }
 
 ol li:nth-of-type(2n) {
   background-color: whitesmoke;
 }
 
-h2 + .user_review {
-    border-top: 1px solid black;
+h2+.user_review {
+  border-top: 1px solid black;
 }
-
