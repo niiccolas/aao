@@ -14,6 +14,3 @@ class Rook < Piece
     PERPENDICULAR_DIR
   end
 end
-
-# r = Rook.new(:white, "brd", [1,1])
-# p r.moves
