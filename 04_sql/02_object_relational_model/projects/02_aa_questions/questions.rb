@@ -193,6 +193,20 @@ class QuestionFollow
     questions.map { |question| Question.new(question) }
   end
 
+  # Default to top 5 questions
+  def self.most_followed_questions(n_questions = 5)
+    mf_questions = QuestionsDatabase.instance.execute(<<-SQL, n_questions)
+    SELECT * FROM questions
+    JOIN question_follows ON question_follows.question_id = questions.id
+    GROUP BY question_id
+    ORDER BY COUNT(user_id) DESC
+    LIMIT ?;
+    SQL
+    return nil if mf_questions.empty?
+
+    mf_questions.map { |question| Question.new(question) }
+  end
+
   attr_reader :id
   attr_accessor :question_id, :user_id
 
