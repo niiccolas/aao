@@ -68,6 +68,9 @@ VALUES
   ((SELECT id FROM users WHERE fname = 'Wendy' AND lname = 'Glover'),
    (SELECT id FROM questions WHERE title = 'Owen: Roommates')),
 
+  ((SELECT id FROM users WHERE fname = 'Gina' AND lname = 'Ratke'),
+   (SELECT id FROM questions WHERE title = 'Owen: Roommates')),
+
   ((SELECT id FROM users WHERE fname = 'Owen' AND lname = 'Greenholt'),
    (SELECT id FROM questions WHERE title = 'Gina: Ruby stil relevant?'));
 
