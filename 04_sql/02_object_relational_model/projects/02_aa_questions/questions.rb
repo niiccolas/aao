@@ -51,6 +51,10 @@ class Question
   def replies
     Reply.find_by_question_id(@id)
   end
+
+  def followers
+    QuestionFollow.followers_for_question_id(@id)
+  end
 end
 
 class User
@@ -87,6 +91,10 @@ class User
 
   def authored_replies
     Reply.find_by_user_id(@id)
+  end
+
+  def followed_questions
+    QuestionFollow.followed_questions_for_user_id(@id)
   end
 end
 
@@ -161,6 +169,28 @@ class QuestionFollow
     return nil if qst_follow.empty?
 
     QuestionFollow.new(qst_follow.first)
+  end
+
+  def self.followers_for_question_id(question_id)
+    followers = QuestionsDatabase.instance.execute(<<-SQL, question_id)
+    SELECT * FROM users
+    JOIN question_follows ON question_follows.user_id = users.id
+    WHERE question_follows.question_id = ?;
+    SQL
+    return nil if followers.empty?
+
+    followers.map { |follower| User.new(follower) }
+  end
+
+  def self.followed_questions_for_user_id(user_id)
+    questions = QuestionsDatabase.instance.execute(<<-SQL, user_id)
+    SELECT * FROM questions
+    JOIN question_follows ON question_follows.question_id = questions.id
+    WHERE question_follows.user_id = ?;
+    SQL
+    return nil if questions.empty?
+
+    questions.map { |question| Question.new(question) }
   end
 
   attr_reader :id
