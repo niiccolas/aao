@@ -141,5 +141,8 @@ VALUES
   ((SELECT id FROM users WHERE fname = 'Wendy' AND lname = 'Glover'),
    (SELECT id FROM questions WHERE title = 'Owen: Roommates')),
 
+  ((SELECT id FROM users WHERE fname = 'Gina' AND lname = 'Ratke'),
+   (SELECT id FROM questions WHERE title = 'Wendy: Mentorship plan?')),
+
   ((SELECT id FROM users WHERE fname = 'Arlie' AND lname = 'Russel'),
    (SELECT id FROM questions WHERE title = 'Owen: Roommates'));
