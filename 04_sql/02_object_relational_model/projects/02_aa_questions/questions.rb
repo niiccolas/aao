@@ -105,6 +105,17 @@ class User
   def liked_questions
     QuestionLike.liked_questions_for_user_id(@id)
   end
+
+  def average_karma
+    karma = QuestionsDatabase.instance.execute(<<-SQL, self.id)
+    SELECT COUNT(question_likes.question_id) / COUNT(DISTINCT questions.id) as average
+    FROM questions
+    LEFT OUTER JOIN question_likes ON questions.id = question_likes.question_id
+    WHERE questions.author_id = ?
+    SQL
+
+    karma.first['average']
+  end
 end
 
 class Reply
