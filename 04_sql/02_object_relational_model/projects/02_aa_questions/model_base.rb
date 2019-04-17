@@ -1,3 +1,6 @@
+require 'active_support/inflector'
+require_relative 'questions_database'
+
 class ModelBase
   def self.table
     self.to_s.tableize
