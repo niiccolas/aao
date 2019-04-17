@@ -95,9 +95,11 @@ class ModelBase
 
   def self.find_by_id(id)
     data = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT * FROM #{table} WHERE #{table}.id = ?
+      SELECT *
+      FROM   #{table}
+      WHERE  #{table}.id = ?
     SQL
 
-    data.nil? ? nil : new(data.first)
+    data.nil? ? nil : self.new(data.first)
   end
 end
