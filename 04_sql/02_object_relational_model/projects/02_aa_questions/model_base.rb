@@ -50,6 +50,16 @@ class ModelBase
     SQL
   end
 
+  def self.where(options = nil)
+    sql_where = options.keys.map { |key| key.to_s + ' = ?' }.join(', ')
+
+    QuestionsDatabase.instance.execute(<<-SQL, *options.values)
+      SELECT *
+      FROM   #{table}
+      WHERE  #{sql_where};
+    SQL
+  end
+
   def self.all
     data = QuestionsDatabase.instance.execute(<<-SQL)
       SELECT *
