@@ -68,11 +68,16 @@ class ModelBase
     parse_all(data)
   end
 
-    QuestionsDatabase.instance.execute(<<-SQL, *options.values)
+  def self.find_by(options)
+    sql_where = options.keys.map { |key| key.to_s + ' = ?' }.join('AND ')
+
+    data = QuestionsDatabase.instance.execute(<<-SQL, *options.values)
       SELECT *
       FROM   #{table}
       WHERE  #{sql_where};
     SQL
+
+    parse_all(data)
   end
 
   def self.all
