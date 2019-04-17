@@ -50,8 +50,23 @@ class ModelBase
     SQL
   end
 
-  def self.where(options = nil)
-    sql_where = options.keys.map { |key| key.to_s + ' = ?' }.join(', ')
+  def self.where(options)
+    if options.is_a? Hash
+      sql_where = options.keys.map { |key| key.to_s + ' = ?' }.join(', ')
+      values    = options.values
+    else
+      sql_where = options
+      values    = nil
+    end
+
+    data = QuestionsDatabase.instance.execute(<<-SQL, *values)
+      SELECT *
+      FROM   #{table}
+      WHERE  #{sql_where};
+    SQL
+
+    parse_all(data)
+  end
 
     QuestionsDatabase.instance.execute(<<-SQL, *options.values)
       SELECT *
