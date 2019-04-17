@@ -34,6 +34,20 @@ class ModelBase
 
   def update
     raise 'Not in DB: cannot update' unless @id
+
+    instance_attr = attributes
+    instance_attr.delete('id')
+    new_values = instance_attr.values
+    sql_set    = instance_attr.keys.map { |attr| attr + ' = ?' }.join(', ')
+
+    QuestionsDatabase.instance.execute(<<-SQL, *new_values)
+      UPDATE
+        #{self.class.table}
+      SET
+        #{sql_set}
+      WHERE
+        #{self.class.table}.id = #{@id};
+    SQL
   end
 
   def self.all
