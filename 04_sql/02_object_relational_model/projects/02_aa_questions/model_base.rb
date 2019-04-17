@@ -86,7 +86,7 @@ class ModelBase
       FROM #{table};
     SQL
 
-    self.parse_all(data)
+    parse_all(data)
   end
 
   def self.parse_all(data)
