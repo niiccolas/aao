@@ -1,0 +1,19 @@
+// Reference Schema:
+// https://code.visualstudio.com/docs/editor/tasks-appendix
+
+{
+  "label": "Run RSPEC test on the current file",
+  "type": "shell",
+  "command": "clear;rspec",
+  "group": {
+    "kind": "test",
+    "isDefault": true
+  },
+  "presentation": {
+    "reveal": "always",
+    // "panel": "new"
+  },
+  "args": [
+    "${file}"
+  ],
+}
