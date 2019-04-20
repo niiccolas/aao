@@ -3,7 +3,12 @@ require_relative 'model_base'
 class Reply < ModelBase
   def self.find_by_user_id(user_id)
     user_replies = QuestionsDatabase.instance.execute(<<-SQL, user_id)
-    SELECT * FROM replies WHERE replies.user_id = ?
+      SELECT
+        *
+      FROM
+        replies
+      WHERE
+        replies.user_id = ?
     SQL
     return nil if user_replies.empty?
 
@@ -12,7 +17,11 @@ class Reply < ModelBase
 
   def self.find_by_question_id(question_id)
     qst_replies = QuestionsDatabase.instance.execute(<<-SQL, question_id)
-    SELECT * FROM replies WHERE replies.question_id = ?
+      SELECT
+        *
+      FROM
+        replies
+      WHERE replies.question_id = ?
     SQL
     return nil if qst_replies.empty?
 
@@ -46,7 +55,12 @@ class Reply < ModelBase
 
   def child_replies
     child_replies = QuestionsDatabase.instance.execute(<<-SQL, @question_id, @id)
-    SELECT * FROM replies WHERE replies.question_id = ? AND replies.parent_reply_id = ?
+      SELECT
+        *
+      FROM
+        replies
+      WHERE
+        replies.question_id = ? AND replies.parent_reply_id = ?
     SQL
     return nil if child_replies.empty?
 
