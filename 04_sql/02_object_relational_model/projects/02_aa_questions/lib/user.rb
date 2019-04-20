@@ -2,14 +2,16 @@ require_relative 'model_base'
 
 class User < ModelBase
   def self.find_by_name(fname, lname)
-    user = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
-      SELECT *
-      FROM users
-      WHERE users.fname = ? AND users.lname = ?
+    user = QuestionsDatabase.get_first_row(<<-SQL, fname, lname)
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        users.fname = ? AND users.lname = ?
     SQL
-    return nil if user.empty?
 
-    User.new(user.first)
+    user.nil? ? nil : User.new(user)
   end
 
   attr_reader :id
@@ -38,13 +40,15 @@ class User < ModelBase
   end
 
   def average_karma
-    karma = QuestionsDatabase.instance.execute(<<-SQL, self.id)
-    SELECT COUNT(question_likes.question_id) / COUNT(DISTINCT questions.id) as average
-    FROM questions
-    LEFT OUTER JOIN question_likes ON questions.id = question_likes.question_id
-    WHERE questions.author_id = ?
+    QuestionsDatabase.get_first_value(<<-SQL, self.id)
+      SELECT
+        COUNT(question_likes.question_id) / COUNT(DISTINCT questions.id)
+      FROM
+        questions
+      LEFT OUTER JOIN
+        question_likes ON questions.id = question_likes.question_id
+      WHERE
+        questions.author_id = ?
     SQL
-
-    karma.first['average']
   end
 end
