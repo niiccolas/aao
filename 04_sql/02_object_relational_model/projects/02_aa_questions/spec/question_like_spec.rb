@@ -87,7 +87,7 @@ describe QuestionLike do
       expect(QuestionLike.most_liked_questions.length).to be 1
     end
 
-    context 'given a parameter of type integer `n`' do
+    context 'given an argument of type integer `n`' do
       it 'returns an array of `n` most liked questions' do
         top2 = QuestionLike.most_liked_questions(2)
         expect(top2.length).to be 2
