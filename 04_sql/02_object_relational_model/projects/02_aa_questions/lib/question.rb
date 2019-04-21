@@ -1,10 +1,16 @@
+
 require_relative 'model_base'
 require_relative 'user'
 
 class Question < ModelBase
   def self.find_by_author_id(author_id)
-    author_questions = QuestionsDatabase.instance.execute(<<-SQL, author_id)
-    SELECT * FROM questions WHERE questions.author_id = ?
+    author_questions = QuestionsDatabase.execute(<<-SQL, author_id)
+      SELECT
+        *
+      FROM
+        questions
+      WHERE
+        questions.author_id = ?
     SQL
     return nil if author_questions.empty?
 
@@ -27,11 +33,16 @@ class Question < ModelBase
   end
 
   def author
-    question_author = QuestionsDatabase.instance.execute(<<-SQL, author_id)
-    SELECT * FROM users WHERE users.id = ?
+    question_author = QuestionsDatabase.get_first_row(<<-SQL, author_id)
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        users.id = ?
     SQL
 
-    User.new(question_author.first)
+    User.new(question_author)
   end
 
   def replies
